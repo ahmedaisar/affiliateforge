@@ -3,6 +3,7 @@
 
 .artboard-page { max-width: var(--max); margin: 0 auto; padding: var(--sp-7) var(--sp-5) var(--sp-8); }
 
+
 .artboard-head { border-bottom: var(--bw-strong) solid var(--ink); padding-bottom: var(--sp-4); }
 .artboard-head h1 { font-family: var(--display); font-size: var(--t-32); line-height: var(--lh-32); letter-spacing: var(--track-tight); }
 
@@ -40,10 +41,19 @@
 }
 .frame__inner { background: var(--paper); }
 .frame--desktop .frame__inner { width: var(--frame-desk-w); height: var(--frame-desk-h); zoom: var(--frame-zoom); }
-.frame--phone { width: var(--frame-phone-w); }
+.frame--phone { width: var(--frame-phone-w); max-width: 100%; }
 .frame--phone .frame__inner { width: var(--frame-phone-w); height: var(--frame-phone-h); }
 
-
-
-
-
+/* At the end of the file on purpose: these override the frame widths above. */
+@media (max-width: 720px) {
+  .artboard-page { padding: var(--sp-5) var(--sp-4) var(--sp-7); }
+  .frame--phone .frame__inner { width: 100%; height: auto; min-height: 600px; }
+  .p-dir > * { flex: 1 1 100%; }
+  /* A 1440 px frame at 390 would be a 248 px sliver of text: the phone mock is
+     what a phone reader needs, and the desktop frames are for a wide screen. */
+  .frame--desktop { display: none; }
+  .board-row::before {
+    content: "Desktop frames are hidden at this width — open on a wider screen to compare shells.";
+    font-size: var(--t-12); color: var(--ink-3);
+  }
+}

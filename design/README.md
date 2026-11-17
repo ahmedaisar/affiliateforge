@@ -73,6 +73,9 @@ it ships; a value that fails is changed, not annotated.
 - Direction A's main column is 48 px top / 48 px bottom padding; B's is 32 px, and B carries
   a `--rail-w` 208 px rail. Both collapse to full width below `--bp-phone`, where tables
   become card lists rather than scrolling horizontally.
+- **Row density is a token, not a padding habit**: `--row-pad` is `--sp-3` in A and `--sp-2`
+  in B, so a row measures 47 px in A and 39 px in B — measured in the browser, and the only
+  difference the artboards' own comparison table states as a number.
 - A wide figure or table scrolls inside `.scroll-x` or `.table-wrap`, never the page.
 
 ## Extending it
@@ -84,12 +87,34 @@ it ships; a value that fails is changed, not annotated.
 4. If the primitive needs a value that has no token yet, that is a missing token, not an
    inline override.
 
+## The rendered pass — done 17 Nov 2026
+
+Chromium came back after the agent-browser sessions were closed. Screenshots at 1400 and 390
+(`screenshots/20-` to `screenshots/29-`). What the pass found and what changed:
+
+1. **Banners collapsed their text.** `.stack-sm` spaces its children with margins, and
+   `<strong>`/`<span>` are inline, so a two-line banner rendered as one run-on line. Both
+   banners are now `<p>` children. *(Kit rule learned: `.stack-*` expects block children.)*
+2. **The fold ended in white space.** Both desktop frames showed a table and then nothing.
+   Each now carries the screen's second block — A an activity list in words, B a run strip in
+   mono lines — which also made the two shells comparable below the table.
+3. **B claimed a density it did not have.** The comparison table said "14 rows fit" while the
+   markup gave B the same 47 px rows as A. Fixed at the source: `--row-pad` is now a token,
+   `--sp-3` in A and `--sp-2` in B, and rows measure 47 px and 39 px. The claim now matches
+   the measurement, and the measurement is in the table.
+4. **A 1440 px frame does not survive a 390 px window.** The phone mock was 390 px wide
+   inside a 358 px frame, clipped on the right, with the menu button half outside it. Below
+   `--bp-phone` the desktop frames are hidden with a line saying why, and the phone mock
+   takes the full width. The media query had to move to the end of `artboards.css`: an
+   equally specific rule later in the file was overriding it.
+5. **B's phone had no way into the rail.** It gained the menu button A already had.
+
+Page-level checks after the fixes: `scrollWidth === innerWidth` at 390 (no sideways scroll),
+both directions render at 1440 and 390, and the primitives strip (buttons, field, four
+states, tags) renders in both.
+
 ## Owed
 
-- **The rendered pass.** Chromium cannot start on this host right now (about 110 MB free, no
-  swap; the binary core-dumps at `--headless=new`). The artboards were verified structurally
-  — markup balanced, every class styled, every value tokenised, contrast computed — but
-  **nobody has looked at them**. Before the owner is asked to pick, take the screenshots at
-  1440 and 390 and fix what they show.
+- **The owner's pick** between A and B; the losing direction is then deleted.
 - **The scored audit** from the `ui-design` skill, once the direction is picked.
 - **The newcomer walkthrough**, with a reader who has not seen these documents.

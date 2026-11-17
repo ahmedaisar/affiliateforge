@@ -176,7 +176,7 @@ a:hover { color: var(--accent-hover); }
 }
 .table th {
   text-align: left; vertical-align: bottom;
-  padding: var(--sp-2) var(--sp-3);
+  padding: var(--row-pad) var(--sp-3);
   font-size: var(--t-11); line-height: var(--lh-11);
   letter-spacing: var(--track-caps); text-transform: uppercase;
   color: var(--ink-3); font-weight: var(--w-strong);
@@ -184,7 +184,7 @@ a:hover { color: var(--accent-hover); }
   white-space: nowrap;
 }
 .table td {
-  padding: var(--sp-3); vertical-align: top;
+  padding: var(--row-pad) var(--sp-3); vertical-align: top;
   border-bottom: var(--bw) solid var(--rule);
 }
 .table tbody tr:last-child td { border-bottom: 0; }

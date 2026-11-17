@@ -55,6 +55,7 @@
   --track-tight: -.01em;
 
   /* ---- Space ----------------------------------------------------------- */
+  --row-pad: var(--sp-3);   /* vertical padding inside a table row */
   --sp-hair: 1px;           /* a hairline of space, where 4px is too much */
   --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
   --sp-5: 24px;  --sp-6: 32px;  --sp-7: 48px;  --sp-8: 64px;
@@ -139,6 +140,7 @@
   --sp-8: 56px;
   --r-1: 1px;  --r-2: 2px;  --r-3: 3px;
 
+  --row-pad: var(--sp-2);
   --control-h: 32px;
   --shadow-1: 0 1px 0 rgba(20, 22, 26, .05);
   --shadow-2: 0 6px 20px rgba(20, 22, 26, .10);
