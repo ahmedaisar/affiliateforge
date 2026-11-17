@@ -11,11 +11,13 @@ this product's order differs, and says so.
 
 ## Status
 
-**Stage 2 (design) is the first stage whose done-when is open.** Nothing is in production;
-nothing is deployed; the repository holds a proposal and these documents and no app code.
-**Waiting on the owner:** the six picks in `decisions.md` (D1–D6) and a read of the four
-provisional picks — the shape switches, `billing: none`, the stack, and the phase order.
-Everything in Phase 1 can start before D1 and D6 are answered; Phases 4 onwards cannot.
+**Stage 2 (design) is in flight; Phase 1 is the active phase.** Nothing is in production;
+nothing is deployed; the repository holds documents, the design kit and artboards and no app
+code. **Decided 2026-11-17:** D1 B (build and hand over), D2 portfolio operators, D3 $299 +
+$9/month, D4 billing only, D5 eBay first with Amazon gated, D6 Cairn. **Still to read:** the
+four provisional picks in `decisions.md` — the shape switches, `billing: none`, the stack and
+the phase order. **Waiting on the owner now:** which of the two app-shell directions in
+`design/artboards.html` to build on.
 
 ## Assumptions this plan rests on — the owner should confirm or refute these first
 
@@ -41,22 +43,24 @@ Everything in Phase 1 can start before D1 and D6 are answered; Phases 4 onwards 
 
 - **Owner review** — the proposal, these documents and the four provisional picks. Done
   when: D1–D6 are answered and the provisional picks are either read or corrected.
-  Status: in flight. Brief: —
+  Status: done (17 Nov 2026) for the six picks; the four provisional picks are still unread.
 
 ### Phase 1 — Design (stage 2)
 
 - **The jobs map** — each of the eight jobs as a screen, the one question that screen
   answers, its primary action. Drawn from `brief.md` § Jobs to be done. Done when: every job
-  has a screen and no screen answers two questions. Status: drafted (`design/jobs-map.md`),
-  awaiting the owner's read with the Phase 0 review.
+  has a screen and no screen answers two questions. Status: drafted (`design/jobs-map.md`).
 - **The kit** — `design/tokens.css` (every raw value), `design/kit.css` (primitives built
   from tokens), `design/README.md` (the design record; `design/kit-notes.md` becomes its
   evidence). Done when: no colour, size or space literal exists outside `tokens.css`, and
-  the kit renders a specimen page of its own controls and states. Status: not started.
+  the kit renders a specimen page of its own controls and states. Status: in flight —
+  `design/tokens.css`, `design/kit.css` and `design/README.md` landed with the artboards.
 - **Artboards** — two app-shell directions at 1440 and 390, plus the three storefront
   directions from the proposal rebuilt from the kit (Field Notes, Bench, Scout). Done when:
   the owner picks one app direction and one storefront direction, recorded in
-  `decisions.md`. Status: not started. Brief: —
+  `decisions.md`. Status: app directions drawn at 1440 and 390 in
+  `design/artboards.html` — **waiting on the owner's pick**; the storefront direction is
+  carried over from the proposal (Field Notes recommended) and needs the owner's yes.
 
 ### Phase 2 — Screens on sample data, and the front door (stage 3)
 

@@ -17,8 +17,9 @@ named beside it. Do not link a planned doc as if it exists.
 
 | Doc | What it is |
 |---|---|
+| [`../design/README.md`](../design/README.md) | The kit: `tokens.css`, `kit.css`, the two app-shell directions, and what the kit guarantees. |
 | [`../design/jobs-map.md`](../design/jobs-map.md) | Each job, its screen, the one question that screen answers and its primary action. |
-| [`../design/kit-notes.md`](../design/kit-notes.md) | The design record for the proposal artifact: direction, palette, type, layout, departures, checks. Becomes `design/README.md` at Phase 1, when it covers the app's kit too. |
+| [`../design/kit-notes.md`](../design/kit-notes.md) | The design record for the proposal artifact, written before the kit existed: palette, type, layout, departures, checks. Evidence, not a rule. |
 
 ## Engineering *(all planned)*
 

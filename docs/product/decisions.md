@@ -13,13 +13,31 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 
 ---
 
+## 2026-11-17 — the app shell's direction
+
+- **Options considered:** A, *Trade press* — warm paper, serif display, top bar, one wide
+  ruled table, generous spacing, continuing the proposal's look; B, *Workbench* — cool
+  stock, condensed grotesque, left rail with counts, tighter rows, a state bar on every
+  row's left edge; and a third drawn from halves of each.
+- **Picked:** **open** — both are drawn at 1440 and 390 in `design/artboards.html`; the
+  agent recommends **A**.
+- **Why A:** the product's whole claim is that a generated store should look like a
+  publication a person would link to. A control plane that looks like every AI dashboard
+  undercuts that claim before the first screen of a store is seen; B is quieter and scans
+  better at thirty rows, which is a real advantage, and is closer to what the market
+  already sells.
+- **Reopen when:** the owner picks (fill this entry in), or the walkthrough shows A's
+  ruled table fails at thirty rows — then A keeps its type and stock and takes B's rail and
+  row density.
+
 ## 2026-11-17 — whether the product has in-app billing
 
 - **Options considered:** the identity provider's billing (Clerk Billing subscriptions, the
   default); Stripe Checkout/Billing in-app; no in-app billing, the fee collected outside it.
 - **Picked:** none in v1 — by **the agent, provisionally**. The price is real ($299 build,
   $9/month caretaker) but it is charged by a Stripe Payment Link the owner clicks through
-  after a build call, not by a table in the app. Reopen on read.
+  after a build call, not by a table in the app. **The owner's D4 answer ("billing only")**
+  settles the question this entry asked: no in-app billing in v1.
 - **Why:** the billing default assumes a subscription per workspace and a plan table that
   gates capacities. This product's first charge is a **one-time** fee for work an agent
   and a person do, which the provider's subscription model cannot express, and its
@@ -69,19 +87,19 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 ## 2026-11-17 — D6 · the name
 
 - **Options considered:** Cairn; a descriptive name; naming it later.
-- **Picked:** **open** — the agent recommends **Cairn** (a stack of stones marking a path:
-  built once, stays; short, ownable, no AI cliché).
-- **Why it is open:** a name is the owner's call and it blocks a domain, a logo and a
-  landing page. It does not block the kit or the screens.
-- **Reopen when:** the owner picks. Until then every artifact says Cairn and nothing
-  external uses it.
+- **Picked:** **Cairn**, by **the owner**: "D1 B, D2 operators, D3 keep, D4 billing only,
+  D5 keep, D6 Cairn" (2026-11-17).
+- **Why:** a stack of stones marking a path — built once, stays. Short, ownable, no AI
+  cliché. The internal artifacts already used it, so nothing is renamed.
+- **Reopen when:** a trademark search or the domain blocks it — then a new entry here, never
+  an edit to this one.
 
 ## 2026-11-17 — D5 · which merchants come first
 
 - **Options considered:** eBay + specialist networks with Amazon gated; Amazon first;
   any merchant with a public feed.
-- **Picked:** **open** — the agent recommends **eBay + specialist networks first, Amazon
-  gated**.
+- **Picked:** **eBay + specialist networks first, Amazon gated**, by **the owner** ("D5
+  keep", 2026-11-17).
 - **Why:** Amazon's PA-API was retired 15 May 2026 and its successor (Creators API) issues
   credentials only after an Associates account has **10 qualifying sales in 30 days** — a
   gate held by the buyer's account, not by us. A first build that shows no price anywhere
@@ -94,8 +112,9 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 
 - **Options considered:** subscription billing for our customers only; also supporting
   own-product checkout in generated stores; deferring.
-- **Picked:** **open** — the agent recommends **billing only**: an affiliate store has no
-  cart, because affiliate revenue arrives as commission, never as a sale.
+- **Picked:** **billing only**, by **the owner** ("D4 billing only", 2026-11-17): an
+  affiliate store has no cart, because affiliate revenue arrives as commission, never as a
+  sale. This also settles the meaning of "payments" in the original brief.
 - **Why:** own-product checkout adds Stripe, tax, refunds, fraud and shipping — a second
   company, not a feature. The word "payments" in the original brief is read as "the store
   is paid" (commissions) and "you are paid" (the fee).
@@ -106,7 +125,8 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 
 - **Options considered:** $299 build + $9/month caretaker; $19/site/month with no build
   fee; free build in exchange for a share of commission.
-- **Picked:** **open** — the agent recommends **$299 + $9/month**.
+- **Picked:** **$299 build + $9/month caretaker**, by **the owner** ("D3 keep",
+  2026-11-17).
 - **Why:** the market already buys this way (a plugin's yearly, an agency's one-off, a $199
   done-for-you blog), a store earns hundreds not thousands in its first months, so $19/month
   is 20–40% of early income, and a one-time fee is a capital decision the operator is used
@@ -118,7 +138,8 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 
 - **Options considered:** portfolio operators running 3–30 sites; first-time builders;
   small agencies.
-- **Picked:** **open** — the agent recommends **portfolio operators**.
+- **Picked:** **portfolio operators running 3–30 sites**, by **the owner** ("D2
+  operators", 2026-11-17).
 - **Why:** they already pay $25–128/month for the job, decide in an evening, hold their own
   Associates accounts (so the gate is theirs and no credential reaches us), and their
   pain — thirty sites that all look like FreshStore — is the pain this product answers.
@@ -132,7 +153,10 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 - **Options considered:** A hosted portfolio builder ($10/site/month, our hosting and
   credentials); B build & hand over ($299 + $9/month, code in the owner's GitHub and
   Vercel); C white-label for agencies.
-- **Picked:** **open** — the agent recommends **B**.
+- **Picked:** **B — build and hand over** ($299 + $9/month caretaker, code in the owner's
+  GitHub and Vercel), by **the owner** ("D1 B", 2026-11-17). **With this pick, direction B
+  is the product and directions A and C move to the backlog**: A as H2's fallback, C as the
+  agency direction. Every later document reads B as decided, not as a recommendation.
 - **Why:** A competes with an incumbent that already has merchant plumbing, six designs and
   years of reviews, at a price where our own refresh cost eats the margin, and it puts
   customers' affiliate keys in our database. B sells the two things the incumbent cannot:

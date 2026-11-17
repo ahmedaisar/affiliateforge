@@ -1,0 +1,145 @@
+/* ============================================================================
+   tokens.css — the only file in this repository that holds a raw value.
+   A colour, a size, a space, a radius, a duration: if you need a number,
+   it is here and you use its name. Nothing else may write a literal.
+   ========================================================================== */
+
+:root {
+  /* ---- Paper and ink -------------------------------------------------- */
+  --paper:        #faf7f1;   /* page */
+  --paper-2:      #f3eee5;   /* panel: one step off the page */
+  --paper-3:      #eae3d6;   /* recess: table heads, rails */
+  --raise:        #fffdf8;   /* a card that floats on the page */
+  --ink:          #1a1917;   /* 15.9:1 on paper */
+  --ink-2:        #4e4a43;   /* 8.1:1 — body copy */
+  --ink-3:        #6a6458;   /* 4.6:1 on the recess, 5.5:1 on paper — meta only */
+  --rule:         #d9d1c2;   /* hairlines, table grid */
+  --rule-strong:  #bdb2a0;   /* a rule that must be seen */
+
+  /* ---- The acting colour ----------------------------------------------- */
+  /* Blue is used by no state, so a blue control never reports health. */
+  --accent:       #1d4e6f;
+  --accent-hover: #163d57;
+  --accent-wash:  #e6eef3;
+  --on-accent:    #fdfbf6;
+
+  /* ---- States: always a word plus a shape ------------------------------ */
+  --ok:        #2f6b45;  --ok-wash:   #e3eee7;
+  --warn:      #8a5a12;  --warn-wash: #f4ebd9;
+  --bad:       #9b2c2c;  --bad-wash:  #f6e4e2;
+  --none:      #6b665d;  --none-wash: #ece8e0;
+
+  /* ---- Type ------------------------------------------------------------ */
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* The direction swaps these two; body copy stays sans in both. */
+  --display: var(--serif);
+  --body:    var(--sans);
+
+  --t-11: 11px;  --lh-11: 1.45;
+  --t-12: 12px;  --lh-12: 1.5;
+  --t-13: 13px;  --lh-13: 1.5;
+  --t-15: 15px;  --lh-15: 1.6;
+  --t-17: 17px;  --lh-17: 1.45;
+  --t-20: 20px;  --lh-20: 1.3;
+  --t-25: 25px;  --lh-25: 1.2;
+  --t-32: 32px;  --lh-32: 1.12;
+  --t-44: 44px;  --lh-44: 1.05;
+
+  --w-normal: 400;
+  --w-strong: 600;
+
+  --track-caps: .14em;   /* small caps eyebrows */
+  --track-tight: -.01em;
+
+  /* ---- Space ----------------------------------------------------------- */
+  --sp-hair: 1px;           /* a hairline of space, where 4px is too much */
+  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 24px;  --sp-6: 32px;  --sp-7: 48px;  --sp-8: 64px;
+
+  /* ---- Form ------------------------------------------------------------ */
+  --r-1: 2px;    --r-2: 4px;    --r-3: 8px;    --r-pill: 999px;
+  --bw: 1px;
+  --bw-strong: 2px;         /* a rule that must be seen */
+  --mark: 10px;             /* the box a state's shape is drawn in */
+  --mark-bar-w: 3px;
+  --mark-bar-h: 12px;
+  --edge-bar: 3px;          /* the state bar on a row's left edge */
+  --meter-h: 4px;
+  --avatar: 20px;
+  --brand-mark: 18px;
+  --topbar-h: 56px;
+  --topbar-h-sm: 48px;
+  --card-min: 200px;
+  --bp-phone: 720px;        /* media queries cannot read a var; this documents it */
+  --control-h: 34px;        /* default control height */
+  --touch: 44px;            /* icon-only controls never go below this */
+  --focus-w: 2px;
+  --focus-offset: 2px;
+  --focus-offset-tight: 1px;
+
+  --shadow-1: 0 1px 2px rgba(26, 25, 23, .06);
+  --shadow-2: 0 8px 28px rgba(26, 25, 23, .12);
+
+  /* ---- Layout ---------------------------------------------------------- */
+  --max: 1120px;
+  --measure: 66ch;
+  --gutter: 64px;
+  --gutter-sm: 16px;
+  --rail-w: 208px;
+  --frame-desk-w: 1440px;
+  --frame-desk-h: 900px;
+  --frame-phone-w: 390px;
+  --frame-phone-h: 780px;
+  --frame-zoom: .62;
+  --rail-w-collapsed: 56px;
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --dur: 140ms;
+  --ease: cubic-bezier(.2, .7, .3, 1);
+}
+
+/* ============================================================================
+   Direction B — "Workbench". Same tokens, different values: cooler stock,
+   a condensed grotesque for display, square corners, a tighter scale, and
+   figures that read as instrument output rather than as prose.
+   Direction A is the :root values above ("Trade press").
+   ========================================================================== */
+[data-direction="b"] {
+  --paper:       #f8f8f5;
+  --paper-2:     #efefe9;
+  --paper-3:     #e4e4dc;
+  --raise:       #ffffff;
+  --ink:         #14161a;
+  --ink-2:       #44484f;
+  --ink-3:       #61666e;
+  --rule:        #d8d8d0;
+  --rule-strong: #bcbcb2;
+
+  --accent:      #274a63;
+  --accent-hover:#1b364a;
+  --accent-wash: #e4ecf1;
+
+  --ok:   #2b6b4a;  --ok-wash:   #dcece3;
+  --warn: #85560d;  --warn-wash: #f3e9d5;
+  --bad:  #9a2b2b;  --bad-wash:  #f5e1e0;
+  --none: #5f646b;  --none-wash: #e8e8e2;
+
+  --display: var(--sans);
+  --body:    var(--sans);
+
+  --t-11: 11px;  --t-12: 12px;  --t-13: 13px;  --t-15: 14px;
+  --t-17: 16px;  --t-20: 19px;  --t-25: 23px;  --t-32: 29px;  --t-44: 38px;
+
+  --track-caps: .1em;
+  --track-tight: -.011em;
+
+  --sp-8: 56px;
+  --r-1: 1px;  --r-2: 2px;  --r-3: 3px;
+
+  --control-h: 32px;
+  --shadow-1: 0 1px 0 rgba(20, 22, 26, .05);
+  --shadow-2: 0 6px 20px rgba(20, 22, 26, .10);
+}

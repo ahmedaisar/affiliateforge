@@ -1,0 +1,49 @@
+/* Artboard chrome only — the frames, not the product. Everything inside a
+   .board is composed from kit.css; nothing here styles a screen. */
+
+.artboard-page { max-width: var(--max); margin: 0 auto; padding: var(--sp-7) var(--sp-5) var(--sp-8); }
+
+.artboard-head { border-bottom: var(--bw-strong) solid var(--ink); padding-bottom: var(--sp-4); }
+.artboard-head h1 { font-family: var(--display); font-size: var(--t-32); line-height: var(--lh-32); letter-spacing: var(--track-tight); }
+
+.direction { margin-top: var(--sp-8); }
+.direction__head {
+  display: flex; align-items: baseline; gap: var(--sp-3); flex-wrap: wrap;
+  padding-bottom: var(--sp-2); border-bottom: var(--bw) solid var(--rule);
+  margin-bottom: var(--sp-4);
+}
+.direction__name { font-family: var(--display); font-size: var(--t-20); line-height: var(--lh-20); font-weight: var(--w-strong); }
+.direction__why { font-size: var(--t-13); color: var(--ink-2); max-width: var(--measure); }
+
+.board-row { display: flex; align-items: flex-start; gap: var(--sp-5); flex-wrap: wrap; }
+
+.frame {
+  border: var(--bw) solid var(--rule-strong);
+  border-radius: var(--r-2);
+  background: var(--raise);
+  overflow: hidden;
+  box-shadow: var(--shadow-2);
+  max-width: 100%;
+}
+.frame__bar {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: var(--bw) solid var(--rule);
+  background: var(--paper-3);
+}
+.frame__dot { width: var(--sp-2); height: var(--sp-2); border-radius: var(--r-pill); background: var(--rule-strong); }
+.frame__url {
+  flex: 1 1 auto; padding: var(--sp-hair) var(--sp-2);
+  background: var(--paper); border: var(--bw) solid var(--rule);
+  border-radius: var(--r-pill);
+  font-family: var(--mono); font-size: var(--t-11); color: var(--ink-3);
+}
+.frame__inner { background: var(--paper); }
+.frame--desktop .frame__inner { width: var(--frame-desk-w); height: var(--frame-desk-h); zoom: var(--frame-zoom); }
+.frame--phone { width: var(--frame-phone-w); }
+.frame--phone .frame__inner { width: var(--frame-phone-w); height: var(--frame-phone-h); }
+
+
+
+
+
