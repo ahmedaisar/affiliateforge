@@ -47,7 +47,8 @@ Everything in Phase 1 can start before D1 and D6 are answered; Phases 4 onwards 
 
 - **The jobs map** — each of the eight jobs as a screen, the one question that screen
   answers, its primary action. Drawn from `brief.md` § Jobs to be done. Done when: every job
-  has a screen and no screen answers two questions. Status: not started.
+  has a screen and no screen answers two questions. Status: drafted (`design/jobs-map.md`),
+  awaiting the owner's read with the Phase 0 review.
 - **The kit** — `design/tokens.css` (every raw value), `design/kit.css` (primitives built
   from tokens), `design/README.md` (the design record; `design/kit-notes.md` becomes its
   evidence). Done when: no colour, size or space literal exists outside `tokens.css`, and
