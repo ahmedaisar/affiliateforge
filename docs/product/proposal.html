@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cairn — proposal: a store you own, built by three agents</title>
+<meta name="description" content="Proposal: an agent-built affiliate storefront you own. Research with sources, alternatives, segment, value curve, 8 jobs, 8 screens, 6 decisions, 5 hypotheses.">
+<style>
+/* ============================================================
+   tokens.css — every raw value lives here and only here.
+   Palette: one set (light). Decision recorded in kit README:
+   a document read on paper-toned background; no dark set yet.
+   Accent hue is a blue (no state uses it). State hues are
+   green / amber / red / grey, each with its own glyph.
+   ============================================================ */
+:root{
+  /* paper + ink */
+  --paper:#faf7f1;
+  --paper-2:#f3eee5;
+  --paper-3:#eae3d6;
+  --ink:#1a1917;
+  --ink-2:#4e4a43;
+  --ink-3:#767065;
+  --rule:#d9d1c2;
+  --rule-strong:#bdb2a0;
+
+  /* accent — acts (buttons, links that do something) */
+  --accent:#1d4e6f;
+  --accent-hover:#163d57;
+  --accent-wash:#e4ebf0;
+  --accent-ink:#ffffff;
+
+  /* state — reports. Never used for an action. */
+  --ok:#2f6b45;      --ok-wash:#e3eee7;
+  --warn:#8a5a12;    --warn-wash:#f4ebd9;
+  --bad:#9b2c2c;     --bad-wash:#f6e4e2;
+  --none:#6b665d;    --none-wash:#ece8e0;
+
+  /* entities in charts — colour follows the entity, not its rank */
+  --s-cairn:#1d4e6f;
+  --s-fresh:#7a5c3e;
+  --s-bolt:#4b4b63;
+  --s-diy:#8e8779;
+  /* the "Scout" specimen in screen 2 — a generated store's own direction */
+  --scout-ink:#211f1a;
+  --scout-paper:#f7f2e8;
+  --scout-edge:#6f685c;
+
+  /* neutral data ink, so the accent never draws data */
+  --data-1:#3b4a5a;
+  --data-2:#9aa3ab;
+
+  /* type — editorial serif for display, system sans for reading */
+  --serif:iowan old style,"palatino linotype",palatino,"book antiqua",georgia,serif;
+  --sans:ui-sans-serif,system-ui,-apple-system,"segoe ui",roboto,helvetica,arial,sans-serif;
+  --mono:ui-monospace,sfmono-regular,"sf mono",menlo,consolas,monospace;
+
+  --t-11:11px;  --lh-11:1.35;
+  --t-12:12px;  --lh-12:1.4;
+  --t-13:13px;  --lh-13:1.5;
+  --t-15:15px;  --lh-15:1.6;
+  --t-17:17px;  --lh-17:1.55;
+  --t-20:20px;  --lh-20:1.35;
+  --t-25:25px;  --lh-25:1.22;
+  --t-32:32px;  --lh-32:1.15;
+  --t-44:44px;  --lh-44:1.06;
+  --t-56:56px;  --lh-56:1.02;
+  --w-400:400; --w-600:600;
+
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+  --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:64px; --sp-9:96px;
+
+  --r-1:3px; --r-2:12px; --r-pill:999px;
+
+  --e-1:0 1px 0 rgba(26,25,23,.04), 0 1px 2px rgba(26,25,23,.05);
+  --e-2:0 12px 32px -12px rgba(26,25,23,.18), 0 2px 6px rgba(26,25,23,.06);
+
+  --dur-1:120ms; --dur-2:220ms; --ease:cubic-bezier(.2,.7,.3,1);
+
+  --z-base:0; --z-sticky:50; --z-modal:100;
+
+  --ctl-h:36px; --ctl-h-lg:44px;
+  --icon:16px; --icon-lg:20px; --stroke:1.5;
+
+  --measure:66ch;
+  --doc-max:1120px;
+}
+</style>
+<style>
+/* kit.css — primitives built from tokens only. No raw colour, size or
+   duration appears below this line; geometry (1px hairlines, 100%, grid
+   tracks) is the only exception. */
+:where(*, *::before, *::after){box-sizing:border-box}
+:where(html){ -webkit-text-size-adjust:100%; scroll-behavior:smooth }
+:where(body){
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:var(--t-15); line-height:var(--lh-15);
+  font-weight:var(--w-400);
+  overflow-wrap:anywhere;
+  text-rendering:optimizeLegibility;
+}
+:where(.doc){ max-width:var(--doc-max); margin:0 auto; padding:var(--sp-5) var(--sp-4) var(--sp-9) }
+:where(.sr-only){ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0 }
+
+/* focus: set once, never removed */
+:where(.doc) :where(a,button,input,summary):focus-visible{
+  outline:2px solid var(--accent); outline-offset:2px; border-radius:var(--r-1)
+}
+@media (prefers-reduced-motion: reduce){
+  :where(*) { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important }
+}
+
+/* ---------- type ---------- */
+.eyebrow{ font-size:var(--t-11); letter-spacing:.14em; text-transform:uppercase; font-weight:var(--w-600); color:var(--ink-3); margin:0 }
+.h1{ font-family:var(--serif); font-size:var(--t-44); line-height:var(--lh-44); font-weight:var(--w-400); letter-spacing:-.01em; margin:0; text-wrap:balance }
+.h2{ font-family:var(--serif); font-size:var(--t-32); line-height:var(--lh-32); font-weight:var(--w-400); letter-spacing:-.005em; margin:0; text-wrap:balance }
+.h3{ font-family:var(--serif); font-size:var(--t-25); line-height:var(--lh-25); font-weight:var(--w-400); margin:0 }
+.h4{ font-size:var(--t-17); line-height:var(--lh-17); font-weight:var(--w-600); margin:0 }
+.lede{ font-size:var(--t-20); line-height:var(--lh-20); color:var(--ink-2); margin:0; max-width:var(--measure) }
+.body{ font-size:var(--t-15); line-height:var(--lh-15); color:var(--ink-2); margin:0; max-width:var(--measure) }
+.body--wide{ max-width:none }
+.small{ font-size:var(--t-13); line-height:var(--lh-13); color:var(--ink-2); margin:0 }
+.meta{ font-size:var(--t-12); line-height:var(--lh-12); color:var(--ink-3); margin:0 }
+.num{ font-variant-numeric:tabular-nums; white-space:nowrap }
+.doc a{ color:var(--accent); text-decoration:underline; text-underline-offset:2px; text-decoration-thickness:1px }
+.doc a:hover{ color:var(--accent-hover) }
+.src{ font-size:var(--t-11); vertical-align:super; text-decoration:none !important; border:0; padding:0 var(--sp-1) }
+
+/* ---------- layout ---------- */
+.stack{ display:flex; flex-direction:column; gap:var(--sp-4) }
+.stack--tight{ gap:var(--sp-2) }
+.stack--loose{ gap:var(--sp-6) }
+.row{ display:flex; flex-wrap:wrap; gap:var(--sp-3); align-items:center }
+.rule{ border:0; border-top:1px solid var(--rule); margin:0 }
+.section{ padding:var(--sp-8) 0 0; display:flex; flex-direction:column; gap:var(--sp-5) }
+.section > .sec-head{ display:flex; flex-direction:column; gap:var(--sp-2); border-top:2px solid var(--ink); padding-top:var(--sp-3) }
+.grid{ display:grid; gap:var(--sp-5) }
+.grid--2{ grid-template-columns:1fr }
+.panel{ background:var(--paper-2); border:1px solid var(--rule); border-radius:var(--r-2); padding:var(--sp-5) }
+.panel--plain{ background:transparent }
+.card{ background:var(--paper); border:1px solid var(--rule); border-radius:var(--r-2); box-shadow:var(--e-1); padding:var(--sp-4) }
+.card--flush{ padding:0; overflow:hidden }
+
+/* ---------- header / nav ---------- */
+.masthead{ display:flex; flex-direction:column; gap:var(--sp-5); padding-bottom:var(--sp-6); border-bottom:1px solid var(--rule-strong) }
+.masthead__top{ display:flex; justify-content:space-between; gap:var(--sp-4); flex-wrap:wrap; align-items:baseline }
+.toc{ position:sticky; top:0; z-index:var(--z-sticky); background:var(--paper); border-bottom:1px solid var(--rule); margin:0 calc(var(--sp-4) * -1); padding:var(--sp-2) var(--sp-4); overflow-x:auto }
+.toc ul{ display:flex; gap:var(--sp-4); list-style:none; margin:0; padding:0 }
+.toc a{ font-size:var(--t-12); color:var(--ink-2); text-decoration:none; white-space:nowrap; padding:var(--sp-1) 0; display:block; border-bottom:2px solid transparent }
+.toc a:hover{ color:var(--ink); border-bottom-color:var(--rule-strong) }
+
+/* ---------- buttons (doc-level controls) ---------- */
+.btn{ display:inline-flex; align-items:center; gap:var(--sp-2); min-height:var(--ctl-h); padding:0 var(--sp-4); border-radius:var(--r-1); border:1px solid transparent; font:inherit; font-size:var(--t-13); font-weight:var(--w-600); line-height:1; cursor:pointer; text-decoration:none !important; transition:background-color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease) }
+.btn--primary{ background:var(--accent); color:var(--accent-ink) }
+.btn--primary:hover{ background:var(--accent-hover); color:var(--accent-ink) }
+.btn--secondary{ background:transparent; color:var(--ink); border-color:var(--rule-strong) }
+.btn--secondary:hover{ background:var(--paper-3); color:var(--ink) }
+.btn--lg{ min-height:var(--ctl-h-lg) }
+
+/* ---------- chips and states (word + shape, never colour alone) ---------- */
+.chip{ display:inline-flex; align-items:center; gap:var(--sp-1); padding:2px var(--sp-2); border-radius:var(--r-pill); font-size:var(--t-11); line-height:var(--lh-11); font-weight:var(--w-600); letter-spacing:.04em; text-transform:uppercase; border:1px solid currentColor; white-space:nowrap }
+.chip--observed{ color:var(--ok); background:var(--ok-wash) }
+.chip--decision{ color:var(--accent); background:var(--accent-wash) }
+.chip--inference{ color:var(--warn); background:var(--warn-wash) }
+.chip--assumption{ color:var(--bad); background:var(--bad-wash) }
+.chip--none{ color:var(--none); background:var(--none-wash) }
+.state{ display:inline-flex; align-items:center; gap:var(--sp-2); font-size:var(--t-12); line-height:var(--lh-12); white-space:nowrap }
+.state__dot{ width:8px; height:8px; border-radius:var(--r-pill); border:1.5px solid currentColor; flex:none }
+.state--ok{ color:var(--ok) } .state--ok .state__dot{ background:currentColor }
+.state--warn{ color:var(--warn) } .state--warn .state__dot{ background:linear-gradient(currentColor,currentColor) center/8px 2px no-repeat }
+.state--bad{ color:var(--bad) } .state--bad .state__dot{ background:var(--bad); border-radius:var(--r-1) }
+.state--none{ color:var(--none) }
+
+/* ---------- tables ---------- */
+.table-wrap{ overflow-x:auto; border:1px solid var(--rule); border-radius:var(--r-2); background:var(--paper) }
+table{ border-collapse:collapse; width:100%; font-size:var(--t-13); line-height:var(--lh-13) }
+th,td{ text-align:left; vertical-align:top; padding:var(--sp-3); border-bottom:1px solid var(--rule) }
+th{ font-size:var(--t-11); letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); font-weight:var(--w-600); background:var(--paper-2); position:sticky; top:0 }
+tbody tr:last-child td{ border-bottom:0 }
+td .small{ margin-top:var(--sp-1) }
+.table--dense th, .table--dense td{ padding:var(--sp-2) var(--sp-3) }
+/* a short table would otherwise crush its columns on a phone; scroll instead */
+.table-wrap > table{ min-width:600px }
+
+/* ---------- figures / screen frames ---------- */
+.fig{ margin:0; display:flex; flex-direction:column; gap:var(--sp-2) }
+.fig__cap{ display:block; font-size:var(--t-12); line-height:var(--lh-15); color:var(--ink-3) }
+.fig__cap .chip{ margin:0 var(--sp-1) }
+.fig__cap strong{ color:var(--ink); font-weight:var(--w-600) }
+.screen-scroll{ overflow-x:auto; padding-bottom:var(--sp-2); border-radius:var(--r-2) }
+.screen{ min-width:960px; background:var(--paper); border:1px solid var(--rule-strong); border-radius:var(--r-2); box-shadow:var(--e-2); overflow:hidden }
+.screen--store{ min-width:960px }
+.chrome{ display:flex; align-items:center; gap:var(--sp-2); padding:var(--sp-2) var(--sp-3); background:var(--paper-3); border-bottom:1px solid var(--rule-strong) }
+.chrome__dots{ display:flex; gap:4px }
+.chrome__dot{ width:8px; height:8px; border-radius:var(--r-pill); background:var(--rule-strong) }
+.chrome__url{ font-size:var(--t-11); color:var(--ink-2); background:var(--paper); border:1px solid var(--rule); border-radius:var(--r-pill); padding:2px var(--sp-3) }
+.screen__body{ display:grid; grid-template-columns:200px 1fr; min-height:520px }
+.screen__body--full{ grid-template-columns:1fr }
+.rail{ background:var(--paper-2); border-right:1px solid var(--rule); padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-4) }
+.rail__brand{ display:flex; align-items:center; gap:var(--sp-2); font-size:var(--t-13); font-weight:var(--w-600) }
+.rail__mark{ width:18px; height:18px; flex:none; color:var(--ink) }
+.rail nav ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px }
+.rail nav a{ display:block; padding:var(--sp-2) var(--sp-3); border-radius:var(--r-1); font-size:var(--t-13); color:var(--ink-2); text-decoration:none }
+.rail nav a[aria-current="page"]{ background:var(--paper-3); color:var(--ink); font-weight:var(--w-600) }
+.main{ padding:var(--sp-5); display:flex; flex-direction:column; gap:var(--sp-5); min-width:0 }
+.main__head{ display:flex; justify-content:space-between; align-items:flex-start; gap:var(--sp-4); flex-wrap:wrap }
+.kpis{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--sp-3) }
+.kpi{ border:1px solid var(--rule); border-radius:var(--r-1); padding:var(--sp-3) }
+.kpi__label{ font-size:var(--t-11); text-transform:uppercase; letter-spacing:.08em; color:var(--ink-3) }
+.kpi__value{ font-size:var(--t-20); font-family:var(--serif); margin-top:var(--sp-1) }
+.thumb{ background:var(--paper-3); border:1px solid var(--rule); border-radius:var(--r-1); aspect-ratio:4/3; display:grid; place-items:center; color:var(--ink-3); font-size:var(--t-11); text-align:center; padding:var(--sp-2) }
+
+/* ---------- charts ---------- */
+.chart{ width:100%; height:auto; display:block }
+.chart text{ font-family:var(--sans); fill:var(--ink-3) }
+.chart .axis{ stroke:var(--rule-strong); stroke-width:1 }
+.chart .gridline{ stroke:var(--rule); stroke-width:1 }
+.chart .lbl{ fill:var(--ink); font-size:12px }
+.chart .lbl-2{ fill:var(--ink-2); font-size:11px }
+.legend{ display:flex; flex-wrap:wrap; gap:var(--sp-4); font-size:var(--t-12); color:var(--ink-2) }
+.legend__item{ display:inline-flex; align-items:center; gap:var(--sp-2) }
+.legend__swatch{ width:10px; height:10px; border-radius:var(--r-pill); flex:none }
+/* a wide chart scrolls on a phone rather than shrinking its labels to nothing */
+.fig--wide{ overflow-x:auto; padding-bottom:var(--sp-2) }
+.fig--wide .chart{ min-width:860px }
+
+/* ---------- value curve dot rows ---------- */
+.curve{ display:flex; flex-direction:column; gap:var(--sp-3) }
+.curve__row{ display:grid; grid-template-columns:1fr; gap:var(--sp-2) }
+.curve__label{ font-size:var(--t-13); color:var(--ink-2) }
+.track{ position:relative; height:22px; background:var(--paper-2); border-radius:var(--r-pill); border:1px solid var(--rule) }
+.track__dot{ position:absolute; top:50%; width:10px; height:10px; border-radius:var(--r-pill); transform:translate(-50%,-50%); box-shadow:0 0 0 2px var(--paper); left:calc(var(--p) * (100% - 16px) + 8px) }
+.track__tick{ position:absolute; top:0; bottom:0; width:1px; background:var(--rule) }
+.track__scale{ display:flex; justify-content:space-between; font-size:var(--t-11); color:var(--ink-3) }
+
+/* ---------- decision blocks ---------- */
+.decision{ border:1px solid var(--rule); border-left:3px solid var(--accent); border-radius:var(--r-2); padding:var(--sp-5); background:var(--paper) }
+.decision__head{ display:flex; justify-content:space-between; gap:var(--sp-3); align-items:baseline; flex-wrap:wrap }
+.opt{ display:flex; gap:var(--sp-3); align-items:flex-start; padding:var(--sp-3); border:1px solid var(--rule); border-radius:var(--r-1); background:var(--paper-2) }
+.opt input{ margin-top:var(--sp-1); accent-color:var(--accent); width:16px; height:16px; flex:none }
+.opt--rec{ border-color:var(--accent); background:var(--accent-wash) }
+.opt__rec-tag{ font-size:var(--t-11); letter-spacing:.06em; text-transform:uppercase; color:var(--accent); font-weight:var(--w-600) }
+.copied{ font-size:var(--t-12); color:var(--ok) }
+
+/* ---------- store specimen surface (screens 7–8) ----------
+   A generated store is a different product with its own look; these
+   token overrides are the “Field Notes” direction shown in screen 2. */
+.store{ --paper:#fbf8f2; --paper-2:#f4efe4; --paper-3:#ebe4d5; --ink:#211f1a; --ink-2:#54504a; --ink-3:#7b756b; --rule:#ded6c6; --rule-strong:#c2b7a2; font-family:var(--sans); background:var(--paper); color:var(--ink) }
+.store .store__serif{ font-family:var(--serif) }
+.store__topbar{ display:flex; justify-content:space-between; align-items:center; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--rule-strong) }
+.store__nav{ display:flex; gap:var(--sp-4); font-size:var(--t-12); color:var(--ink-2) }
+.store__hero{ padding:var(--sp-6) var(--sp-5); display:grid; grid-template-columns:1.4fr 1fr; gap:var(--sp-5); border-bottom:1px solid var(--rule) }
+.store__kicker{ font-size:var(--t-11); letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3) }
+.store__h1{ font-family:var(--serif); font-size:var(--t-44); line-height:var(--lh-44); margin:var(--sp-2) 0 0 }
+.store__deck{ font-size:var(--t-17); line-height:var(--lh-17); color:var(--ink-2); margin:var(--sp-3) 0 0; max-width:52ch }
+.store__method{ font-size:var(--t-12); color:var(--ink-3); border-top:1px solid var(--rule); padding-top:var(--sp-2); margin-top:var(--sp-4) }
+.store__section{ padding:var(--sp-5) }
+.store__h2{ font-family:var(--serif); font-size:var(--t-25); margin:0 0 var(--sp-3) }
+.picks{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-4) }
+.pick{ border:1px solid var(--rule); border-radius:var(--r-1); background:var(--paper); display:flex; flex-direction:column }
+.pick__tag{ font-size:var(--t-11); letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); padding:var(--sp-2) var(--sp-3); border-bottom:1px solid var(--rule) }
+.pick__body{ padding:var(--sp-3); display:flex; flex-direction:column; gap:var(--sp-2); flex:1 }
+.pick__name{ font-family:var(--serif); font-size:var(--t-20); line-height:var(--lh-20) }
+.pick__price{ font-size:var(--t-13); font-variant-numeric:tabular-nums }
+.pick__why{ font-size:var(--t-12); color:var(--ink-2); line-height:var(--lh-12) }
+.pick__act{ margin-top:auto; display:flex; gap:var(--sp-2); align-items:center; padding-top:var(--sp-2) }
+.disclosure{ font-size:var(--t-11); color:var(--ink-3); line-height:var(--lh-11) }
+.stamp{ font-size:var(--t-11); color:var(--ink-3); font-variant-numeric:tabular-nums }
+.spec-scout{ background:var(--scout-ink); color:var(--scout-paper); min-height:230px; display:flex; flex-direction:column }
+.spec-scout__body{ padding:var(--sp-4); display:flex; flex-direction:column; gap:var(--sp-2); flex:1 }
+.spec-scout__kicker{ font-size:var(--t-11); letter-spacing:.16em; text-transform:uppercase; margin:0; opacity:.7 }
+.spec-scout__line{ font-family:var(--serif); font-size:var(--t-32); line-height:1.05; margin:0 }
+.spec-scout__pills{ display:flex; gap:var(--sp-2); margin-top:auto }
+.spec-scout__pill{ border:1px solid var(--scout-edge); border-radius:var(--r-pill); padding:2px var(--sp-2); font-size:var(--t-11) }
+.prodcard{ display:grid; grid-template-columns:1fr 1.1fr; gap:var(--sp-5); padding:var(--sp-5) }
+.spec{ width:100%; font-size:var(--t-12) }
+.spec th{ background:transparent; text-transform:none; letter-spacing:0; font-size:var(--t-12); color:var(--ink-3); position:static }
+.spec td{ text-align:right; font-variant-numeric:tabular-nums }
+
+/* ---------- responsive ---------- */
+@media (min-width:720px){
+  :where(.doc){ padding:var(--sp-6) var(--sp-6) var(--sp-9) }
+  .grid--2{ grid-template-columns:1fr 1fr }
+  .h1{ font-size:var(--t-56); line-height:var(--lh-56) }
+  .curve__row{ grid-template-columns:220px 1fr }
+  .curve__label{ padding-top:2px }
+}
+@media (min-width:960px){
+  .kpis{ grid-template-columns:repeat(4,1fr) }
+}
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <header class="masthead">
+    <div class="masthead__top">
+      <p class="eyebrow">Proposal &nbsp;·&nbsp; 17 November 2026 &nbsp;·&nbsp; for the owner</p>
+      <p class="meta">Every claim is marked by kind: <span class="chip chip--observed">observed</span> <span class="chip chip--decision">your decision</span> <span class="chip chip--inference">my inference</span> <span class="chip chip--assumption">untested</span></p>
+    </div>
+    <div class="stack">
+      <h1 class="h1">A store you own,<br>built by three agents.</h1>
+      <p class="lede">Cairn turns one niche brief into a researched, sourced, deployed affiliate storefront that belongs to its owner. Review the argument below: what the seed site actually is, six alternatives, the segment I would start with, eight jobs, eight screens and the six decisions that are yours.</p>
+    </div>
+    <div class="row">
+      <span class="state state--ok"><span class="state__dot"></span>Research done: 21 sources, read 17 Nov 2026</span>
+      <span class="state state--warn"><span class="state__dot"></span>One finding reshapes the build: Amazon's API gate</span>
+      <span class="state state--none"><span class="state__dot"></span>Screens are static mocks with sample data</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Sections">
+    <ul>
+      <li><a href="#read-first">Read this first</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#alternatives">Alternatives</a></li>
+      <li><a href="#segment">Segment</a></li>
+      <li><a href="#value">Value curve</a></li>
+      <li><a href="#recommendation">Recommendation</a></li>
+      <li><a href="#jobs">Jobs</a></li>
+      <li><a href="#screens">Screens</a></li>
+      <li><a href="#decisions">Decisions</a></li>
+      <li><a href="#hypotheses">Hypotheses</a></li>
+      <li><a href="#sources">Sources</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============================================================ -->
+  <section class="section" id="read-first">
+    <div class="sec-head">
+      <p class="eyebrow">00 — The four assumptions in your brief</p>
+      <h2 class="h2">Where I read your words one way, and where I think one is wrong</h2>
+    </div>
+    <div class="grid grid--2">
+      <div class="panel panel--plain stack">
+        <p class="body"><span class="chip chip--inference">my inference</span> <strong>The site you saw is a buying guide, not a shop.</strong> which3dprinter.best has no cart and no checkout. It earns commission when a reader clicks through to Amazon, eBay or a retailer. So “storefront with payments” splits into two different things, and only one of them is needed on day one.</p>
+        <p class="body"><span class="chip chip--inference">my inference</span> <strong>“Seamlessly” means one brief to a live, indexed store</strong> — under an hour, without the owner writing copy, picking a theme, or applying for an API. The agents run at build time, produce artifacts (a research brief, a catalogue, a repository) and stop. They are not a chat companion.</p>
+      </div>
+      <div class="panel panel--plain stack">
+        <p class="body"><span class="chip chip--assumption">untested</span> <strong>Your brief assumes the Affiliate agent can pull live Amazon offers on day one. It cannot.</strong> PA-API was retired on 15&nbsp;May&nbsp;2026; its successor requires <em>at least 10 qualifying sales in the past 30 days</em> before it will issue credentials <a class="src" href="#sources">S4</a> <a class="src" href="#sources">S5</a>. A brand-new store has zero. Even your seed site is hand-checking prices “while our Amazon integration is pending” <a class="src" href="#sources">S1</a>. My recommendation keeps Amazon links live from day one but prices gated, and I would not build it any other way.</p>
+        <p class="body"><span class="chip chip--decision">your call</span> <strong>“Payments” is ambiguous in your brief.</strong> If it means your subscription billing, it is needed and cheap (Stripe). If it means a checkout on the generated store, it is a different, heavier product and it is not needed for the affiliate model at all. Decision D4.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="row" style="justify-content:space-between">
+        <p class="h4">What this page decides</p>
+        <p class="meta">Impact against effort, § 5; the six open decisions, § 8</p>
+      </div>
+      <p class="body body--wide" style="margin-top:var(--sp-3)">Two directions are genuinely live: a hosted portfolio builder competing with FreshStore at about $10 per site per month, or a build-and-hand-over product sold once per store with a small caretaker fee. The evidence favours the second (§ 5). Everything else — names, order of merchants, whether a checkout ever exists — is yours, and each is a decision rather than a question I can answer from evidence.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="research">
+    <div class="sec-head">
+      <p class="eyebrow">01 — Research</p>
+      <h2 class="h2">What the seed site is, and the four constraints that decide what can be built</h2>
+    </div>
+
+    <div class="stack">
+      <h3 class="h3">1.1 The seed, read from its own HTML</h3>
+      <p class="body">You sent one page. I read the page, its sitemap, its robots file and a product page’s embedded data, because the interesting part of this product is what that site already had to solve.</p>
+      <div class="table-wrap">
+        <table class="table--dense">
+          <thead><tr><th>What I observed</th><th>Evidence</th><th>Why it matters for Cairn</th></tr></thead>
+          <tbody>
+            <tr><td>Next.js on Vercel, server-rendered, cache hit on the homepage</td><td><code>x-nextjs-prerender: 1</code>, <code>server: Vercel</code> <a class="src" href="#sources">S1</a></td><td>The output is a normal static-ish site. Generated stores can be Next.js repos deployed to the owner’s own Vercel account.</td></tr>
+            <tr><td>32 printers, 8 guides, 6 active deals, a “three questions, one shortlist” finder</td><td>Homepage counters <a class="src" href="#sources">S1</a></td><td>Small and deliberate, not 10,000 programmatic pages. That is the shape Google’s scaled-content policy leaves room for <a class="src" href="#sources">S10</a>.</td></tr>
+            <tr><td>90 days of price history embedded per product, drawn as a chart</td><td>Price arrays in the printer page payload <a class="src" href="#sources">S2</a></td><td>Price history is the defensible content. It is also what makes a “check current price” page worth visiting.</td></tr>
+            <tr><td>Schema.org <code>Offer</code> with price and currency, per-product sitemap priorities and <code>changefreq</code></td><td>JSON-LD and <code>/sitemap.xml</code> <a class="src" href="#sources">S2</a> <a class="src" href="#sources">S3</a></td><td>Free, mechanical, high-leverage work an agent should never get wrong twice.</td></tr>
+            <tr><td>A click-tracking endpoint (<code>/api/track</code>) disallowed in robots</td><td><code>/robots.txt</code> <a class="src" href="#sources">S3</a></td><td>Outbound-click analytics are built in from the start, not bolted on.</td></tr>
+            <tr><td>“Prices checked by hand — no automated scraping while our Amazon integration is pending.”</td><td>Homepage footer <a class="src" href="#sources">S1</a></td><td><strong>The single most useful sentence on the site.</strong> Its owner hit the Amazon gate too, and shipped anyway.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stack">
+      <h3 class="h3">1.2 Four constraints, checked before drawing a single screen</h3>
+      <div class="grid grid--2">
+        <div class="card stack stack--tight">
+          <div class="row" style="justify-content:space-between"><p class="h4">1. Amazon’s price gate</p><span class="chip chip--observed">observed</span></div>
+          <p class="small">PA-API is deprecated from 15 May 2026 in favour of the Creators API <a class="src" href="#sources">S5</a>. Creators API prerequisites, verbatim: be enrolled in Associates, “have at least 10 qualifying sales within the past 30 days”, register in Associates Central, generate credentials <a class="src" href="#sources">S4</a>. Displaying a price requires it to come from the API with a date/time stamp when it is refreshed less often than hourly <a class="src" href="#sources">S6</a>.</p>
+          <p class="small"><strong>Consequence:</strong> a store opened today cannot show Amazon prices, legally. It can show links, “check current price”, and a date-stamped figure only once gated. Cairn must make the gate a first-class state, not an error.</p>
+        </div>
+        <div class="card stack stack--tight">
+          <div class="row" style="justify-content:space-between"><p class="h4">2. One credential per account</p><span class="chip chip--inference">my inference</span></div>
+          <p class="small">Associates credentials are issued per affiliate account, and a tag works only with the key pair generated from that same account <a class="src" href="#sources">S7</a>; the operating agreement also scopes product data to sites whose principal purpose is promoting Amazon <a class="src" href="#sources">S6</a>. I found no route by which one platform key may serve its customers’ stores.</p>
+          <p class="small"><strong>Consequence:</strong> each store owner brings their own account and their own gate. A hosted multi-tenant product must therefore hold <em>other people’s</em> affiliate credentials — a security and support burden, and a likely agreement breach. This is the strongest structural argument for build-and-hand-over. Needs your lawyer, not my reading.</p>
+        </div>
+        <div class="card stack stack--tight">
+          <div class="row" style="justify-content:space-between"><p class="h4">3. Google’s scaled-content policy</p><span class="chip chip--observed">observed</span></div>
+          <p class="small">“Scaled content abuse is when many pages are generated for the primary purpose of manipulating search rankings and not helping users… Using generative AI tools… to generate many pages without adding value” <a class="src" href="#sources">S10</a>.</p>
+          <p class="small"><strong>Consequence:</strong> the product must optimise for a small number of genuinely useful pages (the seed site’s 32 printer pages and 8 guides), with sources, method pages and real price data. A “10,000 pages by lunchtime” feature is a churn machine: it ranks for a fortnight and then dies, and the owner cancels.</p>
+        </div>
+        <div class="card stack stack--tight">
+          <div class="row" style="justify-content:space-between"><p class="h4">4. Disclosure is not optional</p><span class="chip chip--observed">observed</span></div>
+          <p class="small">A material connection between the recommender and the merchant must be disclosed, clearly and near the recommendation (16 CFR 255.5) <a class="src" href="#sources">S17</a>.</p>
+          <p class="small"><strong>Consequence:</strong> every generated store ships a disclosure line by default and cannot have it removed from the template. Cheap to build, expensive to omit — and it is the kind of compliance a template marketplace never enforces.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <h3 class="h3">1.3 What operators actually say</h3>
+      <p class="small">Four independent posts, no vendors. <strong>Flagged:</strong> reddit.com returned HTTP 403 to direct fetching on 17 Nov 2026, so each quote is taken verbatim from the search-index snippet of the page, not from the live page. Treat them as indicative of language and pain, never as prevalence.</p>
+      <div class="grid grid--2">
+        <div class="card stack stack--tight">
+          <p class="body" style="font-family:var(--serif); font-size:var(--t-17); line-height:var(--lh-17)">“i tried using an ai tool to speed up the site creation part and ended up launching 3 sites over one weekend… too early to call anything a win financially no revenue yet but all 3 got indexed 2 started picking up impressions”</p>
+          <p class="meta">u/Active-Weakness2326, r/Affiliatemarketing, 15 Apr 2026 <a class="src" href="#sources">S18</a></p>
+          <p class="small"><span class="chip chip--observed">observed</span> Speed alone is already purchasable. The unmet need is the next thing: what to do after the site exists.</p>
+        </div>
+        <div class="card stack stack--tight">
+          <p class="body" style="font-family:var(--serif); font-size:var(--t-17); line-height:var(--lh-17)">“They are all the same template, all look AI created.”</p>
+          <p class="meta">u/SkyFluid1158, r/passive_income, 8 Apr 2026, on done-for-you niche blogs at $199 <a class="src" href="#sources">S19</a></p>
+          <p class="small"><span class="chip chip--observed">observed</span> Sameness is the visible failure mode of this category, and it is the one thing design differentiation can fix.</p>
+        </div>
+        <div class="card stack stack--tight">
+          <p class="body" style="font-family:var(--serif); font-size:var(--t-17); line-height:var(--lh-17)">“I’m thinking about spinning up 10 new niche sites and using an AI SEO agency to populate them with content. The idea is to use their automation to bypass the boring phase of site building.”</p>
+          <p class="meta">u/kimankur, r/Affiliatemarketing, 28 Mar 2026 <a class="src" href="#sources">S20</a></p>
+          <p class="small"><span class="chip chip--observed">observed</span> The buyer is already shopping for an outsourced build, at portfolio scale, in plain words.</p>
+        </div>
+        <div class="card stack stack--tight">
+          <p class="body" style="font-family:var(--serif); font-size:var(--t-17); line-height:var(--lh-17)">“The goal: Generate niche affiliate content using ChatGPT and Midjourney, honestly track my time, and see what the real world earnings look like.”</p>
+          <p class="meta">u/liveitupdeals, r/AIContentAutomators, 31 Jan 2026, reporting $650/month over three months <a class="src" href="#sources">S21</a></p>
+          <p class="small"><span class="chip chip--observed">observed</span> Revenue per store is small and slow. Any pricing must survive a store that earns hundreds, not thousands, in month one.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <h3 class="h3">1.4 What the pieces cost, today</h3>
+      <div class="table-wrap">
+        <table class="table--dense">
+          <thead><tr><th>Piece</th><th>Price observed</th><th>Source &amp; kind</th></tr></thead>
+          <tbody>
+            <tr><td>Hosted affiliate store builder, per site</td><td class="num">$24.75/mo for 10 sites yearly, or $50/mo monthly; 3 / 10 / 30 / 100-site tiers</td><td>FreshStore <a class="src" href="#sources">S11</a> <span class="chip chip--observed">observed</span></td></tr>
+            <tr><td>Doing it on WordPress, ten sites</td><td class="num">≈$128/mo: hosting $17, product plugin $28, Amazon data $55, AI writer $20, domains $8</td><td>FreshStore’s own comparison, prices checked 26 Sep 2026 <a class="src" href="#sources">S11</a> <span class="chip chip--inference">vendor claim</span></td></tr>
+            <tr><td>Amazon product plugin, one site</td><td class="num">€79/year</td><td>AAWP <a class="src" href="#sources">S13</a> <span class="chip chip--observed">observed</span></td></tr>
+            <tr><td>Affiliate link manager (free tier exists)</td><td class="num">$0 for one property; $19/mo Creator billed annually at $190</td><td>Lasso <a class="src" href="#sources">S14</a> <span class="chip chip--observed">observed</span></td></tr>
+            <tr><td>AI SEO content autopilot</td><td class="num">$99/mo for 30 articles</td><td>Outrank <a class="src" href="#sources">S15</a> <span class="chip chip--observed">observed</span></td></tr>
+            <tr><td>AI app builder, per month</td><td class="num">$25/mo, 100 credits</td><td>Lovable <a class="src" href="#sources">S16</a> <span class="chip chip--observed">observed</span></td></tr>
+            <tr><td>My cost to build one store (models, images, refresh)</td><td class="num">$3–12 build, then $0.50–2/mo refresh</td><td><span class="chip chip--inference">my estimate</span> at current API prices: ~30–60 research fetches, 40 product records, 8 guides, 3 design specimens</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small">The cost line matters because it sets the floor for every price on this page: at $3–12 a build and under $2 a month to keep a store fresh, a $9/month caretaker fee is profitable, and a $5/month all-in plan is not.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="alternatives">
+    <div class="sec-head">
+      <p class="eyebrow">02 — Alternatives</p>
+      <h2 class="h2">Six things this buyer already does instead, including nothing</h2>
+    </div>
+    <p class="body">Researched against what the people in question actually use, substitutes included. Direct competitors are separated from substitutes, because “do nothing and read reviews” is the honest baseline that any new tool must beat.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:17%">Alternative</th><th style="width:9%">Cost</th><th style="width:26%">What it does well</th><th style="width:26%">Where it fails this buyer</th><th style="width:22%">What it proves about demand</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Do nothing</strong><br><span class="meta">substitute</span></td>
+            <td class="num">$0</td>
+            <td>Keeps the evening. No API gates, no hosting, no policy risk.</td>
+            <td>No asset, no income, and the research itch stays unscratched — which is why the itch gets scratched by reading instead.</td>
+            <td>The default outcome for most people who have the idea. Adoption must come from people already committed to building.</td>
+          </tr>
+          <tr>
+            <td><strong>FreshStore</strong><br><span class="meta">direct</span></td>
+            <td class="num">$2.48–10<br>/site/mo</td>
+            <td>Everything: hosted, six designs, instant researched niches, products from Amazon/eBay/Walmart/Etsy/AliExpress, AI writer, sitemaps, “No API keys to apply for”, an agent-connect key <a class="src" href="#sources">S11</a> <a class="src" href="#sources">S12</a>.</td>
+            <td>Six designs across every customer (the exact sameness complained about <a class="src" href="#sources">S19</a>); no code, no portability; you rent the asset; the research is theirs, not evidenced to you.</td>
+            <td>This is the price anchor and the feature bar. It also proves portfolio operators buy by site count, and that they already expect an AI agent hook.</td>
+          </tr>
+          <tr>
+            <td><strong>WordPress + affiliate plugins</strong><br><span class="meta">substitute</span></td>
+            <td class="num">≈$128/mo<br>for 10 sites</td>
+            <td>Ownership, infinite themes, mature plugins (AAWP €79/yr; Lasso from $0) <a class="src" href="#sources">S13</a> <a class="src" href="#sources">S14</a>.</td>
+            <td>Weeks of setup, updates and security; Amazon data is the expensive line item; design quality is the owner’s problem.</td>
+            <td>Ownership is worth real money to this buyer. They already pay yearly for a plugin to keep it.</td>
+          </tr>
+          <tr>
+            <td><strong>Lovable / Bolt / v0</strong><br><span class="meta">adjacent</span></td>
+            <td class="num">$25/mo</td>
+            <td>Real code, real design, fast. A blank canvas that produces a repo you keep <a class="src" href="#sources">S16</a>.</td>
+            <td>No affiliate plumbing, no merchant data, no price compliance, no niche research, no idea what to build. The owner still makes every product decision.</td>
+            <td>The mechanism (an agent writes the site) is already normal and priced. The unfinished half is domain knowledge.</td>
+          </tr>
+          <tr>
+            <td><strong>AI SEO content tools</strong><br><span class="meta">adjacent</span></td>
+            <td class="num">$39–99/mo</td>
+            <td>Volume content on autopilot; Outrank $99/mo for 30 articles <a class="src" href="#sources">S15</a>.</td>
+            <td>Writes into a site that does not exist yet; accelerates exactly the pattern Google’s policy calls scaled content abuse <a class="src" href="#sources">S10</a>.</td>
+            <td>Operators pay monthly for autopilot, and will pay for build + autopilot together.</td>
+          </tr>
+          <tr>
+            <td><strong>Agency / freelance build</strong><br><span class="meta">substitute</span></td>
+            <td class="num">$500–3,000<br>one-off</td>
+            <td>Someone else does the boring phase, which is how buyers describe the job <a class="src" href="#sources">S20</a>.</td>
+            <td>Slow, opaque, one-off; no research evidence; ends at handover with nothing scheduled.</td>
+            <td>A one-time price for a built site is an accepted way to buy in this market — the pricing model the recommendation mirrors.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <p class="h4">The gap all six leave open</p>
+      <p class="body body--wide" style="margin-top:var(--sp-2)">Nobody sells <strong>evidence plus ownership</strong>. FreshStore sells speed and hosting; WordPress sells ownership and work; the AI builders sell code and nothing else; agencies sell labour and no record. A store whose niche choice is argued with sources, whose design is not one of six shared themes, and whose code the owner keeps, is not on this list.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="segment">
+    <div class="sec-head">
+      <p class="eyebrow">03 — Segment</p>
+      <h2 class="h2">Start with the operator who already runs three to thirty sites</h2>
+    </div>
+    <div class="grid grid--2">
+      <div class="stack">
+        <p class="body"><strong>The beachhead:</strong> a solo operator (or a pair) running 3–30 affiliate stores, already earning something, who buys tools on measured return and thinks in cost per site per month. They know what an API gate feels like and will not be surprised by one. They buy by the portfolio, not by the store.</p>
+        <p class="body"><strong>Why them, from evidence:</strong> FreshStore prices in exactly those bands — 3, 10, 30, 100 sites — and its own copy addresses “what ten sites cost each way” <a class="src" href="#sources">S11</a>. The buyer asking for ten sites at once writes it out in public <a class="src" href="#sources">S20</a>. Their per-store economics are small and slow <a class="src" href="#sources">S21</a> <a class="src" href="#sources">S18</a>, so they price tools per site and switch when the per-site output changes.</p>
+        <p class="body"><strong>Why not first-timers (yet):</strong> they churn before their first commission, need hand-holding on a gate they cannot clear, and compare the price to $0 rather than to an agency. They are a later, cheaper funnel — not the first ten customers.</p>
+        <p class="body"><strong>Why not agencies (yet):</strong> the highest willingness to pay, but they demand white-label, roles and SLAs before the first version is worth anything. They follow the portfolio operator: an agency is a portfolio operator with clients.</p>
+      </div>
+      <div class="table-wrap" style="align-self:start">
+        <table class="table--dense">
+          <thead><tr><th>Check</th><th>Portfolio operator</th></tr></thead>
+          <tbody>
+            <tr><td>Can they be reached?</td><td>Yes: r/Affiliatemarketing, r/passive_income, FreshStore’s own review pages, niche-site Discords</td></tr>
+            <tr><td>Do they already pay?</td><td class="num">Yes: $25–128/mo per portfolio today <a class="src" href="#sources">S11</a></td></tr>
+            <tr><td>Is the pain frequent?</td><td>Yes: every new niche, and every price that goes stale</td></tr>
+            <tr><td>Can they self-serve the Amazon gate?</td><td>Partly: they own the Associates account, so the 10-sale gate is theirs to clear, not ours</td></tr>
+            <tr><td>Do they decide fast?</td><td>Yes: a card, one evening, no procurement</td></tr>
+            <tr><td>Weakest link</td><td>Price sensitivity is brutal; they will compare a $299 build to a $199 done-for-you blog <a class="src" href="#sources">S19</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="value">
+    <div class="sec-head">
+      <p class="eyebrow">04 — Value proposition &amp; value curve</p>
+      <h2 class="h2">Not cheaper. Differently shaped: evidence, distinct look, portable code</h2>
+    </div>
+    <p class="body"><strong>Proposition for the portfolio operator:</strong> “Hand me a niche and I will hand you back a store that argues for its picks, looks like a publication rather than a template, ships compliant with price rules, and lives in your GitHub and your Vercel account — for one build fee and a small caretaker fee, not a per-site subscription.”</p>
+
+    <figure class="fig">
+      <div class="legend" aria-hidden="true">
+        <span class="legend__item"><span class="legend__swatch" style="background:var(--s-cairn)"></span>Cairn (proposed)</span>
+        <span class="legend__item"><span class="legend__swatch" style="background:var(--s-fresh)"></span>FreshStore</span>
+        <span class="legend__item"><span class="legend__swatch" style="background:var(--s-bolt)"></span>Lovable / Bolt</span>
+        <span class="legend__item"><span class="legend__swatch" style="background:var(--s-diy)"></span>WordPress + plugins</span>
+      </div>
+      <div class="curve">
+        <div class="curve__row">
+          <div class="curve__label">Sourced niche research</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:0.6;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:0.2;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:0.4;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>none</span><span>evidenced</span></div>
+          </div>
+        </div>
+        <div class="curve__row">
+          <div class="curve__label">Design distinctiveness</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:0.4;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:0.8;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:0.6;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>one of six</span><span>its own direction</span></div>
+          </div>
+        </div>
+        <div class="curve__row">
+          <div class="curve__label">Affiliate plumbing, ready</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:0.8;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:0.2;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:0.6;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>bring everything</span><span>works out of the box</span></div>
+          </div>
+        </div>
+        <div class="curve__row">
+          <div class="curve__label">Price-rule compliance built in</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:0.8;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:0;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:0.6;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>you discover it</span><span>enforced by the template</span></div>
+          </div>
+        </div>
+        <div class="curve__row">
+          <div class="curve__label">Code you keep and can move</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:0.2;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>rented</span><span>a repository in your name</span></div>
+          </div>
+        </div>
+        <div class="curve__row">
+          <div class="curve__label">Time to a live store</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:0.8;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:0.4;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:0.2;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>weeks</span><span>minutes</span></div>
+          </div>
+        </div>
+        <div class="curve__row">
+          <div class="curve__label">Cheap per store, per month</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:0.6;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:0.8;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:0.6;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:0.4;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>$128/mo</span><span>$0/mo</span></div>
+          </div>
+        </div>
+        <div class="curve__row">
+          <div class="curve__label">Prices &amp; content stay fresh, unattended</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:0.8;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:0;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:0.4;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>never</span><span>handled</span></div>
+          </div>
+        </div>
+        <div class="curve__row">
+          <div class="curve__label">Merchant breadth</div>
+          <div>
+            <div class="track">
+              <span class="track__tick" style="left:20%"></span><span class="track__tick" style="left:40%"></span><span class="track__tick" style="left:60%"></span><span class="track__tick" style="left:80%"></span>
+              <span class="track__dot" style="--p:0.8;background:var(--s-cairn)" title="Cairn (proposed)"></span>
+              <span class="track__dot" style="--p:1;background:var(--s-fresh)" title="FreshStore"></span>
+              <span class="track__dot" style="--p:0;background:var(--s-bolt)" title="Lovable / Bolt"></span>
+              <span class="track__dot" style="--p:0.6;background:var(--s-diy)" title="WordPress + plugins"></span>
+            </div>
+            <div class="track__scale"><span>one merchant</span><span>five+</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap"><strong>Figure 1.</strong> Value curve, scored 1–5 on each dimension. <span class="chip chip--inference">my scoring</span> from the sources in § 1 and § 2, not a survey. The shape to note: Cairn is not best at everything, and should not try to be — it wins on evidence, distinctiveness, compliance and ownership, and concedes speed, price per month and breadth to FreshStore.</figcaption>
+    </figure>
+
+    <div class="panel panel--plain">
+      <p class="h4">The three claims this curve makes, and what each rests on</p>
+      <ul class="body" style="margin:var(--sp-2) 0 0; padding-left:var(--sp-5)">
+        <li><strong>Design is the visible fault line.</strong> FreshStore ships six designs for all customers <a class="src" href="#sources">S12</a>; buyers call the result out by name <a class="src" href="#sources">S19</a>. <span class="chip chip--observed">observed</span></li>
+        <li><strong>Compliance is unglamorous and unowned.</strong> Prices must come from the API, stamped when not refreshed hourly <a class="src" href="#sources">S6</a>, and the Amazon API needs 10 sales to unlock <a class="src" href="#sources">S4</a>. No competitor page describes that state machine. <span class="chip chip--inference">my inference</span></li>
+        <li><strong>Ownership is what a subscription cannot offer</strong>, and WordPress buyers already pay for it yearly <a class="src" href="#sources">S13</a>. <span class="chip chip--observed">observed</span> that they pay; <span class="chip chip--inference">my inference</span> that they will pay us for it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="recommendation">
+    <div class="sec-head">
+      <p class="eyebrow">05 — Recommendation</p>
+      <h2 class="h2">Build the hand-over product first; earn the subscription later</h2>
+    </div>
+    <div class="grid grid--2">
+      <div class="card stack">
+        <div class="row" style="justify-content:space-between"><p class="h4">Direction A — hosted portfolio builder</p><span class="chip chip--none">not first</span></div>
+        <p class="small"><strong>What it is:</strong> sign up, pick a niche, get a store on our domain for $10/site/month. Twenty designs, one dashboard, we hold every merchant connection.</p>
+        <p class="small"><strong>Audience:</strong> the same portfolio operator. <strong>Advantage:</strong> recurring revenue, one codebase, price parity with FreshStore.</p>
+        <p class="small"><strong>Why not first:</strong> it competes head-on with a product that already has years of merchant plumbing, “no API keys to apply for” <a class="src" href="#sources">S11</a>, six designs and 4.7-on-Trustpilot reviews. Worse, it forces us to hold other people’s Associates credentials (§ 1.2, constraint 2) and to eat hosting and refresh costs at $5–10/site. We would be the cheaper, less complete version of an incumbent — the worst position to defend.</p>
+      </div>
+      <div class="card stack" style="border-color:var(--accent)">
+        <div class="row" style="justify-content:space-between"><p class="h4">Direction B — build &amp; hand over</p><span class="chip chip--decision">recommended</span></div>
+        <p class="small"><strong>What it is:</strong> one brief, then an agent team produces a research brief (with sources), a design direction chosen from three real specimens, a catalogue with live affiliate links, and a deployed Next.js store in <em>the owner’s</em> GitHub and Vercel — $299 a build, $9/month caretaker for price refresh and new guides.</p>
+        <p class="small"><strong>Audience:</strong> the portfolio operator, who buys sites the way they buy plugins and templates. <strong>Advantage:</strong> ownership and distinctiveness are things a subscription cannot copy, the Amazon gate is the owner’s own account, and no customer credential ever touches our database.</p>
+        <p class="small"><strong>Deliberately left out of v1:</strong> portfolio dashboard (v2), agency white-label (v3), any checkout, backlink automation, and Amazon prices before the owner’s gate clears.</p>
+      </div>
+      <div class="card stack">
+        <div class="row" style="justify-content:space-between"><p class="h4">Direction C — white-label for agencies</p><span class="chip chip--none">v3</span></div>
+        <p class="small"><strong>What it is:</strong> the same build engine sold to small agencies who resell stores to clients; per-seat pricing, roles, client reporting.</p>
+        <p class="small"><strong>Advantage:</strong> highest willingness to pay, and one sale is worth ten. <strong>Why not first:</strong> roles, SLAs, invoices and support arrive before the build quality is proven, and an agency relationship converts the first ten customers into a services business. It becomes obvious after three operators have bought the same build.</p>
+      </div>
+      <div class="card stack">
+        <div class="row" style="justify-content:space-between"><p class="h4">The route between them</p><span class="chip chip--inference">my inference</span></div>
+        <p class="small">B is not the opposite of A; it is A with the ownership wedge in front and the recurring part narrowed to a caretaker fee. Every B customer produces the same artefacts A needs: a catalogue, a price history, a refresh job. If the caretaker fee renews at 60%+, the dashboard and hosting (A) become an upsell to an audience that already trusts the output. If it renews below 30%, A would have failed too, and we will have learned it for $12 a build instead of a year of hosting.</p>
+      </div>
+    </div>
+
+    <figure class="fig fig--wide">
+      <svg class="chart" viewBox="0 0 1056 470" role="img" aria-label="Impact and effort grid: thirteen parts of the first version, plotted by how visible each is to the customer against how much it costs to build. Items 1 to 5 sit in the shaded do-first corner.">
+        <rect x="160" y="68" width="505" height="160" fill="var(--accent-wash)" opacity="0.7" rx="8"></rect>
+        <text x="182" y="96" class="lbl" style="font-size:12px;letter-spacing:.14em" fill="var(--accent)">DO FIRST</text>
+        <line class="axis" x1="140" y1="400" x2="1000" y2="400"></line>
+        <line class="axis" x1="140" y1="60" x2="140" y2="400"></line>
+        <line class="gridline" x1="674" y1="60" x2="674" y2="400" stroke-dasharray="3 5"></line>
+        <line class="gridline" x1="140" y1="232" x2="1000" y2="232" stroke-dasharray="3 5"></line>
+        <text x="140" y="426" class="lbl-2" style="font-size:13px">low effort</text>
+        <text x="1000" y="426" class="lbl-2" style="font-size:13px" text-anchor="end">high effort</text>
+        <text x="44" y="230" class="lbl-2" style="font-size:12px" text-anchor="middle" transform="rotate(-90 44 230)">what the customer sees &#8594;</text>
+        <g>
+          <circle cx="371" cy="88" r="15" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"></circle><text x="371" y="93" text-anchor="middle" class="lbl" fill="var(--accent)" style="font-size:13px">1</text>
+          <circle cx="774" cy="88" r="15" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"></circle><text x="774" y="93" text-anchor="middle" class="lbl" fill="var(--accent)" style="font-size:13px">2</text>
+          <circle cx="573" cy="162" r="15" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"></circle><text x="573" y="167" text-anchor="middle" class="lbl" fill="var(--accent)" style="font-size:13px">3</text>
+          <circle cx="371" cy="162" r="15" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"></circle><text x="371" y="167" text-anchor="middle" class="lbl" fill="var(--accent)" style="font-size:13px">4</text>
+          <circle cx="573" cy="125" r="15" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"></circle><text x="573" y="130" text-anchor="middle" class="lbl" fill="var(--accent)" style="font-size:13px">5</text>
+          <circle cx="774" cy="228" r="15" fill="var(--paper)" stroke="var(--data-1)" stroke-width="1.5"></circle><text x="774" y="233" text-anchor="middle" class="lbl" style="font-size:13px">6</text>
+          <circle cx="875" cy="274" r="15" fill="var(--paper)" stroke="var(--data-1)" stroke-width="1.5"></circle><text x="875" y="279" text-anchor="middle" class="lbl" style="font-size:13px">7</text>
+          <circle cx="573" cy="274" r="15" fill="var(--paper)" stroke="var(--data-1)" stroke-width="1.5"></circle><text x="573" y="279" text-anchor="middle" class="lbl" style="font-size:13px">8</text>
+          <circle cx="654" cy="311" r="15" fill="var(--paper)" stroke="var(--data-1)" stroke-width="1.5"></circle><text x="654" y="316" text-anchor="middle" class="lbl" style="font-size:13px">9</text>
+          <circle cx="875" cy="348" r="15" fill="var(--paper)" stroke="var(--data-2)" stroke-width="1.5"></circle><text x="875" y="353" text-anchor="middle" class="lbl" style="font-size:13px">10</text>
+          <circle cx="975" cy="311" r="15" fill="var(--paper)" stroke="var(--data-2)" stroke-width="1.5"></circle><text x="975" y="316" text-anchor="middle" class="lbl" style="font-size:13px">11</text>
+          <circle cx="975" cy="368" r="15" fill="var(--paper)" stroke="var(--data-2)" stroke-width="1.5"></circle><text x="975" y="373" text-anchor="middle" class="lbl" style="font-size:13px">12</text>
+          <circle cx="271" cy="368" r="15" fill="var(--paper)" stroke="var(--data-2)" stroke-width="1.5"></circle><text x="271" y="373" text-anchor="middle" class="lbl" style="font-size:13px">13</text>
+        </g>
+      </svg>
+      <figcaption class="fig__cap"><strong>Figure 2.</strong> Impact (what the customer sees) against effort. Items 1&#8211;5 are the first version, and sit in the shaded quarter; 6&#8211;9 follow within two months; 10&#8211;13 are deliberate deferrals, drawn in the palest ring because their order is not urgent.</figcaption>
+    </figure>
+
+    <div class="grid grid--2" style="gap:var(--sp-6)">
+      <div class="stack stack--tight">
+        <p class="h4">Do first &#8212; the first version</p>
+        <table class="table--dense">
+          <tbody>
+            <tr><td class="num">1</td><td><strong>Research brief with sources.</strong> The one artefact that proves an agent did work a human would charge for.</td></tr>
+            <tr><td class="num">2</td><td><strong>Editorial storefront template.</strong> The visible product; the reason anyone screenshots a store.</td></tr>
+            <tr><td class="num">3</td><td><strong>Price-gate &amp; compliance panel.</strong> Cheap once the state machine is understood; prevents a legal and support mess.</td></tr>
+            <tr><td class="num">4</td><td><strong>Export to the owner&#8217;s GitHub + Vercel.</strong> The wedge. Two OAuth flows and a template repository.</td></tr>
+            <tr><td class="num">5</td><td><strong>Three design directions, as real specimens.</strong> Kills the sameness objection on the first screen.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack stack--tight">
+        <p class="h4">Next, then later</p>
+        <table class="table--dense">
+          <tbody>
+            <tr><td class="num">6</td><td><strong>eBay + Impact connectors.</strong> Day-one sources of priceable offers; eBay&#8217;s core APIs need no extra approval <a class="src" href="#sources">S8</a>.</td></tr>
+            <tr><td class="num">7</td><td><strong>90-day price tracker job.</strong> The defensible content, as your seed site found <a class="src" href="#sources">S2</a>.</td></tr>
+            <tr><td class="num">8</td><td><strong>Eight generated guides.</strong> Makes the store look complete; not the differentiator.</td></tr>
+            <tr><td class="num">9</td><td><strong>Portfolio dashboard.</strong> Valuable at three stores, invisible at one.</td></tr>
+            <tr><td class="num">10</td><td><strong>Amazon Creators unlock flow.</strong> Blocked by someone else&#8217;s sales history; the gate screen ships instead.</td></tr>
+            <tr><td class="num">11</td><td><strong>Backlink automation.</strong> A policy minefield, not a differentiator.</td></tr>
+            <tr><td class="num">12</td><td><strong>Checkout, tax, shipping.</strong> Out of scope for affiliate revenue entirely.</td></tr>
+            <tr><td class="num">13</td><td><strong>Agency white-label.</strong> Direction C: later, and obvious once builds repeat.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="jobs">
+    <div class="sec-head">
+      <p class="eyebrow">06 — Jobs map</p>
+      <h2 class="h2">Eight jobs, eight screens, one question each</h2>
+    </div>
+    <p class="body">The first six jobs belong to the operator, the last two to the reader of the generated store. Each job is in the person’s words; the screen answers one question and has one primary action. Nothing below shows a table because a table exists; every screen is here because a job needs it.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:4%">#</th><th style="width:27%">Job, in their words</th><th style="width:23%">Screen</th><th style="width:27%">The one question it answers</th><th style="width:19%">Primary action</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>“Is there money in this niche, or am I about to waste a month?”</td><td>Niche brief</td><td>Should I build this, and what would I have to beat?</td><td>Build this store</td></tr>
+          <tr><td class="num">2</td><td>“Will this look like a real publication or another AI site?”</td><td>Design directions</td><td>Which of these three directions is this niche’s?</td><td>Choose a direction</td></tr>
+          <tr><td class="num">3</td><td>“Which products, and are the links actually live?”</td><td>Catalogue &amp; merchants</td><td>Is the catalogue complete and every link working?</td><td>Add the 12 recommended</td></tr>
+          <tr><td class="num">4</td><td>“Am I allowed to show these prices?”</td><td>Price gate</td><td>What can this store legally display today?</td><td>Connect a merchant</td></tr>
+          <tr><td class="num">5</td><td>“What is it doing now, and what do I have to decide?”</td><td>Build run</td><td>Is anything waiting on me?</td><td>Review the store</td></tr>
+          <tr><td class="num">6</td><td>“Is any of this earning, and where do I spend next week?”</td><td>Portfolio</td><td>Which store deserves my next hour?</td><td>Open the closest to earning</td></tr>
+          <tr><td class="num">7</td><td>“Which of these should I buy?” <span class="meta">(reader)</span></td><td>Store home</td><td>What is the shortlist for my budget and use?</td><td>Compare the top three</td></tr>
+          <tr><td class="num">8</td><td>“Is this a good price right now?” <span class="meta">(reader)</span></td><td>Product page</td><td>Is today’s price worth acting on?</td><td>Buy at the merchant</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="screens">
+    <div class="sec-head">
+      <p class="eyebrow">07 — Key screens</p>
+      <h2 class="h2">What the operator sees, and what their reader gets</h2>
+    </div>
+    <p class="body">Static mocks, full fidelity, realistic sample data. All names, prices and figures below are <strong>sample data</strong>, labelled on each screen. Screens are drawn at 960 px and scroll sideways on a phone; the page itself never does.</p>
+
+    <!-- SCREEN 1 -->
+    <figure class="fig">
+      <div class="fig__cap"><strong>Screen 1 · Job 1 · “Is there money in this niche?”</strong> <span class="chip chip--observed">sample data</span> <span class="meta">cairn.app/briefs/resin-miniatures</span></div>
+      <div class="screen-scroll">
+        <div class="screen">
+          <div class="chrome"><span class="chrome__dots"><span class="chrome__dot"></span><span class="chrome__dot"></span><span class="chrome__dot"></span></span><span class="chrome__url">cairn.app/briefs/resin-miniatures</span></div>
+          <div class="screen__body">
+            <aside class="rail">
+              <div class="rail__brand">
+                <svg class="rail__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3.5 4.5 20.5M12 3.5l7.5 17M7 14.5h10M5.6 18h12.8"/></svg>
+                Cairn
+              </div>
+              <nav aria-label="Main">
+                <ul>
+                  <li><a href="#screens" aria-current="page">Briefs</a></li>
+                  <li><a href="#screens">Stores</a></li>
+                  <li><a href="#screens">Catalogues</a></li>
+                  <li><a href="#screens">Merchants</a></li>
+                  <li><a href="#screens">Billing</a></li>
+                </ul>
+              </nav>
+              <div style="margin-top:auto" class="stack stack--tight">
+                <p class="meta">Builds left</p>
+                <p class="num" style="font-size:var(--t-20);font-family:var(--serif)">2 of 3</p>
+                <a href="#screens" class="small">Buy another</a>
+              </div>
+            </aside>
+            <div class="main">
+              <div class="main__head">
+                <div class="stack stack--tight">
+                  <p class="eyebrow">Niche brief · 17 Nov 2026</p>
+                  <h4 class="h3">Resin printers for tabletop mini painters</h4>
+                  <p class="small">Researched in 4 min 12 s · 18 sources read · 3 competitors inspected</p>
+                </div>
+                <div class="row">
+                  <span class="state state--ok"><span class="state__dot"></span>Worth building</span>
+                  <span class="num" style="font-family:var(--serif);font-size:var(--t-25)">3.7<span class="small">/5</span></span>
+                </div>
+              </div>
+
+              <div class="kpis">
+                <div class="kpi"><p class="kpi__label">US searches / mo</p><p class="kpi__value num">14,800</p><p class="meta">sample estimate</p></div>
+                <div class="kpi"><p class="kpi__label">Commission / sale</p><p class="kpi__value num">$22.40</p><p class="meta">8% at a specialist retailer</p></div>
+                <div class="kpi"><p class="kpi__label">Established rivals</p><p class="kpi__value num">3 of 6</p><p class="meta">200+ referring domains</p></div>
+                <div class="kpi"><p class="kpi__label">To first page</p><p class="kpi__value num">9–14 wks</p><p class="meta">if 8 guides ship</p></div>
+              </div>
+
+              <div class="grid grid--2">
+                <div class="panel stack stack--tight">
+                  <p class="h4">The argument</p>
+                  <p class="small">Buyers are miniature painters, not printer hobbyists: they search by model and by “best resin for miniatures”. The three rivals all review printers generally and none covers wash-and-cure stations, which is where the margin sits in this niche.</p>
+                  <p class="small"><strong>What you would have to beat:</strong> two sites with printable comparison tables, one with a YouTube channel. Your edge: price history and a finder by miniature scale.</p>
+                </div>
+                <div class="panel stack stack--tight">
+                  <p class="h4">Where the money is</p>
+                  <div class="row" style="justify-content:space-between"><span class="small">Amazon, 3% on a $299 printer</span><span class="num small">$8.97 / sale</span></div>
+                  <hr class="rule">
+                  <div class="row" style="justify-content:space-between"><span class="small">Specialist retailer, 8% on $280</span><span class="num small">$22.40 / sale</span></div>
+                  <hr class="rule">
+                  <div class="row" style="justify-content:space-between"><span class="small">eBay, 2% on resin consumables</span><span class="num small">$1.10 / sale</span></div>
+                  <p class="small" style="margin-top:var(--sp-2)"><strong>Order: specialist retailer → eBay → Amazon.</strong> Amazon pays least here and is gated anyway.</p>
+                </div>
+              </div>
+
+              <div class="stack stack--tight">
+                <div class="row" style="justify-content:space-between"><p class="h4">Evidence</p><p class="meta">every line opens its source</p></div>
+                <div class="card card--flush">
+                  <table class="table--dense">
+                    <tbody>
+                      <tr><td style="width:70%">Six sites rank for “best resin printer for miniatures”; three have 200+ referring domains</td><td><span class="chip chip--observed">observed</span></td><td class="num small">17 Nov</td></tr>
+                      <tr><td>Rivals publish comparison tables; none publishes price history</td><td><span class="chip chip--observed">observed</span></td><td class="num small">17 Nov</td></tr>
+                      <tr><td>Reddit threads repeat “which resin” and “is it worth upgrading”</td><td><span class="chip chip--observed">observed</span></td><td class="num small">17 Nov</td></tr>
+                      <tr><td>Buyers will accept a $22 commission decision on a $280 purchase</td><td><span class="chip chip--inference">my inference</span></td><td class="num small">—</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="small"><strong>Weakest assumption:</strong> that miniature painters buy printers from a site they have never heard of. If they only buy from Amazon search and YouTube, this niche produces traffic and no commission.</p>
+              </div>
+
+              <div class="row" style="justify-content:space-between;border-top:1px solid var(--rule);padding-top:var(--sp-3)">
+                <span class="small">Brief saved to <span class="num">brief.md</span> · 18 sources listed</span>
+                <span class="row"><button class="btn btn--secondary" type="button">Try another niche</button><button class="btn btn--primary" type="button">Build this store</button></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap">Why the commission line leads: at 3% on Amazon a sale is worth $8.97, and the same reader is worth $22.40 at a specialist. The agent’s job is to find that difference before the owner spends a month.</figcaption>
+    </figure>
+
+    <!-- SCREEN 2 -->
+    <figure class="fig">
+      <div class="fig__cap"><strong>Screen 2 · Job 2 · “Will this look like a real publication?”</strong> <span class="chip chip--observed">sample data</span> <span class="meta">three directions, one choice</span></div>
+      <div class="screen-scroll">
+        <div class="screen">
+          <div class="chrome"><span class="chrome__dots"><span class="chrome__dot"></span><span class="chrome__dot"></span><span class="chrome__dot"></span></span><span class="chrome__url">cairn.app/builds/resin-miniatures/direction</span></div>
+          <div class="screen__body screen__body--full">
+            <div class="main">
+              <div class="main__head">
+                <div class="stack stack--tight">
+                  <p class="eyebrow">Step 2 of 4 · design direction</p>
+                  <h4 class="h3">Three directions, built from this niche — not from a theme list</h4>
+                  <p class="small">Each specimen below is real HTML at 1:1, with this niche’s copy. Pick one; the rest is regenerated to match.</p>
+                </div>
+                <span class="state state--none"><span class="state__dot"></span>Nothing built yet</span>
+              </div>
+
+              <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:var(--sp-4)">
+                <!-- A: Field notes -->
+                <div class="card card--flush" style="border-color:var(--accent);box-shadow:var(--e-2)">
+                  <div class="store" style="padding:var(--sp-4);min-height:230px;display:flex;flex-direction:column;gap:var(--sp-2)">
+                    <p class="store__kicker">Field notes · No. 12</p>
+                    <p class="store__serif" style="font-size:var(--t-25);line-height:1.15;margin:0">The resin printer that earns its bench space</p>
+                    <div style="height:64px;background:repeating-linear-gradient(135deg,var(--paper-3),var(--paper-3) 6px,var(--paper-2) 6px,var(--paper-2) 12px);border:1px solid var(--rule)"></div>
+                    <p class="disclosure" style="margin-top:auto">We earn a commission when you buy through our links. It never changes the verdict.</p>
+                  </div>
+                  <div style="padding:var(--sp-3);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center">
+                    <div><p class="h4">Field Notes</p><p class="meta">Editorial serif, warm paper, footnoted</p></div>
+                    <span class="chip chip--decision">recommended</span>
+                  </div>
+                </div>
+                <!-- B: Bench -->
+                <div class="card card--flush">
+                  <div style="padding:var(--sp-4);min-height:230px;display:flex;flex-direction:column;gap:var(--sp-2);background:var(--paper)">
+                    <div class="row" style="justify-content:space-between"><p class="meta">BENCH / MATERIALS TEST 07</p><p class="meta">2026</p></div>
+                    <p style="font-size:var(--t-20);line-height:1.2;margin:0;font-weight:var(--w-600);letter-spacing:-.01em">Resin printers, measured on 14 prints</p>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">
+                      <div style="height:44px;background:var(--paper-3);border:1px solid var(--rule)"></div>
+                      <div style="height:44px;background:var(--paper-3);border:1px solid var(--rule)"></div>
+                      <div style="height:44px;background:var(--paper-3);border:1px solid var(--rule)"></div>
+                    </div>
+                    <p class="meta" style="margin-top:auto;font-variant-numeric:tabular-nums">layer 0.02 · cure 2.5s · warp 0.4mm</p>
+                  </div>
+                  <div style="padding:var(--sp-3);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center">
+                    <div><p class="h4">Bench</p><p class="meta">Technical, data-dense, no photos</p></div>
+                    <span class="state state--none"><span class="state__dot"></span>Available</span>
+                  </div>
+                </div>
+                <!-- C: Scout -->
+                <div class="card card--flush">
+                  <div class="spec-scout">
+                    <div class="spec-scout__body">
+                      <p class="spec-scout__kicker">Scout picks</p>
+                      <p class="spec-scout__line">Buy once.<br>Print for years.</p>
+                      <div class="spec-scout__pills">
+                        <span class="spec-scout__pill">Under $300</span>
+                        <span class="spec-scout__pill">Miniatures</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="padding:var(--sp-3);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;background:var(--paper)">
+                    <div><p class="h4">Scout</p><p class="meta">Photo-led, bold, mobile-first</p></div>
+                    <span class="state state--none"><span class="state__dot"></span>Available</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" style="justify-content:space-between;border-top:1px solid var(--rule);padding-top:var(--sp-3)">
+                <p class="small">Field Notes is recommended: the niche’s rivals look like Bench, and readers here arrive from forums where a publication voice travels further than a spec sheet.</p>
+                <span class="row"><button class="btn btn--secondary" type="button">See all three full-size</button><button class="btn btn--primary" type="button">Choose Field Notes</button></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap">The three specimens are generated for the niche, not picked from six shared themes — the objection the market already makes about the incumbent <a class="src" href="#sources">S19</a>.</figcaption>
+    </figure>
+
+    <!-- SCREEN 3 -->
+    <figure class="fig">
+      <div class="fig__cap"><strong>Screen 3 · Job 3 · “Which products, and are the links live?”</strong> <span class="chip chip--observed">sample data</span> <span class="meta">cairn.app/builds/resin-miniatures/catalogue</span></div>
+      <div class="screen-scroll">
+        <div class="screen">
+          <div class="chrome"><span class="chrome__dots"><span class="chrome__dot"></span><span class="chrome__dot"></span><span class="chrome__dot"></span></span><span class="chrome__url">cairn.app/builds/resin-miniatures/catalogue</span></div>
+          <div class="screen__body">
+            <aside class="rail">
+              <div class="rail__brand"><svg class="rail__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3.5 4.5 20.5M12 3.5l7.5 17M7 14.5h10M5.6 18h12.8"/></svg>Cairn</div>
+              <nav aria-label="Main"><ul><li><a href="#screens">Briefs</a></li><li><a href="#screens">Stores</a></li><li><a href="#screens" aria-current="page">Catalogues</a></li><li><a href="#screens">Merchants</a></li><li><a href="#screens">Billing</a></li></ul></nav>
+            </aside>
+            <div class="main">
+              <div class="main__head">
+                <div class="stack stack--tight">
+                  <p class="eyebrow">Step 3 of 4 · catalogue</p>
+                  <h4 class="h3">42 products · 38 links live · 4 need a look</h4>
+                  <p class="small">Amazon 24 · eBay 11 · specialist retailer 5 · Etsy 2. Prices shown only where the merchant allows it.</p>
+                </div>
+                <span class="row"><button class="btn btn--secondary" type="button">Filter</button><button class="btn btn--primary" type="button">Add the 12 recommended</button></span>
+              </div>
+              <div class="row">
+                <span class="state state--ok"><span class="state__dot"></span>38 live</span>
+                <span class="state state--warn"><span class="state__dot"></span>3 out of stock</span>
+                <span class="state state--bad"><span class="state__dot"></span>1 dead link</span>
+              </div>
+              <div class="card card--flush">
+                <table class="table--dense">
+                  <thead><tr><th>Product</th><th>Merchant</th><th>Price shown</th><th>Link</th><th>Checked</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>Elegoo Mars 5 Ultra</strong><br><span class="meta">resin · 7" 9K mono</span></td><td>Amazon</td><td><span class="state state--warn"><span class="state__dot"></span>Hidden — API gate</span></td><td><span class="state state--ok"><span class="state__dot"></span>Live</span></td><td class="num small">6 min ago</td><td><button class="btn btn--secondary" type="button" style="min-height:28px;padding:0 8px">Edit</button></td></tr>
+                    <tr><td><strong>Anycubic Photon Mono M7</strong><br><span class="meta">resin · 10" 14K</span></td><td>eBay</td><td class="num">$289.00</td><td><span class="state state--ok"><span class="state__dot"></span>Live</span></td><td class="num small">6 min ago</td><td><button class="btn btn--secondary" type="button" style="min-height:28px;padding:0 8px">Edit</button></td></tr>
+                    <tr><td><strong>Elegoo Wash &amp; Cure Station</strong><br><span class="meta">finishing</span></td><td>Specialist</td><td class="num">$119.99</td><td><span class="state state--ok"><span class="state__dot"></span>Live</span></td><td class="num small">12 min ago</td><td><button class="btn btn--secondary" type="button" style="min-height:28px;padding:0 8px">Edit</button></td></tr>
+                    <tr><td><strong>Sunlu ABS-Like Resin, 1 kg</strong><br><span class="meta">consumable</span></td><td>eBay</td><td class="num">$27.50</td><td><span class="state state--warn"><span class="state__dot"></span>Out of stock</span></td><td class="num small">26 min ago</td><td><button class="btn btn--secondary" type="button" style="min-height:28px;padding:0 8px">Replace</button></td></tr>
+                    <tr><td><strong>Creality Halot Mage Pro</strong><br><span class="meta">resin · 10.3" 8K</span></td><td>Specialist</td><td class="num">$349.00</td><td><span class="state state--bad"><span class="state__dot"></span>Dead link</span></td><td class="num small">26 min ago</td><td><button class="btn btn--secondary" type="button" style="min-height:28px;padding:0 8px">Fix</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="small">The dead link is the only row that needs a decision. Everything else maintained itself on the last refresh.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap">Prices are a per-row state, not a global switch: the Amazon row shows the gate, the eBay row shows a real figure, and both are honest on the same screen.</figcaption>
+    </figure>
+
+    <!-- SCREEN 4 -->
+    <figure class="fig">
+      <div class="fig__cap"><strong>Screen 4 · Job 4 · “Am I allowed to show these prices?”</strong> <span class="chip chip--observed">sample data</span> <span class="meta">cairn.app/builds/resin-miniatures/merchants</span></div>
+      <div class="screen-scroll">
+        <div class="screen">
+          <div class="chrome"><span class="chrome__dots"><span class="chrome__dot"></span><span class="chrome__dot"></span><span class="chrome__dot"></span></span><span class="chrome__url">cairn.app/builds/resin-miniatures/merchants</span></div>
+          <div class="screen__body screen__body--full">
+            <div class="main">
+              <div class="main__head">
+                <div class="stack stack--tight">
+                  <p class="eyebrow">Step 4 of 4 · merchants &amp; price rules</p>
+                  <h4 class="h3">What this store may display today</h4>
+                  <p class="small">Rules are applied per merchant and per page. Nothing here is a warning you can dismiss.</p>
+                </div>
+                <button class="btn btn--primary" type="button">Connect a merchant</button>
+              </div>
+
+              <div class="grid grid--2">
+                <div class="card stack stack--tight">
+                  <div class="row" style="justify-content:space-between"><p class="h4">eBay Partner Network</p><span class="state state--ok"><span class="state__dot"></span>Prices allowed</span></div>
+                  <p class="small">Your EPN account is connected. The core Browse and Reporting APIs need no extra approval; data feeds do <a class="src" href="#sources">S8</a> <a class="src" href="#sources">S9</a>. Prices refresh every 30 minutes with a timestamp.</p>
+                  <div class="row" style="justify-content:space-between"><span class="meta">Last sync</span><span class="num small">6 min ago</span></div>
+                </div>
+                <div class="card stack stack--tight" style="border-color:var(--warn)">
+                  <div class="row" style="justify-content:space-between"><p class="h4">Amazon Associates</p><span class="state state--warn"><span class="state__dot"></span>Links yes, prices no</span></div>
+                  <p class="small">Tag <span class="num">cairn-20</span> is connected. Creators API needs <strong>10 qualifying sales in 30 days</strong> before it issues credentials <a class="src" href="#sources">S4</a>, and a displayed price must come from the API with a date/time stamp <a class="src" href="#sources">S6</a>. Until then every Amazon price reads “Check current price”.</p>
+                  <div class="row" style="justify-content:space-between"><span class="meta">Your qualifying sales</span><span class="num small">4 of 10 · 18 days left</span></div>
+                  <div style="height:6px;background:var(--paper-3);border-radius:var(--r-pill);overflow:hidden"><div style="width:40%;height:100%;background:var(--warn)"></div></div>
+                </div>
+              </div>
+
+              <div class="grid grid--2">
+                <div class="card stack stack--tight">
+                  <div class="row" style="justify-content:space-between"><p class="h4">Walmart via Impact</p><span class="state state--none"><span class="state__dot"></span>Not connected</span></div>
+                  <p class="small">Applies in 1–3 days. Product data via feed, prices allowed on approval.</p>
+                </div>
+                <div class="card stack stack--tight">
+                  <div class="row" style="justify-content:space-between"><p class="h4">Specialist retailer (Awin)</p><span class="state state--none"><span class="state__dot"></span>Not connected</span></div>
+                  <p class="small">Highest commission in this niche at 8%. Feed approval needed, then prices are ours to refresh.</p>
+                </div>
+              </div>
+
+              <div class="stack stack--tight">
+                <div class="row" style="justify-content:space-between"><p class="h4">How a product card renders right now</p><p class="meta">live preview · sample product</p></div>
+                <div class="card" style="max-width:420px">
+                  <div class="thumb" style="margin-bottom:var(--sp-3)">Product photo area · Elegoo Mars 5 Ultra</div>
+                  <p class="h4">Elegoo Mars 5 Ultra</p>
+                  <p class="small" style="margin-top:var(--sp-1)">Our pick for miniatures under $300. 9K mono, self-levelling, AI camera.</p>
+                  <div class="row" style="justify-content:space-between;margin-top:var(--sp-3)">
+                    <span class="small"><strong>Check current price</strong> at Amazon</span>
+                    <span class="num small" style="color:var(--ok)">$289.00 at eBay</span>
+                  </div>
+                  <p class="disclosure" style="margin-top:var(--sp-3)">Prices and availability change. We earn a commission on purchases made through our links, at no cost to you.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap">This screen is the product’s moat, not its paperwork: it is the one place where the store owner learns that a rule — not a bug — is hiding their Amazon prices, and what to do about it.</figcaption>
+    </figure>
+
+    <!-- SCREEN 5 -->
+    <figure class="fig">
+      <div class="fig__cap"><strong>Screen 5 · Job 5 · “What is it doing, and what do I decide?”</strong> <span class="chip chip--observed">sample data</span> <span class="meta">cairn.app/builds/resin-miniatures/run</span></div>
+      <div class="screen-scroll">
+        <div class="screen">
+          <div class="chrome"><span class="chrome__dots"><span class="chrome__dot"></span><span class="chrome__dot"></span><span class="chrome__dot"></span></span><span class="chrome__url">cairn.app/builds/resin-miniatures/run</span></div>
+          <div class="screen__body">
+            <aside class="rail">
+              <div class="rail__brand"><svg class="rail__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3.5 4.5 20.5M12 3.5l7.5 17M7 14.5h10M5.6 18h12.8"/></svg>Cairn</div>
+              <nav aria-label="Main"><ul><li><a href="#screens">Briefs</a></li><li><a href="#screens" aria-current="page">Stores</a></li><li><a href="#screens">Catalogues</a></li><li><a href="#screens">Merchants</a></li><li><a href="#screens">Billing</a></li></ul></nav>
+            </aside>
+            <div class="main">
+              <div class="main__head">
+                <div class="stack stack--tight">
+                  <p class="eyebrow">Build · 31 min elapsed</p>
+                  <h4 class="h3">Two agents done, Dev is writing pages</h4>
+                  <p class="small">One thing is waiting on you. Everything else finishes without it.</p>
+                </div>
+                <span class="state state--ok"><span class="state__dot"></span>On track · 12 min left</span>
+              </div>
+
+              <div class="card card--flush">
+                <table class="table--dense">
+                  <tbody>
+                    <tr>
+                      <td style="width:34%"><strong>PM agent</strong><br><span class="meta">niche brief, 18 sources</span></td>
+                      <td><span class="state state--ok"><span class="state__dot"></span>Done · 4 min</span></td>
+                      <td class="small">Verdict 3.7/5, order: specialist → eBay → Amazon</td>
+                      <td><a class="small" href="#screens">brief.md</a></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Affiliate agent</strong><br><span class="meta">catalogue, links, commission math</span></td>
+                      <td><span class="state state--ok"><span class="state__dot"></span>Done · 9 min</span></td>
+                      <td class="small">42 offers found, 6 dropped (out of stock or no commission)</td>
+                      <td><a class="small" href="#screens">catalogue.csv</a></td>
+                    </tr>
+                    <tr style="background:var(--warn-wash)">
+                      <td><strong>Dev agent</strong><br><span class="meta">storefront, 31 pages</span></td>
+                      <td><span class="state state--warn"><span class="state__dot"></span>Needs one answer</span></td>
+                      <td class="small">Fields Notes direction applied. Should the store launch with Amazon prices hidden, or hold until your gate clears?</td>
+                      <td><span class="row"><button class="btn btn--secondary" type="button" style="min-height:28px;padding:0 8px">Launch hidden</button><button class="btn btn--secondary" type="button" style="min-height:28px;padding:0 8px">Wait</button></span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>QA agent</strong><br><span class="meta">accessibility, price rules, disclosure</span></td>
+                      <td><span class="state state--none"><span class="state__dot"></span>Queued</span></td>
+                      <td class="small">Will refuse the deploy if any price lacks its stamp or any page lacks disclosure</td>
+                      <td><span class="meta">—</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Deploy</strong><br><span class="meta">your GitHub, your Vercel</span></td>
+                      <td><span class="state state--none"><span class="state__dot"></span>Waiting on Dev</span></td>
+                      <td class="small">Repository <span class="num">resin-miniatures</span> created under your account</td>
+                      <td><span class="meta">—</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="grid grid--2">
+                <div class="panel stack stack--tight">
+                  <p class="h4">Artifacts you keep</p>
+                  <p class="small">A repository, a research brief with sources, a catalogue in CSV, 90 days of price history, and the deploy URL. Everything except the brief is machine-readable, so the next agent does not start from scratch.</p>
+                </div>
+                <div class="panel stack stack--tight">
+                  <p class="h4">What it refused to do</p>
+                  <p class="small">Pull Amazon prices without credentials · scrape a price from a page because the API was unavailable · publish a page without the commission line · invent a product that no merchant stocks. Each refusal is logged with its reason.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap">A build that needs a human is normal; a build that hides which human, about what, is the failure. One blocked row, one question, two buttons.</figcaption>
+    </figure>
+
+    <!-- SCREEN 6 -->
+    <figure class="fig">
+      <div class="fig__cap"><strong>Screen 6 · Job 6 · “Where do I spend next week?”</strong> <span class="chip chip--observed">sample data</span> <span class="meta">cairn.app/stores</span></div>
+      <div class="screen-scroll">
+        <div class="screen">
+          <div class="chrome"><span class="chrome__dots"><span class="chrome__dot"></span><span class="chrome__dot"></span><span class="chrome__dot"></span></span><span class="chrome__url">cairn.app/stores</span></div>
+          <div class="screen__body">
+            <aside class="rail">
+              <div class="rail__brand"><svg class="rail__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3.5 4.5 20.5M12 3.5l7.5 17M7 14.5h10M5.6 18h12.8"/></svg>Cairn</div>
+              <nav aria-label="Main"><ul><li><a href="#screens">Briefs</a></li><li><a href="#screens" aria-current="page">Stores</a></li><li><a href="#screens">Catalogues</a></li><li><a href="#screens">Merchants</a></li><li><a href="#screens">Billing</a></li></ul></nav>
+            </aside>
+            <div class="main">
+              <div class="main__head">
+                <div class="stack stack--tight">
+                  <p class="eyebrow">Your stores · 6</p>
+                  <h4 class="h3">$2,058 this month, across four that earn</h4>
+                  <p class="small">Commission reported by the networks, updated nightly. Two stores have never earned.</p>
+                </div>
+                <button class="btn btn--primary" type="button">New build · 2 left</button>
+              </div>
+              <div class="kpis">
+                <div class="kpi"><p class="kpi__label">Commission, 30 d</p><p class="kpi__value num">$2,058</p></div>
+                <div class="kpi"><p class="kpi__label">Outbound clicks</p><p class="kpi__value num">9,412</p></div>
+                <div class="kpi"><p class="kpi__label">Earnings / click</p><p class="kpi__value num">$0.22</p></div>
+                <div class="kpi"><p class="kpi__label">Caretaker fee</p><p class="kpi__value num">$54/mo</p></div>
+              </div>
+              <div class="card card--flush">
+                <table class="table--dense">
+                  <thead><tr><th>Store</th><th>Commission</th><th>Clicks</th><th>Indexed</th><th>Prices</th><th>Next action</th></tr></thead>
+                  <tbody>
+                    <tr style="background:var(--accent-wash)"><td><strong>Espresso, under $1,000</strong><br><span class="meta">fieldnotes/espresso-under-1000</span></td><td class="num">$1,140</td><td class="num">3,880</td><td><span class="state state--ok"><span class="state__dot"></span>148 pages</span></td><td><span class="state state--ok"><span class="state__dot"></span>Fresh</span></td><td class="small">Add 4 grinders · 2 guides drafted</td></tr>
+                    <tr><td><strong>3D printers for beginners</strong><br><span class="meta">bench/3d-printers</span></td><td class="num">$640</td><td class="num">2,910</td><td><span class="state state--ok"><span class="state__dot"></span>96 pages</span></td><td><span class="state state--ok"><span class="state__dot"></span>Fresh</span></td><td class="small">Nothing needed</td></tr>
+                    <tr><td><strong>Resin miniatures</strong><br><span class="meta">fieldnotes/resin-miniatures</span></td><td class="num">$182</td><td class="num">1,702</td><td><span class="state state--ok"><span class="state__dot"></span>31 pages</span></td><td><span class="state state--warn"><span class="state__dot"></span>Amazon gated</span></td><td class="small">4 of 10 qualifying sales</td></tr>
+                    <tr><td><strong>Cat trees for big cats</strong><br><span class="meta">scout/cat-trees</span></td><td class="num">$96</td><td class="num">920</td><td><span class="state state--ok"><span class="state__dot"></span>22 pages</span></td><td><span class="state state--ok"><span class="state__dot"></span>Fresh</span></td><td class="small">One guide ranks 8th; refresh it</td></tr>
+                    <tr><td><strong>Tenkara rods</strong><br><span class="meta">fieldnotes/tenkara</span></td><td class="num">$0</td><td class="num">0</td><td><span class="state state--warn"><span class="state__dot"></span>Waiting</span></td><td><span class="state state--none"><span class="state__dot"></span>Not connected</span></td><td class="small">Domain not verified</td></tr>
+                    <tr><td><strong>Bird feeders</strong><br><span class="meta">bench/bird-feeders</span></td><td class="num">$0</td><td class="num">0</td><td><span class="state state--bad"><span class="state__dot"></span>0 pages</span></td><td><span class="state state--none"><span class="state__dot"></span>Not connected</span></td><td class="small">Deploy failed twice — open the log</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="small">The recommendation is a row, not a slogan: the highlighted store earns $0.29 per click and has two guides drafted, so it is the hour worth spending.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap">Six stores, four earning, two broken for different reasons — a portfolio screen earns its place only by naming the next hour.</figcaption>
+    </figure>
+
+    <!-- SCREEN 7 -->
+    <figure class="fig">
+      <div class="fig__cap"><strong>Screen 7 · Job 7 · “Which of these should I buy?”</strong> <span class="chip chip--observed">sample data</span> <span class="meta">a generated store · Field Notes direction</span></div>
+      <div class="screen-scroll">
+        <div class="screen screen--store store">
+          <div class="chrome"><span class="chrome__dots"><span class="chrome__dot"></span><span class="chrome__dot"></span><span class="chrome__dot"></span></span><span class="chrome__url">resin-miniatures.guide</span></div>
+          <div class="store__topbar">
+            <p class="store__serif" style="font-size:var(--t-20);margin:0">Resin, Field Notes</p>
+            <div class="store__nav"><span>Printers</span><span>Resins</span><span>Finishing</span><span>Guides</span><span>How we pick</span></div>
+          </div>
+          <div class="store__hero">
+            <div>
+              <p class="store__kicker">Buying guide · updated 17 November 2026</p>
+              <p class="store__h1">The resin printers worth your bench in 2026</p>
+              <p class="store__deck">Fourteen machines, eleven weeks of bench time, and a spreadsheet of prices nobody asked for. Three of them earn a place.</p>
+              <p class="store__method">By the Cairn desk · 38 printers tracked · 90 days of price history · we buy nothing with your clicks</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--sp-2)">
+              <div style="flex:1;background:repeating-linear-gradient(135deg,var(--paper-3),var(--paper-3) 8px,var(--paper-2) 8px,var(--paper-2) 16px);border:1px solid var(--rule);min-height:120px"></div>
+              <p class="disclosure">Photos are licensed from the makers. We earn a commission when you buy through our links, at no extra cost to you.</p>
+            </div>
+          </div>
+          <div class="store__section">
+            <p class="store__h2">The shortlist</p>
+            <div class="picks">
+              <div class="pick">
+                <p class="pick__tag">Best overall</p>
+                <div class="pick__body">
+                  <div class="thumb">Elegoo Mars 5 Ultra</div>
+                  <p class="pick__name">Elegoo Mars 5 Ultra</p>
+                  <p class="pick__price">$289.00 at eBay <span class="meta">· lower than usual</span></p>
+                  <p class="pick__why">Self-levelling, 9K mono, and the only one here whose price we can verify every 30 minutes.</p>
+                  <div class="pick__act"><button class="btn btn--primary" type="button" style="min-height:32px">Check price</button><span class="stamp">Checked 09:14</span></div>
+                </div>
+              </div>
+              <div class="pick">
+                <p class="pick__tag">Best under $200</p>
+                <div class="pick__body">
+                  <div class="thumb">Anycubic Photon Mono 2</div>
+                  <p class="pick__name">Anycubic Photon Mono 2</p>
+                  <p class="pick__price">Check current price at Amazon</p>
+                  <p class="pick__why">Good enough detail for 28 mm figures, and the cheapest way to find out whether you enjoy this.</p>
+                  <div class="pick__act"><button class="btn btn--secondary" type="button" style="min-height:32px">Check price</button><span class="stamp">Amazon API pending</span></div>
+                </div>
+              </div>
+              <div class="pick">
+                <p class="pick__tag">Best for finishing</p>
+                <div class="pick__body">
+                  <div class="thumb">Wash &amp; cure station</div>
+                  <p class="pick__name">Elegoo Wash &amp; Cure</p>
+                  <p class="pick__price">$119.99 at the specialist</p>
+                  <p class="pick__why">Not the printer you were looking for, and the purchase everyone wishes they made sooner.</p>
+                  <div class="pick__act"><button class="btn btn--primary" type="button" style="min-height:32px">Check price</button><span class="stamp">Checked 09:12</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="store__section" style="border-top:1px solid var(--rule)">
+            <div class="row" style="justify-content:space-between">
+              <p class="small"><strong>Three questions, one shortlist:</strong> what are you printing, what is the budget, and how much space do you have?</p>
+              <button class="btn btn--secondary" type="button">Start the finder</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap">The output the owner actually sells to a reader: a shortlist with reasons, a verifiable price where one can be verified, and “check current price” where it cannot. No page on this store claims a number it cannot source.</figcaption>
+    </figure>
+
+    <!-- SCREEN 8 -->
+    <figure class="fig">
+      <div class="fig__cap"><strong>Screen 8 · Job 8 · “Is this a good price right now?”</strong> <span class="chip chip--observed">sample data</span> <span class="meta">a generated store · product page</span></div>
+      <div class="screen-scroll">
+        <div class="screen screen--store store">
+          <div class="chrome"><span class="chrome__dots"><span class="chrome__dot"></span><span class="chrome__dot"></span><span class="chrome__dot"></span></span><span class="chrome__url">resin-miniatures.guide/printers/elegoo-mars-5-ultra</span></div>
+          <div class="store__topbar">
+            <p class="store__serif" style="font-size:var(--t-20);margin:0">Resin, Field Notes</p>
+            <div class="store__nav"><span>Printers</span><span>Resins</span><span>Finishing</span><span>Guides</span><span>How we pick</span></div>
+          </div>
+          <div class="prodcard">
+            <div>
+              <div class="thumb" style="aspect-ratio:1/1">Photo · Elegoo Mars 5 Ultra</div>
+              <p class="disclosure" style="margin-top:var(--sp-2)">We earn a commission on purchases made through our links, at no extra cost to you. Prices change; the stamp below is when we last checked.</p>
+            </div>
+            <div class="stack">
+              <div>
+                <p class="store__kicker">Our pick · miniatures under $300</p>
+                <p class="store__serif" style="font-size:var(--t-32);line-height:1.1;margin:var(--sp-2) 0 0">Elegoo Mars 5 Ultra</p>
+                <p class="small" style="margin-top:var(--sp-2);max-width:46ch">The one we would buy again: self-levelling out of the box, a 9K mono screen that resolves faces at 28 mm, and an enclosure that does not smell like a chemistry lab.</p>
+              </div>
+              <div class="panel panel--plain" style="border:1px solid var(--rule);padding:var(--sp-3)">
+                <div class="row" style="justify-content:space-between;align-items:baseline">
+                  <span class="num" style="font-family:var(--serif);font-size:var(--t-32)">$289.00</span>
+                  <span class="state state--ok"><span class="state__dot"></span>25% below its 90-day median</span>
+                </div>
+                <p class="stamp" style="margin-top:var(--sp-1)">Price accurate as of 17 Nov 2026, 09:14 — it may have changed since.</p>
+                <div class="row" style="margin-top:var(--sp-3)"><button class="btn btn--primary btn--lg" type="button" style="flex:1;justify-content:center">Buy at eBay</button><button class="btn btn--secondary btn--lg" type="button">Amazon</button></div>
+              </div>
+              <div class="stack stack--tight">
+                <div class="row" style="justify-content:space-between"><p class="h4">90-day price history</p><p class="meta">median $385</p></div>
+                <svg class="chart" viewBox="0 0 560 170" role="img" aria-label="Line chart of the price of this printer over ninety days, falling from 399 dollars in September to 289 dollars in November, against a 385 dollar median.">
+                  <line class="gridline" x1="40" y1="30" x2="540" y2="30"></line>
+                  <line class="gridline" x1="40" y1="90" x2="540" y2="90"></line>
+                  <line class="axis" x1="40" y1="140" x2="540" y2="140"></line>
+                  <text x="0" y="34" class="lbl-2">$420</text>
+                  <text x="0" y="94" class="lbl-2">$350</text>
+                  <text x="0" y="144" class="lbl-2">$280</text>
+                  <polyline fill="none" stroke="var(--data-1)" stroke-width="2" points="40,38 80,44 120,40 160,52 200,58 240,66 280,60 320,74 360,88 400,96 440,110 480,126 520,132"></polyline>
+                  <circle cx="520" cy="132" r="4" fill="var(--data-1)"></circle>
+                  <text x="40" y="162" class="lbl-2">Sep</text>
+                  <text x="270" y="162" class="lbl-2">Oct</text>
+                  <text x="500" y="162" class="lbl-2">Nov</text>
+                </svg>
+              </div>
+              <table class="spec">
+                <tbody>
+                  <tr><th>Build volume</th><td>153 × 77 × 165 mm</td></tr>
+                  <tr><th>Screen</th><td>7" 9K mono</td></tr>
+                  <tr><th>Layer height</th><td>0.01–0.2 mm</td></tr>
+                  <tr><th>Leveling</th><td>Automatic</td></tr>
+                  <tr><th>Fume control</th><td>Carbon filter</td></tr>
+                </tbody>
+              </table>
+              <div class="panel panel--plain" style="border-left:3px solid var(--rule-strong);padding-left:var(--sp-3)">
+                <p class="small"><strong>Who it is not for:</strong> anyone printing terrain larger than a fist, or anyone who wants a machine that also engraves. The build plate is small on purpose.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption class="fig__cap">The stamp and the history are the same feature: a reader can tell a real dip from a permanent price, and the owner never publishes a number the API did not hand over.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="decisions">
+    <div class="sec-head">
+      <p class="eyebrow">08 — Open decisions</p>
+      <h2 class="h2">Six choices that are yours, each with my recommendation</h2>
+    </div>
+    <p class="body">These are the questions evidence cannot settle: your values, your segment and your scope. Pick on the page, then copy your picks into chat — or answer in chat directly. Nothing is recorded until you do.</p>
+
+    <div class="stack stack--loose">
+      <div class="decision stack" data-decision="D1">
+        <div class="decision__head"><p class="h4">D1 · Which shape do we build first?</p><span class="chip chip--decision">recommend B</span></div>
+        <div class="stack stack--tight">
+          <label class="opt"><input type="radio" name="D1" value="A — hosted portfolio builder at $10/site/mo"><span><strong>A · Hosted portfolio builder.</strong> $10/site/month, our hosting, our credentials, twenty designs. <span class="meta">Recurring revenue, direct fight with FreshStore, we hold customers’ affiliate keys.</span></span></label>
+          <label class="opt opt--rec"><input type="radio" name="D1" value="B — build & hand over: $299 + $9/mo (recommended)" checked><span><strong>B · Build &amp; hand over.</strong> $299 a build, $9/month caretaker, code in the owner’s GitHub and Vercel. <span class="meta">Ownership and distinctiveness are uncopyable; no customer credential ever reaches us.</span> <span class="opt__rec-tag">recommended</span></span></label>
+          <label class="opt"><input type="radio" name="D1" value="C — white-label engine for agencies"><span><strong>C · White-label for agencies.</strong> Highest price per deal, but roles, SLAs and support before the build is proven.</span></label>
+        </div>
+        <p class="small"><strong>Why B:</strong> A competes with an incumbent that already has merchant plumbing, six designs and years of reviews, on a price where my own refresh cost eats the margin; B sells the two things that incumbent cannot — a look of its own and a repository in the owner’s name.</p>
+      </div>
+
+      <div class="decision stack" data-decision="D2">
+        <div class="decision__head"><p class="h4">D2 · Who are the first ten customers?</p><span class="chip chip--decision">recommend portfolio operators</span></div>
+        <div class="stack stack--tight">
+          <label class="opt opt--rec"><input type="radio" name="D2" value="Portfolio operators, 3–30 sites (recommended)" checked><span><strong>Portfolio operators, 3–30 sites.</strong> They already pay $25–128/month, decide in an evening, and own their own Associates account. <span class="opt__rec-tag">recommended</span></span></label>
+          <label class="opt"><input type="radio" name="D2" value="First-time builders"><span><strong>First-time builders.</strong> Larger market, but they churn before the first commission and compare the price to $0.</span></label>
+          <label class="opt"><input type="radio" name="D2" value="Small agencies, white-label"><span><strong>Small agencies.</strong> Highest willingness to pay, and it turns the first version into a services business.</span></label>
+        </div>
+        <p class="small"><strong>What would change my mind:</strong> if ten operators tell us the WordPress stack is the real competitor (not FreshStore), the buyer is more technical than assumed and the wedge should be the export, sold as a one-time developer tool instead of a product.</p>
+      </div>
+
+      <div class="decision stack" data-decision="D3">
+        <div class="decision__head"><p class="h4">D3 · How is it priced?</p><span class="chip chip--decision">recommend build fee + caretaker</span></div>
+        <div class="stack stack--tight">
+          <label class="opt opt--rec"><input type="radio" name="D3" value="$299 per build + $9/mo caretaker (recommended)" checked><span><strong>$299 + $9/month.</strong> Matches how this market already buys (a plugin yearly, an agency one-off, a $199 done-for-you blog), and keeps the caretaker fee above my $2/month refresh cost. <span class="opt__rec-tag">recommended</span></span></label>
+          <label class="opt"><input type="radio" name="D3" value="$19/site/mo, no build fee"><span><strong>$19/site/month, no build fee.</strong> Lower entry, but 2–4× FreshStore’s $2.48–10 per site and a harder first sale.</span></label>
+          <label class="opt"><input type="radio" name="D3" value="Free build, share of affiliate commission"><span><strong>Free build, share the commission.</strong> Aligned, but it needs the store’s affiliate accounts under our control and turns every refund into a reconciliation.</span></label>
+        </div>
+        <p class="small"><strong>The number that decides it:</strong> a store earns hundreds, not thousands, in its first months <a class="src" href="#sources">S21</a>. A $19/month fee is 20–40% of a store’s early income; a one-time $299 is a capital decision the operator is used to making.</p>
+      </div>
+
+      <div class="decision stack" data-decision="D4">
+        <div class="decision__head"><p class="h4">D4 · What did “payments” mean in your brief?</p><span class="chip chip--decision">recommend billing only</span></div>
+        <div class="stack stack--tight">
+          <label class="opt opt--rec"><input type="radio" name="D4" value="Subscription billing only; no checkout on the store (recommended)" checked><span><strong>Subscription billing only.</strong> Stripe for your customers; the generated store has no cart, because affiliate revenue arrives as commission, not as a sale. <span class="opt__rec-tag">recommended</span></span></label>
+          <label class="opt"><input type="radio" name="D4" value="Also support own-product checkout (Stripe + tax + fulfilment)"><span><strong>Also support own-product checkout.</strong> Adds Stripe, tax, refunds, fraud and shipping to the product — a second company, not a feature.</span></label>
+          <label class="opt"><input type="radio" name="D4" value="Defer: ship affiliate stores now, revisit checkout after 10 customers"><span><strong>Defer the question.</strong> Ship affiliate stores; revisit once ten customers exist and one of them asks to sell their own product.</span></label>
+        </div>
+      </div>
+
+      <div class="decision stack" data-decision="D5">
+        <div class="decision__head"><p class="h4">D5 · Which merchants come first?</p><span class="chip chip--decision">recommend eBay + specialist networks</span></div>
+        <div class="stack stack--tight">
+          <label class="opt opt--rec"><input type="radio" name="D5" value="eBay and specialist networks first; Amazon price-gated (recommended)" checked><span><strong>eBay + specialist networks first, Amazon gated.</strong> eBay’s core APIs need no extra approval <a class="src" href="#sources">S8</a>; Awin/Impact feeds arrive in days; Amazon unlocks at 10 sales. <span class="opt__rec-tag">recommended</span></span></label>
+          <label class="opt"><input type="radio" name="D5" value="Amazon first, prices hidden until the gate clears"><span><strong>Amazon first.</strong> The biggest catalogue, and the reason every store looks the same. Prices hidden until the owner’s gate clears <a class="src" href="#sources">S4</a>.</span></label>
+          <label class="opt"><input type="radio" name="D5" value="Any merchant with a public feed, no curated order"><span><strong>Any merchant with a public feed.</strong> Maximum breadth, minimum judgement about commission per sale.</span></label>
+        </div>
+        <p class="small"><strong>Why not Amazon-first:</strong> the gate is the buyer’s, not ours, and a first build that shows no prices anywhere reads as broken. eBay and a specialist can show real, stamped prices on day one.</p>
+      </div>
+
+      <div class="decision stack" data-decision="D6">
+        <div class="decision__head"><p class="h4">D6 · The name</p><span class="chip chip--decision">your call</span></div>
+        <div class="stack stack--tight">
+          <label class="opt opt--rec"><input type="radio" name="D6" value="Keep Cairn as the working name (recommended)" checked><span><strong>Cairn.</strong> A stack of stones marking a path — a guide that is built once and stays. Short, ownable, no AI cliché. <span class="opt__rec-tag">recommended</span></span></label>
+          <label class="opt"><input type="radio" name="D6" value="Use a descriptive name instead"><span><strong>A descriptive name.</strong> Says what it does, ranks for nothing, and reads like every other tool in this market.</span></label>
+          <label class="opt"><input type="radio" name="D6" value="You will name it later"><span><strong>Name it later.</strong> Fine for a build; blocking for a landing page, a domain and a logo.</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div class="stack stack--tight">
+          <p class="h4">Send these picks to chat</p>
+          <p class="small">Copies your selections as text. Answers given in chat work the same way; this button just saves typing.</p>
+        </div>
+        <div class="row"><button class="btn btn--primary" type="button" id="copy-picks">Copy my picks</button><span class="copied" id="copy-status" role="status" aria-live="polite"></span></div>
+      </div>
+      <pre id="picks-out" class="small" style="margin:var(--sp-4) 0 0;white-space:pre-wrap;color:var(--ink-3);font-family:var(--mono);font-size:var(--t-11);line-height:1.6"></pre>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="hypotheses">
+    <div class="sec-head">
+      <p class="eyebrow">09 — Hypotheses</p>
+      <h2 class="h2">Five claims, one of which decides everything</h2>
+    </div>
+    <div class="panel" style="border-left:3px solid var(--bad)">
+      <p class="eyebrow" style="color:var(--bad)">The weakest consequential assumption</p>
+      <p class="h3" style="margin-top:var(--sp-2);max-width:52ch">A generated store earns its first commission within 60 days without its owner writing anything.</p>
+      <p class="body" style="margin-top:var(--sp-3)">If that is false, nothing else here matters: ownership of a store that earns nothing is a $299 souvenir, and no caretaker fee survives month three. The evidence cuts both ways — sites built fast do get indexed in days <a class="src" href="#sources">S18</a>, three months of manual work produced about $650 a month <a class="src" href="#sources">S21</a>, and Google explicitly targets many pages generated without added value <a class="src" href="#sources">S10</a>. My mitigation is a design choice, not optimism: few pages, real price history, a method page and visible sources — the shape of the one site you sent me.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:5%">ID</th><th style="width:26%">Hypothesis</th><th style="width:8%">Status</th><th style="width:30%">How the first ten users test it</th><th style="width:31%">The result that changes the plan</th></tr></thead>
+        <tbody>
+          <tr><td class="num">H1</td><td><strong>A generated store earns its first commission within 60 days</strong>, unattended.</td><td><span class="chip chip--assumption">untested</span></td><td>Build 3 stores in 2 niches on real domains. Record indexation at 14 days, impressions at 45, commission at 60.</td><td>2 of 3 earn ≥1 commission in 60 days → proceed. 0 of 3 → move to a research-and-export tool at $29/mo, or sell the build as a service.</td></tr>
+          <tr><td class="num">H2</td><td>Operators pay <strong>$299 for a store they own</strong> rather than $10/site/month.</td><td><span class="chip chip--assumption">untested</span></td><td>Offer the build page to 10 portfolio operators from the two subreddits; take a $50 deposit.</td><td>3 of 10 pre-pay → keep B. 0–1 → switch to Direction A and compete on price, with the cost model in § 1.4.</td></tr>
+          <tr><td class="num">H3</td><td><strong>Distinctiveness, not speed, is why they switch.</strong></td><td><span class="chip chip--assumption">untested</span></td><td>Show 10 operators our store beside a FreshStore site; ask which they would put their own domain on, and why.</td><td>6 of 10 choose ours and name the look in the reason → the design work is the moat and gets the budget. If they choose on price, it is not.</td></tr>
+          <tr><td class="num">H4</td><td>The <strong>Amazon price gate is acceptable</strong> to a buyer who understands it.</td><td><span class="chip chip--assumption">untested</span></td><td>Show screen 4 and the “check current price” card; ask whether they would still launch.</td><td>≥6 of 10 proceed → the gate is a feature. ≤3 → Amazon-first is demanded, and the product becomes a WordPress plugin with a much smaller price.</td></tr>
+          <tr><td class="num">H5</td><td>The <strong>caretaker fee renews</strong> at 60% by month three.</td><td><span class="chip chip--assumption">untested</span></td><td>First 10 paying customers, tracked monthly with cancellation reasons recorded verbatim.</td><td>&lt;30% renewal → A would have failed too, and the honest product is a one-off build with no subscription at all.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Building the first version and putting it in front of paying operators is the experiment for H1–H4 at once. The cheap version, before any code: three real builds by hand, which is also what a first plan would schedule.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section class="section" id="sources">
+    <div class="sec-head">
+      <p class="eyebrow">10 — Sources</p>
+      <h2 class="h2">Everything above, addressable</h2>
+    </div>
+    <p class="small">All read 17 November 2026. Reddit entries are marked because reddit.com refused direct fetches; their text comes from the search-index snippet of the same URL.</p>
+    <div class="table-wrap">
+      <table class="table--dense">
+        <thead><tr><th style="width:5%">ID</th><th style="width:42%">Source</th><th style="width:38%">Address</th><th style="width:15%">Kind</th></tr></thead>
+        <tbody>
+          <tr><td class="num">S1</td><td>which3dprinter.best — homepage, footer and counters</td><td>https://www.which3dprinter.best/</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S2</td><td>which3dprinter.best — product page, embedded Offer JSON-LD and 90-day price array</td><td>https://www.which3dprinter.best/printers/elegoo-centauri-carbon</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S3</td><td>which3dprinter.best — sitemap.xml and robots.txt</td><td>https://www.which3dprinter.best/sitemap.xml</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S4</td><td>Amazon Associates — Creators API, Prerequisites (“at least 10 qualifying sales within the past 30 days”)</td><td>https://affiliate-program.amazon.com/creatorsapi/docs/en-us/introduction</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S5</td><td>Amazon — PA-API 5.0 FAQ, deprecation on 15 May 2026</td><td>https://webservices.amazon.com/paapi5/documentation/faq.html</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S6</td><td>Amazon Associates — operating policies: price display and date/time stamp</td><td>https://affiliate-program.amazon.com.au/help/operating/policies</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S7</td><td>AA-Team docs — PA-API 5 restrictions (HTTPS required; one tag per key pair)</td><td>https://docs.aa-team.com/woocommerce-amazon-affiliates/documentation/pa-api-5-restrictions-requirements/</td><td><span class="chip chip--inference">third-party</span></td></tr>
+          <tr><td class="num">S8</td><td>eBay Partner Network — Developer Questionnaire (reporting, Browse and Finding APIs need no extra approval)</td><td>https://partnernetwork.ebay.com/page/developer-questionnaire</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S9</td><td>eBay Developers — Deal API, limited release</td><td>https://developer.ebay.com/api-docs/buy/static/api-deal.html</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S10</td><td>Google Search — spam policies, “Scaled content abuse”</td><td>https://developers.google.com/search/docs/essentials/spam-policies</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S11</td><td>FreshStore — pricing (10 sites: $24.75/mo yearly, $50 monthly; 3/10/30/100-site tiers; WordPress comparison figures)</td><td>https://www.freshstore.com/pricing</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S12</td><td>FreshStore — affiliate store builder (six designs, instant niches, “No API keys to apply for”)</td><td>https://www.freshstore.com/affiliate-store</td><td><span class="chip chip--observed">vendor claim</span></td></tr>
+          <tr><td class="num">S13</td><td>AAWP — pricing, €79/year for one site</td><td>https://getaawp.com/pricing/</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S14</td><td>Lasso — pricing, free for one property, Creator $19/mo billed annually</td><td>https://getlasso.co/pricing/</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S15</td><td>Outrank — pricing, $99/mo for 30 articles</td><td>https://www.outrank.so/pricing</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S16</td><td>Lovable — pricing, Pro $25/mo with 100 credits</td><td>https://lovable.dev/pricing</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S17</td><td>16 CFR § 255.5 — disclosure of material connections</td><td>https://www.govinfo.gov/content/pkg/CFR-2025-title16-vol1/pdf/CFR-2025-title16-vol1-sec255-5.pdf</td><td><span class="chip chip--observed">observed</span></td></tr>
+          <tr><td class="num">S18</td><td>r/Affiliatemarketing — “I got 3 affiliate sites live fast”, 15 Apr 2026</td><td>https://www.reddit.com/r/Affiliatemarketing/comments/1slrqix/</td><td><span class="chip chip--inference">snippet, 403 on fetch</span></td></tr>
+          <tr><td class="num">S19</td><td>r/passive_income — “Buyer be warned”, 8 Apr 2026</td><td>https://www.reddit.com/r/passive_income/comments/1sfxx46/</td><td><span class="chip chip--inference">snippet, 403 on fetch</span></td></tr>
+          <tr><td class="num">S20</td><td>r/Affiliatemarketing — “AI SEO agency for niche sites”, 28 Mar 2026</td><td>https://www.reddit.com/r/Affiliatemarketing/comments/1s64x5u/</td><td><span class="chip chip--inference">snippet, 403 on fetch</span></td></tr>
+          <tr><td class="num">S21</td><td>r/AIContentAutomators — 3-month AI affiliate test, $650/month, 31 Jan 2026</td><td>https://www.reddit.com/r/AIContentAutomators/comments/1qs0hli/</td><td><span class="chip chip--inference">snippet, 403 on fetch</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" style="margin-top:var(--sp-4)">Next, on your word: the brief (accepted intent and use cases), then a plan that opens with the assumptions in § 00 and names the files each phase changes. The five screens of the operator app are the first build; the store’s two screens are the first thing its readers see.</p>
+  </section>
+
+  <footer style="margin-top:var(--sp-8);border-top:1px solid var(--rule-strong);padding-top:var(--sp-4)">
+    <div class="row" style="justify-content:space-between">
+      <p class="meta">Cairn · proposal · 17 November 2026 · docs/product/proposal.html</p>
+      <p class="meta">Claims marked by kind · screening mocks use sample data</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var groups = ["D1", "D2", "D3", "D4", "D5", "D6"];
+  var out = document.getElementById("picks-out");
+  var status = document.getElementById("copy-status");
+  var button = document.getElementById("copy-picks");
+
+  function current() {
+    var lines = [];
+    groups.forEach(function (g) {
+      var picked = document.querySelector('input[name="' + g + '"]:checked');
+      if (picked) lines.push(g + ": " + picked.value);
+    });
+    return lines;
+  }
+  function render() {
+    var lines = current();
+    out.textContent = lines.length ? lines.join("\n") : "No picks yet.";
+  }
+  document.querySelectorAll('input[type="radio"]').forEach(function (input) {
+    input.addEventListener("change", render);
+  });
+  render();
+
+  button.addEventListener("click", function () {
+    var text = "Proposal picks (Cairn, 17 Nov 2026)\n" + current().join("\n");
+    var done = function () { status.textContent = "Copied — paste it into chat."; };
+    var fail = function () { status.textContent = "Select the text below and copy it."; };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fail);
+    } else {
+      fail();
+    }
+  });
+}());
+</script>
+</body>
+</html>
