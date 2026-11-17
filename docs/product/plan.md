@@ -14,10 +14,10 @@ this product's order differs, and says so.
 **Stage 2 (design) is in flight; Phase 1 is the active phase.** Nothing is in production;
 nothing is deployed; the repository holds documents, the design kit and artboards and no app
 code. **Decided 2026-11-17:** D1 B (build and hand over), D2 portfolio operators, D3 $299 +
-$9/month, D4 billing only, D5 eBay first with Amazon gated, D6 Cairn. **Still to read:** the
-four provisional picks in `decisions.md` — the shape switches, `billing: none`, the stack and
-the phase order. **Waiting on the owner now:** which of the two app-shell directions in
-`design/artboards.html` to build on.
+$9/month, D4 billing only, D5 eBay first with Amazon gated, D6 Cairn. **Still to read:** the five provisional picks in `decisions.md` — the shape switches,
+`billing: none`, the stack, the phase order and the storefront direction. **Phase 1 is
+complete**: the shell is Trade press (owner's pick, 17 Nov 2026) and the artboards are
+rendered. **Next: Phase 2**, screens on sample data with the front door beside them.
 
 ## Assumptions this plan rests on — the owner should confirm or refute these first
 
@@ -58,9 +58,10 @@ the phase order. **Waiting on the owner now:** which of the two app-shell direct
 - **Artboards** — two app-shell directions at 1440 and 390, plus the three storefront
   directions from the proposal rebuilt from the kit (Field Notes, Bench, Scout). Done when:
   the owner picks one app direction and one storefront direction, recorded in
-  `decisions.md`. Status: app directions drawn at 1440 and 390 in
-  `design/artboards.html` — **waiting on the owner's pick**; the storefront direction is
-  carried over from the proposal (Field Notes recommended) and needs the owner's yes.
+  `decisions.md`. Status: **done (17 Nov 2026)** — the owner picked **Trade press**; the
+  other shell was deleted. The storefront direction (Field Notes) is recorded provisionally
+  in `decisions.md` for one read, and is confirmed or corrected when the first store is
+  generated in Phase 6.
 
 ### Phase 2 — Screens on sample data, and the front door (stage 3)
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cairn — app shell, two directions</title>
+<title>Cairn — the app shell</title>
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="kit.css">
 <link rel="stylesheet" href="artboards.css">
@@ -11,20 +11,7 @@
   /* Screen-local geometry only: heights and the frame's own scroll. No raw colours. */
   .frame__inner .shell { height: 100%; }
   .s-table td:first-child { font-weight: var(--w-strong); }
-    .s-queue { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); }
-  .s-stat { border-left: var(--bw-strong) solid var(--ink); padding-left: var(--sp-3); }
-  .s-stat__n { font-family: var(--display); font-size: var(--t-25); line-height: var(--lh-25); font-variant-numeric: tabular-nums; }
-  .s-bar { position: absolute; left: 0; top: 0; bottom: 0; width: var(--edge-bar); background: var(--none); }
-  .s-row { position: relative; padding-left: var(--sp-4); }
-  .s-row--ok .s-bar { background: var(--ok); }
-  .s-row--warn .s-bar { background: var(--warn); }
-  .s-row--bad .s-bar { background: var(--bad); }
-    @media (max-width: 720px) {
-    .rail { display: none; }
-    .main { padding: var(--sp-4); }
-    .topbar .nav, .topbar .workspace-chip { display: none; }
-  }
-  .p-dir { display: flex; gap: var(--sp-4); flex-wrap: wrap; align-items: flex-end; }
+                      .p-dir { display: flex; gap: var(--sp-4); flex-wrap: wrap; align-items: flex-end; }
   .p-dir > * { min-width: var(--card-min); flex: 1 1 var(--card-min); }
 </style>
 </head>
@@ -33,22 +20,23 @@
 
   <header class="artboard-head stack">
     <p class="eyebrow">Phase 1 · design · 17 Nov 2026</p>
-    <h1>Two app shells. One screen, drawn in both.</h1>
-    <p class="lede">The screen is <span class="mono">/stores</span> — the portfolio, the one the operator
-      returns to. It is drawn at 1440 and 390 in each direction, from one kit, so what you are
-      comparing is the shell, not the content. Sample data throughout.</p>
-    <p class="meta">Both directions are light and both use one palette: a dark set is a decision for
-      the design phase of the generated storefront, not for the control plane.</p>
+    <h1>The chosen shell, at 1440 and 390.</h1>
+    <p class="lede">The screen is <span class="mono">/stores</span> — the portfolio, the member home, the one
+      the operator returns to. The shell is <strong>Trade press</strong>, picked on 17 November 2026 from the
+      two drawn; the other is gone. Sample data throughout.</p>
+    <p class="meta">One palette, light only: a dark set is a decision for the generated storefront's design
+      phase, not for the control plane.</p>
   </header>
 
   <!-- =====================================================  A  -->
-  <section class="direction" data-direction="a">
+  <section class="direction">
     <div class="direction__head">
-      <span class="direction__name">A — Trade press</span>
-      <span class="tag tag--accent">continues the proposal</span>
-      <p class="direction__why">Warm paper, serif headings, a top bar, one wide ruled table. The store
-        is a publication and the product looks like the trade it serves: it reads as a desk with a
-        ledger on it. Calmer at thirty rows; the weakest at a glance, because nothing shouts.</p>
+      <span class="direction__name">Trade press</span>
+      <span class="tag tag--accent">chosen</span>
+      <p class="direction__why">Warm paper, serif headings, a top bar, one wide ruled table. The store is a
+        publication and the product looks like the trade it serves: it reads as a desk with a ledger on
+        it. It is the calmer of the two at thirty rows, and it says something about the product that a
+        dashboard would not.</p>
     </div>
 
     <div class="board-row">
@@ -179,174 +167,21 @@
     </div>
   </section>
 
-  <!-- =====================================================  B  -->
-  <section class="direction" data-direction="b">
-    <div class="direction__head">
-      <span class="direction__name">B — Workbench</span>
-      <span class="tag">instrument, not publication</span>
-      <p class="direction__why">Cooler stock, condensed grotesque headings, a left rail, tighter rows and a
-        status bar down the left edge of every store. The product looks like a tool that measures
-        things: the portfolio reads at a glance, and thirty stores fit on one screen. Less distinctive
-        than A, and closer to what the market already sells.</p>
-    </div>
-
-    <div class="board-row">
-      <div class="frame frame--desktop">
-        <div class="frame__bar"><span class="frame__dot"></span><span class="frame__dot"></span><span class="frame__dot"></span>
-          <span class="frame__url">cairn.app/stores</span></div>
-        <div class="frame__inner">
-          <div class="shell">
-            <div class="topbar" style="height: var(--topbar-h-sm)">
-              <span class="brand">
-                <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><rect x="4" y="16" width="16" height="4"/><rect x="6.5" y="11" width="11" height="3.6"/><rect x="9" y="6.5" width="6" height="3.2"/></g></svg>
-                Cairn
-              </span>
-              <span class="tag" style="margin-left: var(--sp-2)">Ridge Media</span>
-              <span class="push"></span>
-              <span class="meta mono">7 stores · 2 alerts</span>
-              <button class="btn btn--primary" style="margin-left: var(--sp-4)">New store</button>
-            </div>
-            <div class="body-row">
-              <nav class="rail">
-                <div class="rail__group">
-                  <div class="rail__label">Portfolio</div>
-                  <a class="rail__item" href="#" aria-current="page">Stores <span class="rail__count">7</span></a>
-                  <a class="rail__item" href="#">Niche briefs <span class="rail__count">3</span></a>
-                  <a class="rail__item" href="#">Catalogues <span class="rail__count">5</span></a>
-                </div>
-                <div class="rail__group">
-                  <div class="rail__label">Supply</div>
-                  <a class="rail__item" href="#">Merchants</a>
-                  <a class="rail__item" href="#">Price gates</a>
-                  <a class="rail__item" href="#">Link health</a>
-                </div>
-                <div class="rail__group">
-                  <div class="rail__label">Account</div>
-                  <a class="rail__item" href="#">Runs <span class="rail__count">2</span></a>
-                  <a class="rail__item" href="#">Settings</a>
-                </div>
-              </nav>
-              <div class="main">
-                <div class="page-head">
-                  <div class="stack-sm">
-                    <h1 class="h1">Portfolio</h1>
-                    <p class="page-head__sub">What changed since yesterday, and what needs you now.</p>
-                  </div>
-                </div>
-
-                <div class="s-queue" style="margin-top: var(--sp-5)">
-                  <div class="s-stat"><p class="eyebrow">Refreshed today</p><p class="s-stat__n">5 / 7</p></div>
-                  <div class="s-stat"><p class="eyebrow">Dead links</p><p class="s-stat__n">4</p></div>
-                  <div class="s-stat"><p class="eyebrow">Per sale, median</p><p class="s-stat__n">$18.40</p></div>
-                </div>
-
-                <div class="table-wrap" style="margin-top: var(--sp-5)">
-                  <table class="table s-table">
-                    <thead><tr><th>Store</th><th>Niche</th><th>Refreshed</th><th class="num">Offers</th><th class="num">Per sale</th><th>State</th></tr></thead>
-                    <tbody>
-                      <tr class="s-row s-row--warn"><td><span class="s-bar"></span>resin-miniatures.best</td><td>Resin printers for miniatures</td><td class="meta mono">2h</td><td class="num">24</td><td class="num">$18.40</td><td><span class="state state--warn">4 dead links</span></td></tr>
-                      <tr class="s-row s-row--ok"><td><span class="s-bar"></span>fdm-under-300.com</td><td>FDM printers under $300</td><td class="meta mono">2h</td><td class="num">31</td><td class="num">$12.10</td><td><span class="state state--ok">Live</span></td></tr>
-                      <tr class="s-row s-row--warn"><td><span class="s-bar"></span>mini-wash-cure.com</td><td>Wash and cure stations</td><td class="meta mono">2h</td><td class="num">9</td><td class="num">$22.40</td><td><span class="state state--warn">Gate unapplied</span></td></tr>
-                      <tr class="s-row s-row--ok"><td><span class="s-bar"></span>desk-3d-scanners.io</td><td>Desktop 3D scanners</td><td class="meta mono">2h</td><td class="num">12</td><td class="num">$26.80</td><td><span class="state state--ok">Live</span></td></tr>
-                      <tr class="s-row s-row--bad"><td><span class="s-bar"></span>wood-filament.shop</td><td>Wood-fill filaments</td><td class="meta mono">9d</td><td class="num">0</td><td class="num">—</td><td><span class="state state--bad">Build failed</span></td></tr>
-                      <tr class="s-row"><td><span class="s-bar"></span>budget-resin.store</td><td>Budget resin</td><td class="meta mono">—</td><td class="num">18</td><td class="num">$9.60</td><td><span class="state state--none">Nothing built</span></td></tr>
-                      <tr class="s-row s-row--ok"><td><span class="s-bar"></span>printer-bench.tools</td><td>Bench tools</td><td class="meta mono">2h</td><td class="num">14</td><td class="num">$7.20</td><td><span class="state state--ok">Live</span></td></tr>
-                    </tbody>
-                  </table>
-                </div>
-                <p class="meta" style="margin-top: var(--sp-4)">The left edge carries the state as a bar as well as a word, so a scan down thirty rows finds the two that need you without reading.</p>
-
-                <div class="split" style="margin-top: var(--sp-6)">
-                  <h2 class="h4">This morning</h2>
-                  <span class="meta mono">3 runs</span>
-                </div>
-                <div class="stack-sm" style="margin-top: var(--sp-2)">
-                  <div class="cluster" style="gap: var(--sp-3)"><span class="meta mono" style="width: 44px">06:10</span><span class="state state--ok">Done</span><span class="body-sm">5 stores refreshed · 143 offers checked</span></div>
-                  <div class="cluster" style="gap: var(--sp-3)"><span class="meta mono" style="width: 44px">06:42</span><span class="state state--warn">Your call</span><span class="body-sm">mini-wash-cure.com: Amazon gate open · 9 links ready</span></div>
-                  <div class="cluster" style="gap: var(--sp-3)"><span class="meta mono" style="width: 44px">07:15</span><span class="state state--bad">Stopped</span><span class="body-sm">wood-filament.shop: catalogue has 0 offers</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="frame frame--phone">
-        <div class="frame__bar"><span class="frame__dot"></span><span class="frame__dot"></span><span class="frame__dot"></span>
-          <span class="frame__url">cairn.app/stores</span></div>
-        <div class="frame__inner">
-          <div class="shell">
-            <div class="topbar" style="height: var(--topbar-h-sm); padding: 0 var(--sp-4)">
-              <span class="brand">
-                <svg class="brand__mark" viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><rect x="4" y="16" width="16" height="4"/><rect x="6.5" y="11" width="11" height="3.6"/><rect x="9" y="6.5" width="6" height="3.2"/></g></svg>
-                Cairn
-              </span>
-              <span class="push"></span>
-              <button class="btn btn--primary" style="min-height: var(--touch); padding: 0 var(--sp-3)">New store</button>
-              <button class="btn btn--icon" aria-label="Portfolio and settings">☰</button>
-            </div>
-            <div class="main" style="padding: var(--sp-3)">
-              <div class="cluster" style="justify-content: space-between">
-                <h1 class="h3">Portfolio</h1>
-                <span class="meta mono">2 alerts</span>
-              </div>
-              <div class="table-wrap" style="margin-top: var(--sp-3)">
-                <table class="table">
-                  <tbody>
-                    <tr class="s-row s-row--warn"><td><span class="s-bar"></span>
-                      <p style="font-weight: var(--w-strong)">resin-miniatures.best</p>
-                      <p class="meta mono">24 offers · $18.40 · 2h</p>
-                      <span class="state state--warn">4 dead links</span></td></tr>
-                    <tr class="s-row s-row--ok"><td><span class="s-bar"></span>
-                      <p style="font-weight: var(--w-strong)">fdm-under-300.com</p>
-                      <p class="meta mono">31 offers · $12.10 · 2h</p>
-                      <span class="state state--ok">Live</span></td></tr>
-                    <tr class="s-row s-row--warn"><td><span class="s-bar"></span>
-                      <p style="font-weight: var(--w-strong)">mini-wash-cure.com</p>
-                      <p class="meta mono">9 offers · $22.40 · 2h</p>
-                      <span class="state state--warn">Gate unapplied</span></td></tr>
-                    <tr class="s-row s-row--bad"><td><span class="s-bar"></span>
-                      <p style="font-weight: var(--w-strong)">wood-filament.shop</p>
-                      <p class="meta mono">0 offers · build failed · 9d</p>
-                      <span class="state state--bad">Build failed</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="p-dir" style="margin-top: var(--sp-5)">
-      <div><span class="label">Primary action</span><button class="btn btn--primary">New store</button></div>
-      <div><span class="label">Secondary</span><button class="btn">Review</button></div>
-      <div><span class="label">Quiet</span><button class="btn btn--quiet">Dismiss</button></div>
-      <div><span class="label">Field</span><input class="field" placeholder="The niche, in your words"></div>
-      <div><span class="label">States</span><span class="cluster"><span class="state state--ok">Live</span><span class="state state--warn">Needs a look</span><span class="state state--bad">Failed</span><span class="state state--none">Nothing built</span></span></div>
-      <div><span class="label">Tags</span><span class="cluster"><span class="tag">Sample data</span><span class="tag tag--accent">Gate open</span></span></div>
-    </div>
-  </section>
-
   <section class="direction">
-    <div class="direction__head"><span class="direction__name">What differs, and what does not</span></div>
-    <div class="table-wrap">
+    <div class="direction__head"><span class="direction__name">Why this direction</span></div>
+    <p class="body-sm">Picked by the owner on 17 November 2026. The comparison it was chosen from is
+      in <span class="mono">docs/product/decisions.md</span>; the other shell was deleted rather than kept as
+      a theme.</p>
+    <div class="table-wrap" style="margin-top: var(--sp-4)">
       <table class="table">
-        <thead><tr><th>&nbsp;</th><th>A — Trade press</th><th>B — Workbench</th></tr></thead>
         <tbody>
-          <tr><td>Navigation</td><td>Top bar, five destinations</td><td>Left rail, three groups, counts</td></tr>
-          <tr><td>Display face</td><td>Serif, 44 px page title</td><td>Condensed grotesque, 38 px</td></tr>
-          <tr><td>Stock</td><td>Warm paper, letterpress rules</td><td>Cool paper, hairline grid</td></tr>
-          <tr><td>Density</td><td>47 px a row: 7 in the fold, 3 in the activity list</td><td>39 px a row: 9 in the fold, tabular figures</td></tr>
-          <tr><td>State</td><td>Word plus shape, in the row</td><td>Word, shape, and a bar on the left edge</td></tr>
-          <tr><td>Below the table</td><td>An activity list, in words</td><td>A run strip, three mono lines</td></tr>
-          <tr><td>Same in both</td><td colspan="2">The palette roles, the four states, the control heights, the 44 px touch floor, the focus ring, the phone layout's card list, and every value in <span class="mono">tokens.css</span></td></tr>
+          <tr><td style="width: 30%">What it keeps</td><td>Warm paper, serif display, a top bar, one ruled table, activity in words. The product reads as the trade it serves, which is the claim the generated stores make.</td></tr>
+          <tr><td>What it rejected</td><td>A left rail, a condensed grotesque, 39 px rows and a state bar on each row's edge. Those scanned better at thirty stores; A was chosen for what it says about the product, not for density.</td></tr>
+          <tr><td>What the pass changed</td><td>Row density is a token (<span class="mono">--row-pad</span>); both banners use block children; the fold carries the screen's second block; the phone mock takes the full width at 390.</td></tr>
+          <tr><td>Untouched by the pick</td><td>The palette roles, the four states as word plus shape, the control heights, the 44 px touch floor, the focus ring, and every value in <span class="mono">tokens.css</span>.</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="body-sm" style="margin-top: var(--sp-4)">Reply with <strong>A</strong> or <strong>B</strong>. The other is discarded rather than kept as a
-      theme: one direction, extended, is what makes a product look designed. If neither reads right,
-      say which half of each you want and I draw a third.</p>
   </section>
 
 </div>

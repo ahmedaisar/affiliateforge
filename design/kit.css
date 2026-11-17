@@ -228,30 +228,6 @@ a:hover { color: var(--accent-hover); }
 
 .body-row { display: flex; align-items: stretch; flex: 1 1 auto; min-height: 0; }
 
-.rail {
-  width: var(--rail-w); flex: 0 0 var(--rail-w);
-  border-right: var(--bw) solid var(--rule);
-  background: var(--paper-2);
-  padding: var(--sp-4) var(--sp-3);
-}
-.rail__group + .rail__group { margin-top: var(--sp-5); }
-.rail__label {
-  padding: 0 var(--sp-2) var(--sp-2);
-  font-size: var(--t-11); line-height: var(--lh-11);
-  letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--ink-3);
-}
-.rail__item {
-  display: flex; align-items: center; gap: var(--sp-2);
-  padding: var(--sp-2); border-radius: var(--r-2);
-  font-size: var(--t-13); color: var(--ink-2); text-decoration: none;
-}
-.rail__item:hover { background: var(--paper-3); color: var(--ink); }
-.rail__item[aria-current="page"] {
-  background: var(--paper); color: var(--ink); font-weight: var(--w-strong);
-  box-shadow: inset var(--bw-strong) 0 0 var(--ink);
-}
-.rail__count { margin-left: auto; font-size: var(--t-11); color: var(--ink-3); }
-
 .main { flex: 1 1 auto; min-width: 0; padding: var(--sp-6) var(--sp-7) var(--sp-8); }
 .main--narrow { max-width: calc(var(--measure) + var(--sp-8) * 2); }
 

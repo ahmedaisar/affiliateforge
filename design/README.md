@@ -8,7 +8,7 @@ of one").
 |---|---|
 | `tokens.css` | **Every raw value in this repository.** Colour, type, space, form, layout, motion. |
 | `kit.css` | The primitives, built only from those tokens. Compose screens from these. |
-| `artboards.html` | Two app-shell directions, the same screen drawn in both at 1440 and 390. |
+| `artboards.html` | The chosen shell: the same screen at 1440 and 390, plus the primitives strip. |
 | `jobs-map.md` | Each job, the screen that does it, the one question it answers, its primary action. |
 
 `kit-notes.md` is the record of the *proposal artifact's* design, written before this kit
@@ -24,22 +24,20 @@ read a custom property there — so `--bp-phone` documents the value that `@medi
 Verified 17 Nov 2026: no hex literal and no `px` value exists in `kit.css`, `artboards.css`
 or the artboards markup, except the breakpoint above.
 
-## Direction (open until the owner picks)
+## Direction — Trade press (chosen 17 Nov 2026)
 
-Two shells are drawn, from the same tokens, on the same screen (`/stores`, the portfolio,
-which is also the member home):
+Warm paper, serif display, a top bar, one wide ruled table, activity in words. The store is a
+publication and the product looks like the trade it serves. Chosen by the owner from two
+shells drawn on the same screen (`/stores`, the portfolio, which is also the member home).
 
-- **A — Trade press.** Warm paper, serif display, top bar, one wide ruled table, generous
-  spacing. It continues the proposal's look: the product reads as the trade it serves.
-- **B — Workbench.** Cooler stock, condensed grotesque, left rail with counts, tighter rows,
-  tabular figures, and a state bar down the left edge of every row. It reads as an
-  instrument: thirty stores scan in one pass.
+The shell that lost — cool stock, condensed grotesque, left rail with counts, 39 px rows, a
+state bar on each row's edge — **was deleted, not kept behind a switch.** It scanned better at
+thirty rows, and that is recorded in `docs/product/decisions.md` as the cost of the choice;
+if thirty rows ever become the complaint, that entry is where to reopen it.
 
-A direction is a **set of token values**, never a second kit: `[data-direction="b"]` in
-`tokens.css` overrides stock, display face, scale, radii and control height, and every
-primitive follows. **The pick is recorded in `docs/product/decisions.md`, and the losing
-direction is deleted rather than kept as a theme** — a product with two themes looks like a
-product with none.
+A direction is a **set of token values**, never a second kit. `[data-direction]` overrides
+existed only while two shells were being compared and are gone with the loser: `:root` in
+`tokens.css` is now the whole theme, so a second theme cannot creep back in by accident.
 
 ## What the kit guarantees, in both directions
 
@@ -69,7 +67,7 @@ it ships; a value that fails is changed, not annotated.
 
 ## Layout and density
 
-- `--max` 1120 px content, `--measure` 66ch for reading, `--gutter` 64 px above 720 px.
+- `--max` 1120 px content, `--measure` 66ch for reading.
 - Direction A's main column is 48 px top / 48 px bottom padding; B's is 32 px, and B carries
   a `--rail-w` 208 px rail. Both collapse to full width below `--bp-phone`, where tables
   become card lists rather than scrolling horizontally.
@@ -115,6 +113,5 @@ states, tags) renders in both.
 
 ## Owed
 
-- **The owner's pick** between A and B; the losing direction is then deleted.
-- **The scored audit** from the `ui-design` skill, once the direction is picked.
+- **The scored audit** from the `ui-design` skill (now that the direction is picked).
 - **The newcomer walkthrough**, with a reader who has not seen these documents.

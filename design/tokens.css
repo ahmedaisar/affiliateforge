@@ -34,7 +34,7 @@
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-  /* The direction swaps these two; body copy stays sans in both. */
+  /* Display is the serif; body copy stays sans. */
   --display: var(--serif);
   --body:    var(--sans);
 
@@ -81,67 +81,18 @@
   --focus-offset: 2px;
   --focus-offset-tight: 1px;
 
-  --shadow-1: 0 1px 2px rgba(26, 25, 23, .06);
   --shadow-2: 0 8px 28px rgba(26, 25, 23, .12);
 
   /* ---- Layout ---------------------------------------------------------- */
   --max: 1120px;
   --measure: 66ch;
-  --gutter: 64px;
-  --gutter-sm: 16px;
-  --rail-w: 208px;
   --frame-desk-w: 1440px;
   --frame-desk-h: 900px;
   --frame-phone-w: 390px;
   --frame-phone-h: 780px;
   --frame-zoom: .62;
-  --rail-w-collapsed: 56px;
 
   /* ---- Motion ---------------------------------------------------------- */
   --dur: 140ms;
   --ease: cubic-bezier(.2, .7, .3, 1);
-}
-
-/* ============================================================================
-   Direction B — "Workbench". Same tokens, different values: cooler stock,
-   a condensed grotesque for display, square corners, a tighter scale, and
-   figures that read as instrument output rather than as prose.
-   Direction A is the :root values above ("Trade press").
-   ========================================================================== */
-[data-direction="b"] {
-  --paper:       #f8f8f5;
-  --paper-2:     #efefe9;
-  --paper-3:     #e4e4dc;
-  --raise:       #ffffff;
-  --ink:         #14161a;
-  --ink-2:       #44484f;
-  --ink-3:       #61666e;
-  --rule:        #d8d8d0;
-  --rule-strong: #bcbcb2;
-
-  --accent:      #274a63;
-  --accent-hover:#1b364a;
-  --accent-wash: #e4ecf1;
-
-  --ok:   #2b6b4a;  --ok-wash:   #dcece3;
-  --warn: #85560d;  --warn-wash: #f3e9d5;
-  --bad:  #9a2b2b;  --bad-wash:  #f5e1e0;
-  --none: #5f646b;  --none-wash: #e8e8e2;
-
-  --display: var(--sans);
-  --body:    var(--sans);
-
-  --t-11: 11px;  --t-12: 12px;  --t-13: 13px;  --t-15: 14px;
-  --t-17: 16px;  --t-20: 19px;  --t-25: 23px;  --t-32: 29px;  --t-44: 38px;
-
-  --track-caps: .1em;
-  --track-tight: -.011em;
-
-  --sp-8: 56px;
-  --r-1: 1px;  --r-2: 2px;  --r-3: 3px;
-
-  --row-pad: var(--sp-2);
-  --control-h: 32px;
-  --shadow-1: 0 1px 0 rgba(20, 22, 26, .05);
-  --shadow-2: 0 6px 20px rgba(20, 22, 26, .10);
 }

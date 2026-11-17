@@ -13,22 +13,37 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 
 ---
 
+## 2026-11-17 — the generated storefront's direction
+
+- **Options considered:** *Field Notes* (editorial serif, warm paper, footnoted — the proposal's
+  recommendation); *Bench* (technical, data-dense, no photos); *Scout* (photo-led, bold,
+  mobile-first). All three are drawn at 1:1 in the proposal's screen 2.
+- **Picked:** **Field Notes** — by **the agent, provisionally**, since the proposal recommended
+  it and the owner's acceptance of the proposal did not exclude it. Listed for one read.
+- **Why:** the niche's rivals look like Bench, and readers arrive from forums where a
+  publication voice travels further than a spec sheet. It is also the direction that looks
+  least like a FreshStore site, which is the whole claim (§ 2.2 of `AGENTS.md`).
+- **Reopen when:** the owner says otherwise, or the H1 trial's three stores show a Bench-shaped
+  rival outranking a Field Notes store on the same niche.
+
 ## 2026-11-17 — the app shell's direction
 
 - **Options considered:** A, *Trade press* — warm paper, serif display, top bar, one wide
   ruled table, generous spacing, continuing the proposal's look; B, *Workbench* — cool
   stock, condensed grotesque, left rail with counts, tighter rows, a state bar on every
   row's left edge; and a third drawn from halves of each.
-- **Picked:** **open** — both are drawn at 1440 and 390 in `design/artboards.html`; the
-  agent recommends **A**.
+- **Picked:** **A — Trade press**, by **the owner**: "Proceed ahead with A" (2026-11-17).
+  **B was deleted** with its `[data-direction]` overrides, so no second theme can return by
+  accident; `design/artboards.html` now draws the chosen shell alone at 1440 and 390.
 - **Why A:** the product's whole claim is that a generated store should look like a
   publication a person would link to. A control plane that looks like every AI dashboard
   undercuts that claim before the first screen of a store is seen; B is quieter and scans
   better at thirty rows, which is a real advantage, and is closer to what the market
   already sells.
-- **Reopen when:** the owner picks (fill this entry in), or the walkthrough shows A's
-  ruled table fails at thirty rows — then A keeps its type and stock and takes B's rail and
-  row density.
+- **Reopen when:** a real portfolio reaches thirty stores and the ruled table stops scanning
+  — then A keeps its type and stock and takes the left rail and the 39 px rows that lost here.
+  That is the cost this entry accepted: the choice was made on what the product says about
+  itself, not on density.
 
 ## 2026-11-17 — whether the product has in-app billing
 
