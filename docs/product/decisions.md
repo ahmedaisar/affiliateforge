@@ -13,6 +13,30 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 
 ---
 
+## 2026-11-18 — the control plane's stack: Vite, not Next.js
+
+- **Options considered:** keep Next.js (App Router) as proposed; **Vite + React Router as a
+  static SPA** with agent jobs as Supabase Edge Functions; Next.js with reduced output
+  (static export only, no server components).
+- **Picked:** **Vite + React Router (TypeScript SPA), static hosting, Edge Functions for
+  agents** — by **the agent, provisionally**, under the owner's instruction on 17 Nov 2026
+  after the build repeatedly died on this host (~950 MB RAM, no swap until that day; Next's
+  dev/build toolchains and `tsc -b` were the memory ceiling). Listed for one read.
+- **Why:** the framework was the wrong shape, not the product. A static SPA builds in about
+  a second on this machine and is trivially hostable; Next's value here (server components,
+  route handlers, middleware) would only be used by Phase 5's agents, which can live in Edge
+  Functions against the same Postgres. This entry supersedes the "2026-11-17 — the stack for
+  the control plane and for generated stores" entry, which stays as written.
+- **Consequences, stated honestly:** the browser holds the Supabase anon key, so **RLS is
+  the only authorization boundary in the control plane's wire path**; anything that needs a
+  secret never happens in the client. Clerk's client SDK signs the user in; the browser
+  forwards that token, and Edge Functions verify it. Static hosts need an SPA rewrite
+  (`/* -> /index.html`); deep links otherwise 404. No server-side rendering; SEO of the
+  landing page is a trade accepted in exchange for the machine that exists.
+- **Reopen when:** a screen genuinely requires SSR or secrets in-page (release gate go/no-go
+  would be the likely trigger), or the machine gains memory and a Tauri/Electron shell is
+  wanted, or the 2 GB swap makes Next free again. Then a new entry; this one stays.
+
 ## 2026-11-17 — the generated storefront's direction
 
 - **Options considered:** *Field Notes* (editorial serif, warm paper, footnoted — the proposal's

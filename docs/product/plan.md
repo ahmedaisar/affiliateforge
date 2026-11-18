@@ -65,10 +65,18 @@ rendered. **Next: Phase 2**, screens on sample data with the front door beside t
 
 ### Phase 2 — Screens on sample data, and the front door (stage 3)
 
-- **The screens** — `/stores` (portfolio), `/stores/[id]/niche` (brief + evidence),
-  `/stores/[id]/look` (three specimens), `/stores/[id]/catalogue`, `/stores/[id]/gate`
-  (price gate), `/stores/[id]/build` (run), and a storefront preview at
-  `/stores/[id]/preview/…`. Sample data fills every state, behind the seams the real system
+- **The scaffold** — Vite SPA in `src/`, React Router, the design kit imported from
+  `design/` by path; `npm run dev` serves on 3000, `npm run preview` serves the built
+  `dist/` on 3100. Done when: the app builds from a clean clone and every route below
+  answers 200 against `vite preview`. Status: **done (17 Nov 2026)** — verified by
+  build + fetch of all routes; screenshots and the rendered pass are **not** done (no
+  browser on the host).
+- **The screens** — `/stores` (portfolio, done), landing `/` and `/pricing` (done), legal
+  `/legal/terms` and `/legal/privacy` (drafts, done), plus the
+  remaining jobs screens: `/stores/:id/niche` (brief + evidence), `/stores/:id/look`
+  (three specimens), `/stores/:id/catalogue`, `/stores/:id/gate` (price gate),
+  `/stores/:id/build` (run), and a storefront preview at `/stores/:id/preview/…`.
+  Sample data fills every state, behind the seams the real system
   will use. Done when: the newcomer walkthrough, the rendered pass at 1440/768/390, the
   screenshot critique and the scored audit pass with P0 and P1 fixed, and the owner has
   clicked through every state at phone and desktop width. Status: not started.
@@ -79,6 +87,8 @@ rendered. **Next: Phase 2**, screens on sample data with the front door beside t
 
 ### Phase 3 — Setup (stage 4)
 
+- **Hosting** — an `/* -> /index.html` rewrite on the static host, or every deep link 404s.
+  Blocking prerequisite for go-live; not for local preview.
 - **Clerk and Supabase** — a development Clerk application with organizations enabled, a
   development Supabase project, keys in `.env`, `.env.example`, a row each in
   `docs/variables.md`, the env schema failing at build. Done when: the app boots on the
@@ -94,6 +104,10 @@ rendered. **Next: Phase 2**, screens on sample data with the front door beside t
   `docs/architecture.md` describe what is there. Status: not started.
 
 ### Phase 5 — The research agents
+
+- **Runtime** — the agents run as Supabase Edge Functions (Deno), never in the browser:
+  secrets are unreachable from the SPA by design. The browser forwards the Clerk session
+  token; every function verifies it and every query runs under RLS as that user.
 
 - **Scout (niche research)** — a server-side job that takes a niche, searches, and returns a
   brief with a score and evidence lines carrying source URL and fetch date; a per-run token

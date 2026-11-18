@@ -49,9 +49,12 @@ repository, a URL, a log line or a client bundle.
 
 ## 1.3 Stack, and the choices already made on it
 
-Next.js (App Router, TypeScript) · the kit in `design/` · Supabase Postgres · Clerk ·
-Netlify · Vitest + Playwright. Generated stores are a **separate** Next.js repository built
-and deployed into the operator's own GitHub and Vercel accounts.
+Vite + React Router (TypeScript SPA) · the kit in `design/` · Supabase Postgres · Clerk ·
+Vitest + Playwright. Generated stores are a **separate** Next.js repository built and
+deployed into the operator's own GitHub and Vercel accounts. There is no server runtime in
+the control plane: agent jobs run as **Supabase Edge Functions**, and authorization in the
+browser is the anon key plus RLS. Hosting is static (e.g. Netlify) with the SPA rewrite, so
+every path serves `index.html`.
 
 Propose these rather than re-deriving them; reopen one only by saying in § 2.3 that its
 trigger fired, and record it in `docs/product/decisions.md` (default choices: the
@@ -107,7 +110,9 @@ Skill defaults apply, with these departures — each dated and in the owner's te
 - **2026-11-17 — reviewer fallback:** a fresh session of the builder's own family, since no
   other reviewer CLI is configured here. Prefer another family if one becomes available.
 - **2026-11-17 — no builder delegation is configured** (no `codex-agents` CLI, one machine
-  with ~1 GB of RAM and 2 cores). The session agent builds, and each phase's line in
+  with ~1 GB of RAM and 2 cores).
+- **2026-11-17 — the control plane runs on Vite, not the skill's Next.js default.** Owner
+  go on 17 Nov; the recorded reopening lives in `docs/product/decisions.md` (17 Nov). The session agent builds, and each phase's line in
   `docs/product/plan.md` is its brief. Do not plan work that needs a sandbox this machine
   does not have.
 - **2026-11-17 — design taste:** trade press, not AI SaaS. Warm paper, serif display,
@@ -270,7 +275,10 @@ Each is a sentence a migration or a job can be checked against.
 
 ## 2.7 Status
 
-Stage 2 (design) is the first stage whose done-when is open; nothing is deployed and the
-repository holds no app code. Nothing is in production. Waiting on the owner: the six picks
-in `decisions.md` (D1–D6) and a read of the four provisional picks. Full status and phases:
-`docs/product/plan.md`.
+Stage 2 (design) is complete: the shell is Trade press (17 Nov 2026), the kit holds every
+value and the artboards are rendered. **Phase 2 is in progress** — screens on sample data
+as a Vite SPA in `src/`, routes `/` (landing), `/pricing`, `/stores` (member home), `/legal/*`,
+built and served from `dist/` with `npm run build && npm run preview`. Nothing is in
+production. Waiting on the owner: a read of the four-plus provisional picks (shape switches,
+`billing: none`, the stack entry of 17-18 Nov, the phase order, Field Notes for the
+storefront) — decisions in `decisions.md`. Reopening: 17/18 Nov 2026.
