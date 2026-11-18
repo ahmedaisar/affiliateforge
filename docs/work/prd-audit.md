@@ -16,6 +16,13 @@ reads it instead of a fixture.
 | Build run + handover (UC6, P6 Mason) | Built, fixture | No repo/deploy side effect; no tokens exist |
 | Reader storefront `/preview` (UC9) | Built + wired + visible | CTA hits `/go/...`; UI shows tracked clicks on `/stores` (verified: 2 rows logged, portfolio strip renders, `/api/insights` 200) |
 | Auth / workspaces / RLS (UC1, UC10, P4–5) | **Missing** | No Clerk, no Postgres; the local API has an optional dev token and no tenant boundary |
+
+**Input-abuse pass (18 Nov 2026):** malformed JSON, oversized bodies, SQL-ish choice keys,
+XSS-shaped strings and path-traversal ids — all handled (400 or silently ignored); the seed
+resets to seven demo stores. No 500s remain on any probed route. Method: a fuzz script that
+hits `/api/stores`, `/go/`, `/api/stores/:id/brief`, YAML-safe choices. Gaps found and fixed
+in the same session: the 500 on bad JSON, the `GET 000` on oversized queries, the missing
+caps. This is not a security audit; it is what stood between a bug and a crash. |
 | Backend / anything with state | **Built, local** | Node + node:sqlite on `127.0.0.1:8787`: stores, catalogue (approve, remove), build log, morning activity, outbound click logging with 302 to merchant |
 | Agents (Scout/Broker/Mason) | **Missing** | Phase 5–6 |
 | Real affiliate feeds | **Missing** | Keys, networks, approval flows |
