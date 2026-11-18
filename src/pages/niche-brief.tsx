@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { OperatorShell, EvidenceKind } from "@/components/operator-shell";
 import { fetchBrief, type BriefResponse } from "@/lib/api";
 
 export default function NicheBriefPage() {
   const [brief, setBrief] = useState<BriefResponse | null>(null);
   const navigate = useNavigate();
+  const { id = "resin-miniatures" } = useParams<{ id: string }>();
 
   useEffect(() => {
-    fetchBrief("resin-miniatures").then(setBrief);
-  }, []);
+    fetchBrief(id).then(setBrief);
+  }, [id]);
 
-  if (!brief) return <OperatorShell current="/stores/resin-miniatures/niche"><p className="meta">Loading…</p></OperatorShell>;
+  if (!brief) return <OperatorShell><p className="meta">Loading…</p></OperatorShell>;
 
   return (
-    <OperatorShell current="/stores/resin-miniatures/niche">
+    <OperatorShell>
       <div className="page-head">
         <div className="stack-sm">
           <p className="eyebrow">Niche brief · 17 Nov 2026 · sample data</p>
@@ -71,8 +72,8 @@ export default function NicheBriefPage() {
       </div>
 
       <div className="cluster-lg" style={{ marginTop: "var(--sp-6)" }}>
-        <button className="btn btn--primary" onClick={() => navigate("/stores/resin-miniatures/catalogue")}>Build this store</button>
-        <Link className="btn" to="/stores/resin-miniatures/look">See the looks</Link>
+        <button className="btn btn--primary" onClick={() => navigate(`/stores/${id}/catalogue`)}>Build this store</button>
+        <Link className="btn" to={`/stores/${id}/look`}>See the looks</Link>
       </div>
     </OperatorShell>
   );

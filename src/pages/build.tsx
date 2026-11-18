@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { OperatorShell } from "@/components/operator-shell";
+import { useParams } from "react-router-dom";
 import type { BuildStep } from "@/lib/screenData";
 import { fetchBuild, startBuild } from "@/lib/api";
 import type { StoreState } from "@/lib/data";
@@ -12,13 +13,14 @@ function lineState(state: BuildStep["state"]): { state: StoreState; label: strin
 
 export default function BuildPage() {
   const [steps, setSteps] = useState<BuildStep[]>([]);
+  const { id = "resin-miniatures" } = useParams<{ id: string }>();
 
   useEffect(() => {
-    fetchBuild("resin-miniatures").then(setSteps).catch(() => {});
-  }, []);
+    fetchBuild(id).then(setSteps).catch(() => {});
+  }, [id]);
 
   return (
-    <OperatorShell current="/stores/resin-miniatures/build">
+    <OperatorShell>
       <div className="page-head">
         <div className="stack-sm">
           <p className="eyebrow">Build run · sample data</p>
@@ -52,7 +54,7 @@ export default function BuildPage() {
           stops refreshing.
         </p>
         <div className="cluster" style={{ marginTop: "var(--sp-2)" }}>
-          <button className="btn btn--primary" onClick={() => startBuild("resin-miniatures").catch(() => {})}>Append a build line</button>
+          <button className="btn btn--primary" onClick={() => startBuild(id).then(() => fetchBuild(id).then(setSteps)).catch(() => {})}>Append a build line</button>
           <span className="mono">github.com/your-account/resin-miniatures.best</span>
           <span className="mono">vercel.com/your-account/…</span>
         </div>

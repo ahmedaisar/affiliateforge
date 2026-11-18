@@ -1,16 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Brand } from "@/components/brand";
 import { SAMPLE } from "@/lib/data";
 
-const NAV = [
-  { to: "/stores", label: "Stores" },
-  { to: "/stores/resin-miniatures/niche", label: "Briefs" },
-  { to: "/stores/resin-miniatures/catalogue", label: "Catalogues" },
-  { to: "/stores/resin-miniatures/gate", label: "Gates" },
-  { to: "/stores/resin-miniatures/build", label: "Runs" },
-];
+function navFor(id: string) {
+  return [
+    { to: `/stores`, label: "Stores" },
+    { to: `/stores/${id}/niche`, label: "Briefs" },
+    { to: `/stores/${id}/catalogue`, label: "Catalogues" },
+    { to: `/stores/${id}/gate`, label: "Gates" },
+    { to: `/stores/${id}/build`, label: "Runs" },
+  ];
+}
 
-export function OperatorShell({ children, current }: { children: React.ReactNode; current: string }) {
+export function OperatorShell({ children, current }: { children: React.ReactNode; current?: string }) {
+  const { id = "resin-miniatures" } = useParams<{ id: string }>();
+  const NAV = navFor(id);
+  const active = current ?? `/stores/${id}/build`;
   return (
     <>
       <div className="topbar">
@@ -19,7 +24,7 @@ export function OperatorShell({ children, current }: { children: React.ReactNode
         </Link>
         <nav className="nav">
           {NAV.map((item) => (
-            <Link key={item.to} to={item.to} aria-current={current === item.to ? "page" : undefined}>
+            <Link key={item.to} to={item.to} aria-current={active === item.to ? "page" : undefined}>
               {item.label}
             </Link>
           ))}

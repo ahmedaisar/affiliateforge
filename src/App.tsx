@@ -18,7 +18,7 @@ export function App() {
       <Route path="/" element={<Home />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/stores" element={<Stores />} />
-      <Route path="/stores/resin-miniatures/niche" element={<NicheBriefPage />} />
+      <Route path="/stores/:id/niche" element={<NicheBriefPage />} />
       <Route path="/stores/:id/look" element={<LookPage />} />
       <Route path="/stores/:id/catalogue" element={<CataloguePage />} />
       <Route path="/stores/:id/gate" element={<GatePage />} />

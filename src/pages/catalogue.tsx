@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { OperatorShell } from "@/components/operator-shell";
 import type { CatalogueRow } from "@/lib/screenData";
 import { fetchCatalogue, removeProduct, approveCatalogue } from "@/lib/api";
@@ -12,17 +12,18 @@ export default function CataloguePage() {
   void error;
   const [approved, setApproved] = useState(false);
   const navigate = useNavigate();
+  const { id = "resin-miniatures" } = useParams<{ id: string }>();
 
   useEffect(() => {
-    fetchCatalogue("resin-miniatures")
+    fetchCatalogue(id)
       .then((data) => setRows([...data].sort((a, b) => a.order - b.order)))
       .catch((err) => setError(err instanceof Error ? err.message : String(err)));
-  }, []);
+  }, [id]);
 
   const total = rows.reduce((n, r) => n + r.commission, 0);
 
   return (
-    <OperatorShell current="/stores/resin-miniatures/catalogue">
+    <OperatorShell>
       <div className="page-head">
         <div className="stack-sm">
           <p className="eyebrow">Catalogue · step 2 of 4 · sample data</p>
@@ -45,7 +46,7 @@ export default function CataloguePage() {
                 <td>
                   <button
                     className="btn btn--quiet"
-                    onClick={() => { setRows((list) => list.filter((r) => r.id !== row.id)); removeProduct("resin-miniatures", row.id).catch(() => {}); }}
+                    onClick={() => { setRows((list) => list.filter((r) => r.id !== row.id)); removeProduct(id, row.id).catch(() => {}); }}
                   >
                     Remove
                   </button>
@@ -58,15 +59,15 @@ export default function CataloguePage() {
 
       <p className="meta" style={{ marginTop: "var(--sp-4)" }}>
         Composite commission, sample data, first sale: {money(total)}. A gate doesn't block approval —
-        it changes what those links can say, see <a href="/stores/resin-miniatures/gate">the gate</a>.
+        it changes what those links can say, see <a href={`/stores/${id}/gate`}>the gate</a>.
       </p>
 
       <div className="cluster-lg" style={{ marginTop: "var(--sp-5)" }}>
         <button
           className="btn btn--primary"
-          onClick={() => approveCatalogue("resin-miniatures").then(() => setApproved(true)).catch((err) => setError(String(err)))}
+          onClick={() => approveCatalogue(id).then(() => setApproved(true)).catch((err) => setError(String(err)))}
         >{approved ? "Approved — catalogue frozen" : "Approve catalogue"}</button>
-        <button className="btn" onClick={() => navigate("/stores/resin-miniatures/niche")}>Back to the brief</button>
+        <button className="btn" onClick={() => navigate(`/stores/${id}/niche`)}>Back to the brief</button>
       </div>
     </OperatorShell>
   );

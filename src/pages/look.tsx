@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { OperatorShell } from "@/components/operator-shell";
 import { listDesignSpecimens, type DesignSpecimen } from "@/lib/screenData";
 import { fetchChoices, saveChoices } from "@/lib/api";
@@ -9,14 +9,15 @@ export default function LookPage() {
   const [picked, setPicked] = useState<string>("field-notes");
   const [saved, setSaved] = useState(false);
   const navigate = useNavigate();
+  const { id = "resin-miniatures" } = useParams<{ id: string }>();
 
   useEffect(() => {
     listDesignSpecimens().then(setSpecimens);
-    fetchChoices("resin-miniatures").then((c) => { if (c.look) setPicked(c.look); }).catch(() => {});
-  }, []);
+    fetchChoices(id).then((c) => { if (c.look) setPicked(c.look); }).catch(() => {});
+  }, [id]);
 
   return (
-    <OperatorShell current="/stores/resin-miniatures/look">
+    <OperatorShell>
       <div className="page-head">
         <div className="stack-sm">
           <p className="eyebrow">Step 3 of 4 · design direction · sample data</p>
@@ -33,7 +34,7 @@ export default function LookPage() {
             role="radio"
             aria-checked={picked === specimen.id}
             className="card"
-            onClick={() => { setPicked(specimen.id); setSaved(false); saveChoices("resin-miniatures", { look: specimen.id }).then(() => setSaved(true)).catch(() => {}); }}
+            onClick={() => { setPicked(specimen.id); setSaved(false); saveChoices(id, { look: specimen.id }).then(() => setSaved(true)).catch(() => {}); }}
             style={{ textAlign: "left", cursor: "pointer", border: picked === specimen.id ? "var(--bw-strong) solid var(--accent)" : undefined }}
           >
             <div className="card__body">
@@ -65,8 +66,8 @@ export default function LookPage() {
       </div>
 
       <div className="cluster-lg" style={{ marginTop: "var(--sp-5)" }}>
-        <button className="btn btn--primary" onClick={() => navigate("/stores/resin-miniatures/build")}>Choose {specimens.find((s) => s.id === picked)?.name ?? "this look"}</button>
-        <a className="btn" href="/stores/resin-miniatures/preview">Preview the storefront</a>
+        <button className="btn btn--primary" onClick={() => navigate(`/stores/${id}/build`)}>Choose {specimens.find((s) => s.id === picked)?.name ?? "this look"}</button>
+        <a className="btn" href={`/stores/${id}/preview`}>Preview the storefront</a>
         <span className="meta">{saved ? "Choice saved to the workspace." : "Field Notes is backed by the rivals' look; your pick is saved to the backend."}</span>
       </div>
     </OperatorShell>
