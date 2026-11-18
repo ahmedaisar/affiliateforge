@@ -70,7 +70,10 @@ scripts/demo.sh            # backend + dev server locally (no restart of a live 
 scripts/demo.sh --tunnel   # forces a new quick public link (random *.trycloudflare.com)
 ```
 
-The tunnel is ephemeral and public; treat any URL it prints as public-on-the-internet.
+The demo on the public link is **read-only** as of 2026-11-18: `/health`, `/api/*`, `/go/*` and
+the generated-store preview work; every other verb is 503. The URL at 08:30 UTC today was
+https://guides-holds-held-jul.trycloudflare.com — ephemeral, gone when the laptop sleeps.
+Treat any URL as public.
 
 ## Verify everything at once
 
