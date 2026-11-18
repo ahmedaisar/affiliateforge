@@ -52,8 +52,8 @@ caps and the unvalidated choices keys. This is not a security audit; it is what 
 | Legal pages | Built, wired, **not approved** | Text is honest about what exists; nobody approved it |
 
 **Backend now exists and is the source of truth for stores, catalogue, build log and click
-counts.** The frontend reads `/api` (proxied in development); the niche brief is served from the backend's seeded rows — no Scout agent exists yet. Phase 3 next: Clerk (organizations)
-and Supabase Postgres with RLS, or the local backend keeps SQLite and gains the workspace
+counts.** The frontend reads `/api` (proxied in development); the niche brief is served from the backend's seeded rows — no Scout agent exists yet. Phase 3 is **parked by the owner's 2026-11-18 instruction**: development remains on the local SQLite file with no auth;
+the local backend stays on SQLite and gains the workspace
 column — owner's call. Agents (Phase 5) remain the largest unbuilt block.
 
 **Verification, 18 Nov 2026 (final evening pass):** all 14 app routes at 390x844,

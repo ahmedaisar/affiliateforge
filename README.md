@@ -45,7 +45,7 @@ for review). Phase 3 needs external accounts; the exact steps are in
 
 ## What is missing (read [the audit](docs/work/prd-audit.md))
 
-Phase 3 — Clerk (organizations) and Postgres — has not been done. No multi-tenant
+Phase 3 — Clerk (organizations) and Postgres — is **parked by owner instruction (2026-11-18)**, not pending. No multi-tenant
 authorization exists; the tunnel that was live on 2026-11-18 exposed one demo workspace
 to anyone with the link. Legal text is a draft. The rendered pass has now happened —
 six screenshots in `screenshots/`, taken with headless Chromium at 1440 and 390, and the
@@ -66,9 +66,10 @@ been performed. No release has shipped.
 ## Direction of travel
 
 **Phase 2 is functionally complete; owner sign-off on the evidence is pending.**
-The next unblocked step is Phase 3 (identity + database), which needs a Clerk
-application and a Supabase project — external accounts, ~10 minutes. Full
-steps in `docs/work/phase-3-setup.md`.
+No step is unblocked. Phase 3 (identity + database) is **parked by the owner's
+2026-11-18 instruction to develop on the local SQLite file with no auth** —
+it reopens only by a new dated owner decision naming it. Full Clerk + Supabase
+steps are parked as reference in `docs/work/phase-3-setup.md`.
 
 ## Restart cleanly
 
