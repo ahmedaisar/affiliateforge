@@ -56,6 +56,11 @@ counts.** The frontend reads `/api` (proxied in development); the niche brief is
 and Supabase Postgres with RLS, or the local backend keeps SQLite and gains the workspace
 column — owner's call. Agents (Phase 5) remain the largest unbuilt block.
 
+**Verification, 18 Nov 2026 (final evening pass):** all 14 app routes at 390x844,
+zero pageerrors; the public tunnel now runs read-only end-to-end (writes 503 via
+`CAIRN_READ_ONLY=1`; nine routes 200, one probe 503); `verify.sh` five gates green;
+no stray demo store remains — the tunnel-created `bikerental.mv` was deleted.
+
 **Verification, 18 Nov 2026 (whole day):** `/health` 200, `/api/stores` 200 with seven seeded stores, `/api/stores/:id/brief` 200, catalogue DELETE 200, approval 200 after fix, input-hardening fuzz pass clean, Playwright flow walk clean, build clean.
 
 **Verification this turn:** `/health` 200, `/api/stores` 200 with seven seeded stores, an
