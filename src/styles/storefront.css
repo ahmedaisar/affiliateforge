@@ -1,0 +1,34 @@
+/* Storefront specimen: "Field Notes" — the generated store's direction.
+   Values are all tokens: the store is colour, type and space that comes from
+   the kit; the kit README §Direction records the pick. */
+
+.store { background: var(--paper); color: var(--ink); min-height: 100vh; }
+.store-topbar {
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-6); border-bottom: var(--bw) solid var(--rule);
+}
+.store-nav { display: flex; gap: var(--sp-4); }
+.store-nav a { color: var(--ink-2); text-decoration: none; font-size: var(--t-13); }
+.store-nav a:hover { color: var(--accent); }
+
+.store-page { max-width: var(--measure); margin: 0 auto; padding: var(--sp-8) var(--sp-5) var(--sp-7); }
+.store-kicker { font-size: var(--t-11); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--ink-3); }
+.store-title { font-family: var(--serif); font-size: var(--t-44); line-height: var(--lh-44); margin-top: var(--sp-3); }
+.store-lede { font-size: var(--t-17); line-height: var(--lh-17); color: var(--ink-2); margin-top: var(--sp-4); }
+
+.store-disclosure {
+  margin-top: var(--sp-5); padding: var(--sp-3) var(--sp-4);
+  background: var(--paper-2); border-left: var(--bw-strong) solid var(--ink);
+  font-size: var(--t-13); line-height: var(--lh-13);
+}
+.store-disclosure a { color: var(--accent); }
+
+.store-block { margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: var(--bw) solid var(--rule); }
+.store-price { font-family: var(--serif); font-size: var(--t-44); line-height: var(--lh-44); margin-top: var(--sp-2); }
+.store-price-meta { display: block; font-family: var(--sans); font-size: var(--t-13); font-weight: var(--w-normal); color: var(--ink-3); margin-top: var(--sp-1); max-width: var(--measure); }
+
+.store-block-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-top: var(--sp-3); }
+@media (max-width: 720px) { .store-block-grid { grid-template-columns: 1fr; } }
+.store-note { margin-top: var(--sp-2); font-size: var(--t-13); line-height: var(--lh-13); color: var(--ink-2); }
+
+.store-foot { margin-top: var(--sp-8); font-size: var(--t-12); color: var(--ink-3); }

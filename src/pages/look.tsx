@@ -63,6 +63,7 @@ export default function LookPage() {
 
       <div className="cluster-lg" style={{ marginTop: "var(--sp-5)" }}>
         <button className="btn btn--primary" onClick={() => navigate("/stores/resin-miniatures/build")}>Choose {specimens.find((s) => s.id === picked)?.name ?? "this look"}</button>
+        <a className="btn" href="/stores/resin-miniatures/preview">Preview the storefront</a>
         <span className="meta">Field Notes is backed by the rivals' look; Bench trails every spec sheet; Scout wins nothing here.</span>
       </div>
     </OperatorShell>
