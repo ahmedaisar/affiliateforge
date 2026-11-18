@@ -27,7 +27,7 @@ export default function LookPage() {
         <span className="meta">Nothing built yet</span>
       </div>
 
-      <div className="grid-3" style={{ marginTop: "var(--sp-5)" }}>
+      <div className="grid-3" role="radiogroup" aria-label="Store design direction" style={{ marginTop: "var(--sp-5)" }}>
         {specimens.map((specimen) => (
           <button
             key={specimen.id}

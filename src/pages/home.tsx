@@ -7,19 +7,19 @@ const AGENTS = [
     name: "Scout",
     job: "Finds the niche",
     body:
-      "Searches the niche you name and returns a brief: search volume, commission per sale, who already ranks, and what you would have to beat. Every claim carries its source and the date it was read.",
+      "A researched brief: search volume, commission per sale, who already ranks, and what you would have to beat. Every claim carries its source and the date it was read.",
   },
   {
     name: "Broker",
     job: "Finds the offers",
     body:
-      "Searches your own affiliate networks for products in that niche and orders them by what each sale pays. A merchant whose API is gated is offered as a link with a price gate, never as a number it cannot prove.",
+      "Your own affiliate networks, searched for products in that niche and ordered by what each sale pays. A merchant whose API is gated is offered as a link with a price gate, never as a number it cannot prove.",
   },
   {
     name: "Mason",
     job: "Builds and hands over",
     body:
-      "Writes the store, pushes it to a repository in your GitHub, deploys it to your Vercel, and gives you the URL. Nightly, it refreshes prices and links, and says so on the page when a link dies.",
+      "The store writes itself into a repository in your GitHub, deploys to your Vercel, and is yours from the first push. Prices and links refresh nightly, and a dead link becomes a visible state, not a silent 404.",
   },
 ];
 
@@ -34,9 +34,10 @@ export default function Home() {
             A store you own, built from evidence.
           </h1>
           <p className="lede" style={{ marginTop: "var(--sp-4)", maxWidth: "var(--measure)" }}>
-            Three agents research the niche, find the offers and build the store — then hand you the
-            repository, the domain and the affiliate accounts. No templates, no lock-in, no credential
-            of yours in our database.
+            Research the niche, find the offers, build the store and hand it all to you — repository,
+            domain, affiliate accounts. No templates, no lock-in, no credential of yours in our
+            database. Today the build is done by the team behind Cairn working with you on a call;
+            the three-crew workflow is the product's design, not a public feature yet.
           </p>
           <div className="cluster-lg" style={{ marginTop: "var(--sp-5)" }}>
             <a className="btn btn--primary" href="mailto:build@cairn.example?subject=Build%20a%20store">
