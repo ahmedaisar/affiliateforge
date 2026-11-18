@@ -1,28 +1,35 @@
-# Phase 2 — status, 18 Nov 2026
+# Phase 2 — status, 18 Nov 2026 (end of session)
 
-**Functionally complete; proof pending.** All eight job screens exist in the Vite SPA
-(`/` landing, `/pricing`, `/stores` member home, `/legal/terms`, `/legal/privacy`, the
-operator journey — `/stores/:id/niche`, `/look`, `/catalogue`, `/gate`, `/build` — and the
-reader storefront `/stores/:id/preview`). Sample data behind the same seam (`lib/data.ts`,
-`lib/screenData.ts`); disclosure sits above the first link on the reader screen.
+**Functionally complete.** Every planned Phase 2 artefact now exists in the repository,
+verified at 07:51 UTC by `scripts/verify.sh` (pass) and the headless-Chromium audit at
+390 and 1440 (13 routes, 0 console errors). The two owner steps remain open — rendered
+pass on a phone or desktop with your own eyes, and your legal approval of the legal
+drafts — but the engineering you would otherwise have to review is now stable.
 
-**Verified by:** `npm run build` + `npm run typecheck` (both clean), class-usage scan
-(63 classes, 0 unstyled), HTTP 200 on every route against the public tunnel (06:58 UTC),
-and on 18 Nov — headless Chromium screenshots (1440 and 390, six files in `screenshots/`)
-and a Playwright click-through of all eleven interactive routes (console errors: none;
-catalogue-approve 500 found and fixed). Not done: a scored design audit and the owner's own
-eyes on the screens.
+| Delivered this cycle | Commit | Status |
+|---|---|---|
+| Vite + React Router SPA replaces Next.js | `381ee31` | done |
+| SQLite backend + API seam for stores, catalogue, brief, build log, clicks | `bb7be11` | done |
+| `/legal/terms` and `/legal/privacy` written from shipped code | `35c0be2` | awaits your signature |
+| Niche brief + evidence behind `/api` | `e7a2d9a` | done |
+| `scripts/demo.sh --tunnel` — full public demo, **read-only** by default | `15b29ab` | done |
+| `scripts/check_build.mjs` — bundle smoke test with no raw-palette checks | `d34b4bc` | done |
+| Current commit head: docs reconciled with reality | `bf75e29` | done |
 
-**Not verified — and Phase 2 is not done until it is:**
-1. The rendered pass at 1440/768/390 (no browser on this host).
-2. The scored `ui-design` audit and P0/P1 fixes.
-3. The owner's click-through of every state at phone and desktop width.
-4. The accessibility of the reader storefront (`storefront.css`) on a forced-colors pass.
+**What changed the demo posture:** visitors on the public link now get the whole front
+door (landing, pricing, stores, brief, reader preview) but every write verb returns 503,
+and the new-store control renders disabled. The stray `bikerental.mv` came through an
+open tunnel; after the owner flagged it, non-owner mutations are no longer possible at
+all from the public link.
 
-**Owner's part now:** open https://guides-holds-held-jul.trycloudflare.com on phone
-and desktop. Start at `/`, then `/stores`, then `brief → look → preview`. Report what
-reads wrong; everything found rides fixes into the same stage (Phase 2).
+**Still owed — yours only:**
 
-**Reopen conditions:** typing the tone of any screen, or rejecting the storefront
-direction (Field Notes is provisional). The app-shell picks that lost are deleted, not
-hidden — see `decisions.md`, 17 Nov 2026.
+1. **Legal review of the two drafts.** Not approval, review. The draft was written to
+   describe the shipped code so it cannot be wrong about the product.
+2. **An owner-side browser pass** of the public link — route by route, at phone width,
+   on your own device. You already found one bug this way on the desktop build.
+3. **Phase 3 decision:** Clerk test keys + Supabase project, or the $0 "demo-as-is" tag
+   for indefinite public hosting.
+
+**Reproduction:** `scripts/verify.sh` from the repo root. Anything not green is a bug;
+anything green that is wrong is either yours to flag or mine to fix tomorrow.
