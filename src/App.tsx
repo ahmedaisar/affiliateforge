@@ -11,6 +11,8 @@ import CataloguePage from "@/pages/catalogue";
 import GatePage from "@/pages/gate";
 import BuildPage from "@/pages/build";
 import StorefrontPreview from "@/pages/storefront-preview";
+import SettingsAi from "@/pages/settings-ai";
+import SettingsProfile from "@/pages/settings-profile";
 
 export function App() {
   return (
@@ -24,6 +26,8 @@ export function App() {
       <Route path="/stores/:id/gate" element={<GatePage />} />
       <Route path="/stores/:id/build" element={<BuildPage />} />
       <Route path="/stores/:id/preview" element={<StorefrontPreview />} />
+      <Route path="/settings/ai" element={<SettingsAi />} />
+      <Route path="/settings/profile" element={<SettingsProfile />} />
       <Route path="/legal/terms" element={<Terms />} />
       <Route path="/legal/privacy" element={<Privacy />} />
       <Route path="*" element={<NotFound />} />

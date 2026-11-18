@@ -14,3 +14,28 @@
 .prose { max-width: var(--measure); }
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-4); }
 .footer { border-top: var(--bw) solid var(--rule); padding: var(--sp-6) 0; }
+
+/* Phone: the topbar becomes a compact column header — brand on one line,
+   actions wrap below; tables and screens stack fully; nothing overflows. */
+@media (max-width: 720px) {
+  .topbar { flex-wrap: wrap; height: auto; min-height: 52px; padding: var(--sp-2) var(--sp-4); row-gap: var(--sp-2); }
+  .topbar .nav { order: 3; flex-basis: 100%; overflow-x: auto; white-space: nowrap; gap: var(--sp-4); padding-bottom: var(--sp-1); }
+  .topbar .workspace-chip { display: none; }
+  .page { padding: 0 var(--sp-4) var(--sp-7); }
+  .page-head--front { padding: var(--sp-6) 0 var(--sp-5); }
+  .page-head { flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
+  .split { flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
+  .grid-3 { grid-template-columns: 1fr; }
+  .topbar .btn { min-height: 44px; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table { font-size: var(--t-12); }
+  .table th, .table td { padding: var(--sp-2); }
+  .card__head { flex-wrap: wrap; gap: var(--sp-2); }
+  .body-row { flex-direction: column; }
+  h1.h1 { font-size: var(--t-32); }
+}
+
+@media (max-width: 380px) {
+  .topbar .btn { min-height: 44px; font-size: var(--t-12); padding: 0 var(--sp-3); }
+  .btn--primary { font-size: var(--t-12); }
+}

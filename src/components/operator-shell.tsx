@@ -9,6 +9,8 @@ function navFor(id: string) {
     { to: `/stores/${id}/catalogue`, label: "Catalogues" },
     { to: `/stores/${id}/gate`, label: "Gates" },
     { to: `/stores/${id}/build`, label: "Runs" },
+    { to: `/settings/ai`, label: "AI" },
+    { to: `/settings/profile`, label: "Workspace" },
   ];
 }
 

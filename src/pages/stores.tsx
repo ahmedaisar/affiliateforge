@@ -46,9 +46,9 @@ export default function Stores() {
         </Link>
         <nav className="nav">
           <Link to="/stores" aria-current="page">Stores</Link>
-          <span className="meta" style={{ padding: "var(--sp-2) 0" }}>Briefs</span>
-          <span className="meta" style={{ padding: "var(--sp-2) 0" }}>Catalogues</span>
-          <span className="meta" style={{ padding: "var(--sp-2) 0" }}>Merchants</span>
+          <Link to="/stores/resin-miniatures/niche" style={{ padding: "var(--sp-2) 0", color: "var(--ink-2)", textDecoration: "none" }}>Briefs</Link>
+          <Link to="/stores/resin-miniatures/catalogue" style={{ padding: "var(--sp-2) 0", color: "var(--ink-2)", textDecoration: "none" }}>Catalogues</Link>
+          <Link to="/stores/resin-miniatures/gate" style={{ padding: "var(--sp-2) 0", color: "var(--ink-2)", textDecoration: "none" }}>Gates</Link>
         </nav>
         <span className="push" />
         {SAMPLE && <span className="tag">Sample data</span>}
@@ -75,7 +75,7 @@ export default function Stores() {
                 <p><strong>{attention[0].domain} — {attention[0].stateLabel}</strong></p>
                 <p>{attention[0].detail}</p>
               </div>
-              <button className="btn" disabled title="Phase 6 adds link repair">Review</button>
+              <Link className="btn" to="/stores/resin-miniatures/gate">Review dead links</Link>
             </div>
           )}
 
