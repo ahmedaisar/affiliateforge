@@ -19,10 +19,13 @@ const json = (res, status, body) => {
 const readBody = (req) =>
   new Promise((resolve, reject) => {
     let raw = "";
-    req.on("data", (chunk) => { raw += chunk; if (raw.length > 1e6) req.destroy(); });
-    req.on("end", () => { try { resolve(raw ? JSON.parse(raw) : {}); } catch (e) { reject(e); } });
+    req.on("data", (chunk) => { raw += chunk; if (raw.length > 1e6) { reject(new Error("too large")); req.destroy(); } });
+    req.on("end", () => { try { resolve(raw ? JSON.parse(raw) : {}); } catch { reject(new Error("bad json")); } });
     req.on("error", reject);
   });
+
+/** Validation failure → 400 with a reason, never a 500. */
+class BadRequest extends Error {}
 
 const row = (r) => ({
   id: r.id, domain: r.domain, niche: r.niche, offers: r.offers,
@@ -72,7 +75,8 @@ const server = createServer(async (req, res) => {
       const domain = String(body.domain ?? "").trim().toLowerCase();
       const niche = String(body.niche ?? "").trim();
       if (!domain || !niche) return json(res, 400, { error: "domain and niche are required" });
-      if (!/^(?:[a-z0-9-]+\.)+[a-z]{2,}$/.test(domain)) return json(res, 400, { error: "domain is not a domain" });
+      if (domain.length > 253 || !/^(?:[a-z0-9-]{1,63}\.)+[a-z]{2,}$/.test(domain)) return json(res, 400, { error: "domain is not a domain" });
+      if (niche.length > 140) return json(res, 400, { error: "niche is too long" });
       const base = domain.replace(/\.[^.]+$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "store";
       let id = base;
       for (let n = 2; db.prepare("SELECT 1 FROM stores WHERE id = ?").get(id); n += 1) id = `${base}-${n}`;
@@ -133,12 +137,16 @@ const server = createServer(async (req, res) => {
       }
       if (method === "PUT") {
         const body = await readBody(req);
+        const saved = [];
         for (const [key, value] of Object.entries(body)) {
-          if (typeof value !== "string" || key.length > 64 || value.length > 256) continue;
+          if (typeof value !== "string") continue;
+          if (!/^[a-z_]{1,32}$/.test(key)) continue;
+          if (value.length > 64) continue;
           db.prepare("INSERT INTO store_choices (store_id, key, value) VALUES (?,?,?) ON CONFLICT(store_id, key) DO UPDATE SET value = excluded.value")
             .run(choice[1], key, value);
+          saved.push(key);
         }
-        return json(res, 200, { saved: true });
+        return json(res, 200, { saved });
       }
     }
 
@@ -157,6 +165,8 @@ const server = createServer(async (req, res) => {
 
     return json(res, 404, { error: "no such route" });
   } catch (err) {
+    if (err instanceof BadRequest) return json(res, 400, { error: err.message });
+    if (err?.message === "bad json" || err?.message === "too large") return json(res, 400, { error: err.message });
     console.error("[cairn-api]", err);
     return json(res, 500, { error: "internal error" });
   }
