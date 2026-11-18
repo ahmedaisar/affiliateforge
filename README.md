@@ -37,6 +37,7 @@ for review). Phase 3 needs external accounts; the exact steps are in
 | Design system (`design/tokens.css`, `design/kit.css`) | One palette, Trade press direction; every value lives in tokens |
 | Vite + React Router SPA | 12 routes — landing, pricing, portfolio, the five-step journey, the reader storefront, two legal pages, 404 |
 | Back-end service (`server/`) | Node stdlib HTTP + `node:sqlite`, seeded with seven demo stores |
+| Mason's first slice (`server/build-store.mjs`) | **Working locally**: POST `/api/stores/:id/build` renders `dist-stores/<id>/` with FTC disclosure above the first merchant link, a `method.html` with read-on dates, `404.html`, `sitemap.xml` |
 | `/api/stores`, catalogue, `/api/stores/:id/brief`, build log | Read and write against SQLite |
 | Affiliate redirect `/go/:store/:product` | 302 to merchant, click counted |
 | Legal pages | Honest drafts; **owner approval required before any release** |

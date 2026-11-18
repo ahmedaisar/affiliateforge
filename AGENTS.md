@@ -223,7 +223,7 @@ the code, the domain and the affiliate accounts.
   from the default; reasoning in `docs/product/decisions.md` (2026-11-17).
 - **Anonymous public:** yes — the landing, pricing, legal pages and the affiliate redirect
   are read by strangers; the editor dashboard is loopback-only in this build.
-- **Embedded agents:** yes — Scout, Broker and Mason (all still sample-data only).
+- **Embedded agents:** yes — Scout and Broker are sample-data only; Mason (build step) now runs locally for real: he writes dist-stores/<id>/. He is not a deploy.
 - **Member home:** `/stores`.
 
 Reopened defaults: **billing** (default "the identity provider's" → none, because a
