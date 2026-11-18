@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { OperatorShell, EvidenceKind } from "@/components/operator-shell";
-import { getNicheBrief, type NicheBrief } from "@/lib/screenData";
+import { fetchBrief, type BriefResponse } from "@/lib/api";
 
 export default function NicheBriefPage() {
-  const [brief, setBrief] = useState<NicheBrief | null>(null);
+  const [brief, setBrief] = useState<BriefResponse | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getNicheBrief().then(setBrief);
+    fetchBrief("resin-miniatures").then(setBrief);
   }, []);
 
   if (!brief) return <OperatorShell current="/stores/resin-miniatures/niche"><p className="meta">Loading…</p></OperatorShell>;
@@ -28,15 +28,9 @@ export default function NicheBriefPage() {
       </div>
 
       <div className="grid-3" style={{ marginTop: "var(--sp-5)" }}>
-        {brief.meta.map((m) => (
-          <div key={m.label} className="card">
-            <div className="card__body stack-sm">
-              <span className="eyebrow">{m.label}</span>
-              <span className="h3 num">{m.value}</span>
-              <span className="meta">{m.sub}</span>
-            </div>
-          </div>
-        ))}
+        <div className="card"><div className="card__body stack-sm"><span className="eyebrow">Score</span><span className="h3 num">{brief.score}</span><span className="meta">{brief.scoreLabel}</span></div></div>
+        <div className="card"><div className="card__body stack-sm"><span className="eyebrow">Niche</span><p className="body-sm">Resin printers for miniature painters</p></div></div>
+        <div className="card"><div className="card__body stack-sm"><span className="eyebrow">Read</span><p className="body-sm">17 Nov 2026 · sample data</p></div></div>
       </div>
 
       <div className="split" style={{ marginTop: "var(--sp-6)", alignItems: "flex-start", flexWrap: "wrap" }}>

@@ -8,7 +8,7 @@ reads it instead of a fixture.
 |---|---|---|
 | Landing, pricing, legal drafts (UC1, plan P2) | Built, static | Session-free, no entitlements; price as copy |
 | Member home `/stores` with states (UC8, P2) | Built, fixture | Reads `lib/data.ts`; no workspace/auth boundary |
-| Niche brief + evidence (UC2, P5 Scout) | Built, fixture | No agent, no budget, no sources fetched |
+| Niche brief + evidence (UC2, P5 Scout) | Built, wired (sample) | Served by the backend; no agent, no research budget, every claim still marked sample |
 | Look choice (UC3) | Built, fixture | Choice not persisted |
 | Catalogue ordered by commission (UC4, P5 Broker) | Built, wired | Removal is a DELETE; Approve writes one build-log line; network sends go to eBay sample links |
 | Amazon/specialist price gate (UC5) | Built, UI only | Gate is display; no merchant adapter |

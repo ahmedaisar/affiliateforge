@@ -44,6 +44,24 @@ export function openDb() {
       network TEXT NOT NULL DEFAULT 'ebay',
       at TEXT NOT NULL DEFAULT (datetime('now'))
     );
+    CREATE TABLE IF NOT EXISTS brief_meta (
+      store_id TEXT PRIMARY KEY REFERENCES stores(id) ON DELETE CASCADE,
+      title TEXT NOT NULL,
+      score REAL NOT NULL,
+      score_label TEXT NOT NULL,
+      argument TEXT NOT NULL,
+      counter TEXT NOT NULL,
+      money_line TEXT NOT NULL,
+      order_line TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS brief_evidence (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      store_id TEXT NOT NULL REFERENCES stores(id) ON DELETE CASCADE,
+      claim TEXT NOT NULL,
+      source TEXT NOT NULL,
+      read_on TEXT NOT NULL,
+      kind TEXT NOT NULL CHECK (kind IN ('observed','inference','assumption'))
+    );
     CREATE TABLE IF NOT EXISTS meta (
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL
@@ -87,6 +105,19 @@ function seed(db) {
       ["resin-miniatures", "18:07", "Repository created: ahmed_aisar/resin-miniatures.best", "ok"],
       ["resin-miniatures", "18:09", "Deploying to your Vercel project…", "warn"],
     ].forEach((r) => insBuild.run(...r));
+    db.prepare(`INSERT INTO brief_meta (store_id, title, score, score_label, argument, counter, money_line, order_line)
+      VALUES ('resin-miniatures', 'Resin printers for tabletop mini painters', 3.7, 'Worth building',
+        'Buyers are miniature painters, not printer hobbyists: they search by model and by “best resin for miniatures”. The three rivals all review printers generally and none covers wash-and-cure stations, which is where the margin sits in this niche.',
+        'What you would have to beat: two sites with printable comparison tables, one with a YouTube channel. Your edge: price history and a finder by miniature scale.',
+        'Why not Amazon first: 3% × $299 is $8.97, and Amazon pays last here; a specialist pays 8% × $280 = $22.40 — and the reader trusts the specialist more, not less.',
+        'Order: specialist retailer → eBay → Amazon. Amazon pays least and is gated anyway.')`).run();
+    const insEv = db.prepare("INSERT INTO brief_evidence (store_id, claim, source, read_on, kind) VALUES (?,?,?,?,?)");
+    [
+      ["resin-miniatures", "Six sites rank for “best resin printer for miniatures”; three have 200+ referring domains", "serp.capture · sample", "17 Nov", "observed"],
+      ["resin-miniatures", "Rivals publish comparison tables; none publishes price history", "rival-crawl · sample", "17 Nov", "observed"],
+      ["resin-miniatures", "Reddit threads repeat “which resin” and “is it worth upgrading”", "reddit-thread-index · sample", "17 Nov", "inference"],
+      ["resin-miniatures", "Wash-and-cure stations are an under-served buying step", "niche-argument · hypothesis", "17 Nov", "assumption"],
+    ].forEach((r) => insEv.run(...r));
     db.prepare("INSERT INTO meta (key, value) VALUES ('seeded', datetime('now'))").run();
     db.exec("COMMIT");
   } catch (e) {

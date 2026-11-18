@@ -4,7 +4,7 @@
  * Every screen reads through this file; no fixture may be imported by a page.
  */
 import type { Store, ActivityLine, StoreState } from "./data";
-import type { CatalogueRow, BuildStep } from "./screenData";
+import type { CatalogueRow, BuildStep, NicheBrief } from "./screenData";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, init);
@@ -46,4 +46,11 @@ export async function fetchBuild(storeId: string): Promise<BuildStep[]> {
 
 export async function startBuild(storeId: string): Promise<void> {
   await request(`/stores/${encodeURIComponent(storeId)}/build`, { method: "POST" });
+}
+
+export type BriefEvidence = { claim: string; source: string; readOn: string; kind: "observed" | "inference" | "assumption" };
+export type BriefResponse = Omit<NicheBrief, "meta" | "niche" | "evidence"> & { evidence: BriefEvidence[] };
+
+export async function fetchBrief(storeId: string): Promise<BriefResponse> {
+  return request<BriefResponse>(`/stores/${encodeURIComponent(storeId)}/brief`);
 }

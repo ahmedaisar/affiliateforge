@@ -118,6 +118,14 @@ const server = createServer(async (req, res) => {
       return json(res, 202, { started: true });
     }
 
+    const brief = path.match(/^\/api\/stores\/([A-Za-z0-9._-]+)\/brief$/);
+    if (method === "GET" && brief) {
+      const meta = db.prepare("SELECT title, score, score_label, argument, counter, money_line, order_line FROM brief_meta WHERE store_id = ?").get(brief[1]);
+      if (!meta) return json(res, 404, { error: "no brief" });
+      const evidence = db.prepare("SELECT claim, source, read_on AS readOn, kind FROM brief_evidence WHERE store_id = ?").all(brief[1]);
+      return json(res, 200, { title: meta.title, score: meta.score, scoreLabel: meta.score_label, argument: meta.argument, counter: meta.counter, moneyLine: meta.money_line, orderLine: meta.order_line, evidence });
+    }
+
     const health = path.match(/^\/api\/activity$/);
     if (method === "GET" && health) {
       const rows = db.prepare("SELECT time, what, state FROM build_log ORDER BY rowid DESC LIMIT 3").all().reverse();
