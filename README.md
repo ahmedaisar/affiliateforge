@@ -31,7 +31,7 @@ for review). Phase 3 needs external accounts; the exact steps are in
 | Piece | Status |
 |---|---|
 | Design system (`design/tokens.css`, `design/kit.css`) | One palette, Trade press direction; every value lives in tokens |
-| Vite + React Router SPA | 11 routes, landing through the reader storefront |
+| Vite + React Router SPA | 12 routes — landing, pricing, portfolio, the five-step journey, the reader storefront, two legal pages, 404 |
 | Back-end service (`server/`) | Node stdlib HTTP + `node:sqlite`, seeded with seven demo stores |
 | `/api/stores`, catalogue, `/api/stores/:id/brief`, build log | Read and write against SQLite |
 | Affiliate redirect `/go/:store/:product` | 302 to merchant, click counted |
