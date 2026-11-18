@@ -57,7 +57,7 @@ function generate({ store, products, meta, evidence, outDir }) {
     : products.map((p) => `
       <li class="card">
         <a class="product-name" href="/go/${esc(store.id)}/${encodeURIComponent(p.id)}" rel="sponsored noopener">${esc(p.name)}</a>
-        <div class="meta"><span>${esc(p.merchant)}</span> · <span>Commission ${p.commission}%</span></div>
+        <div class="meta"><span>${esc(p.merchant)}</span> · <span>Commission ${esc(String(p.commission))}%</span></div>
         <div class="price-note">Price shown by the merchant at checkout; we keep no stale price on this page.</div>
       </li>`).join("\n");
 
