@@ -68,7 +68,11 @@ export default function Stores() {
                 {stores.length} stores · {attention.length} need you today · {totalOffers} offers
               </p>
             </div>
-            <button className="btn btn--primary" onClick={() => setCreating(true)}>New store</button>
+            {!DEMO_READ_ONLY ? (
+              <button className="btn btn--primary" onClick={() => setCreating(true)}>New store</button>
+            ) : (
+              <button className="btn" disabled title="The public demo is read-only; a real workspace requires sign-in">New store</button>
+            )}
           </div>
 
 
