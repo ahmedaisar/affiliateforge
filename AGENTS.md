@@ -275,14 +275,12 @@ Each is a sentence a migration or a job can be checked against.
 
 ## 2.7 Status
 
-Stage 2 (design) is complete. **Phase 2 is functionally complete** —
-Vite SPA in `src/`, 14 routes including `/settings/ai` and `/settings/profile`,
-37 new artifacts this session. Landing `/`, `/pricing`, `/stores` (member home,
-reads `/api/stores`), the five-step operator journey, the reader storefront at
-`/stores/:id/preview`, legal drafts and settings wired to the persistent backend
-(`server/index.mjs` + `node:sqlite`). Phone works at 390 px after the owner's
-report. Nothing is deployed; nothing is behind credentials (loopback only).
-**Waiting on the owner:** legal sign-off on `/legal/*` (both files stay flagged
-as drafts until then), a named Cloudflare tunnel (the quick tunnel is ephemeral
-and public), Clerk + Supabase keys for Phase 3, and a read of/corrections to the
-provisional picks in `decisions.md`. Reopening: 18 Nov 2026.
+Stage 2 (design) complete. **Phase 2 is functionally complete (18 Nov evening); owner pass pending.**
+Routes: `/`, `/pricing`, `/stores`, the five-step operator journey, `/stores/:id/preview`,
+`/settings/ai`, `/settings/profile`, `/legal/*`, 404. Phone verified at 390; PR adds kit-level
+`@media` for 720 and 380 breakpoints. Public demo at `--tunnel` mode is read-only with a
+disabled New Store control and a banner; the owner stack stays full. Legal text now describes
+exactly what ships. Nothing is behind credentials; the loopback is not production.
+**Owner's moves, in order:** (1) approve/patch `/legal/terms` and `/legal/privacy`;
+(2) phone-verify the journey on the live external demo; (3) Clerk + Supabase keys;
+(4) named Cloudflare tunnel or another host. Reopening: 18 Nov 2026 (evening).
