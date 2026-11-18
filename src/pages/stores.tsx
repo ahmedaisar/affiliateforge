@@ -64,7 +64,17 @@ export default function Stores() {
                 {stores.length} stores · {attention.length} need you today · {totalOffers} offers
               </p>
             </div>
-            <button className="btn btn--primary" disabled title="Phase 4 adds store creation">
+            <button className="btn btn--primary" onClick={async () => {
+              const domain = window.prompt("Store domain (e.g. resin-bench.com)");
+              const niche = window.prompt("Niche, in your words");
+              if (!domain || !niche) return;
+              try {
+                const res = await fetch("/api/stores", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ domain, niche }) });
+                if (!res.ok) { setError((await res.json()).error ?? "could not create"); return; }
+                const created = await res.json();
+                setStores((list) => [...list, created]);
+              } catch (err) { setError(String(err)); }
+            }}>
               New store
             </button>
           </div>
