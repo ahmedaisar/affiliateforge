@@ -45,3 +45,14 @@ create. This file is the checklist and the expected shape of what the agent will
    the front end keeps calling `/api` unchanged.
 
 Expected effort: one focused session once keys exist.
+
+
+---
+
+## Note added 18 Nov 2026
+
+The public demo on the current quick-tunnel link is deliberately read-only:
+no POST/PUT/DELETE can mutate the seeded demo. A stranger with the link sees
+the banner, the disabled New Store control, and the seeded portfolio — nothing
+else. This is the correct posture for a pre-auth demo; it is **not** the right
+posture for a paying workspace. Phase 3 replaces it entirely.

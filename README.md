@@ -11,13 +11,17 @@ researched by agents, reviewed by you, owned by you. The brief and research live
 
 ```bash
 npm install
-npm run api        # backend on 127.0.0.1:8787 (stdlib Node + node:sqlite, seeded demo)
-npm run dev        # Vite on 0.0.0.0:3000 — serves the SPA and proxies /api, /go, /health
+npm run api        # owner backend on 127.0.0.1:8787 (stdlib Node + node:sqlite, seeded demo, writable)
+npm run dev        # owner frontend on 127.0.0.1:3000 — serves the SPA and proxies /api, /go, /health
 # or both:
 npm run dev:full
+# or a separate public read-only demo behind a tunnel:
+scripts/demo.sh --tunnel
 ```
 
-Open `http://localhost:3000` (on the LAN, `http://10.138.0.2:3000`).
+The default is the **owner** stack. The public tunnel on port 3001 points to a
+read-only API on 8788; every write returns 503 and the UI disables the New
+Store action. Use `--tunnel`, not `npm run dev`, when offering the demo.
 
 `npm run test` for the small unit suite, `npm run build` for the static bundle,
 `npm run preview` to serve `dist/` on 3100. `.env.example` documents the local
