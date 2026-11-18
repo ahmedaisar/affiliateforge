@@ -76,7 +76,7 @@ scripts/demo.sh --tunnel   # forces a new quick public link (random *.trycloudfl
 
 The demo on the public link is **read-only** as of 2026-11-18: `/health`, `/api/*`, `/go/*` and
 the generated-store preview work; every other verb is 503. The URL at 08:30 UTC today was
-https://guides-holds-held-jul.trycloudflare.com — ephemeral, gone when the laptop sleeps.
+https://congratulations-hire-sophisticated-prominent.trycloudflare.com — ephemeral, gone when the laptop sleeps.
 Treat any URL as public.
 
 ## Verify everything at once
