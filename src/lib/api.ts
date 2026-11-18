@@ -54,3 +54,10 @@ export type BriefResponse = Omit<NicheBrief, "meta" | "niche" | "evidence"> & { 
 export async function fetchBrief(storeId: string): Promise<BriefResponse> {
   return request<BriefResponse>(`/stores/${encodeURIComponent(storeId)}/brief`);
 }
+
+export async function fetchChoices(storeId: string): Promise<Record<string, string>> {
+  return request<Record<string, string>>(`/stores/${encodeURIComponent(storeId)}/choices`);
+}
+export async function saveChoices(storeId: string, choices: Record<string, string>): Promise<void> {
+  await request(`/stores/${encodeURIComponent(storeId)}/choices`, { method: "PUT", body: JSON.stringify(choices), headers: { "content-type": "application/json" } });
+}

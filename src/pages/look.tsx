@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { OperatorShell } from "@/components/operator-shell";
 import { listDesignSpecimens, type DesignSpecimen } from "@/lib/screenData";
+import { fetchChoices, saveChoices } from "@/lib/api";
 
 export default function LookPage() {
   const [specimens, setSpecimens] = useState<DesignSpecimen[]>([]);
   const [picked, setPicked] = useState<string>("field-notes");
+  const [saved, setSaved] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     listDesignSpecimens().then(setSpecimens);
+    fetchChoices("resin-miniatures").then((c) => { if (c.look) setPicked(c.look); }).catch(() => {});
   }, []);
 
   return (
@@ -30,7 +33,7 @@ export default function LookPage() {
             role="radio"
             aria-checked={picked === specimen.id}
             className="card"
-            onClick={() => setPicked(specimen.id)}
+            onClick={() => { setPicked(specimen.id); setSaved(false); saveChoices("resin-miniatures", { look: specimen.id }).then(() => setSaved(true)).catch(() => {}); }}
             style={{ textAlign: "left", cursor: "pointer", border: picked === specimen.id ? "var(--bw-strong) solid var(--accent)" : undefined }}
           >
             <div className="card__body">
@@ -64,7 +67,7 @@ export default function LookPage() {
       <div className="cluster-lg" style={{ marginTop: "var(--sp-5)" }}>
         <button className="btn btn--primary" onClick={() => navigate("/stores/resin-miniatures/build")}>Choose {specimens.find((s) => s.id === picked)?.name ?? "this look"}</button>
         <a className="btn" href="/stores/resin-miniatures/preview">Preview the storefront</a>
-        <span className="meta">Field Notes is backed by the rivals' look; Bench trails every spec sheet; Scout wins nothing here.</span>
+        <span className="meta">{saved ? "Choice saved to the workspace." : "Field Notes is backed by the rivals' look; your pick is saved to the backend."}</span>
       </div>
     </OperatorShell>
   );

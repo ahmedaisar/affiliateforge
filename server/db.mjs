@@ -62,6 +62,12 @@ export function openDb() {
       read_on TEXT NOT NULL,
       kind TEXT NOT NULL CHECK (kind IN ('observed','inference','assumption'))
     );
+    CREATE TABLE IF NOT EXISTS store_choices (
+      store_id TEXT NOT NULL REFERENCES stores(id) ON DELETE CASCADE,
+      key TEXT NOT NULL,
+      value TEXT NOT NULL,
+      PRIMARY KEY (store_id, key)
+    );
     CREATE TABLE IF NOT EXISTS meta (
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL
@@ -118,6 +124,8 @@ function seed(db) {
       ["resin-miniatures", "Reddit threads repeat “which resin” and “is it worth upgrading”", "reddit-thread-index · sample", "17 Nov", "inference"],
       ["resin-miniatures", "Wash-and-cure stations are an under-served buying step", "niche-argument · hypothesis", "17 Nov", "assumption"],
     ].forEach((r) => insEv.run(...r));
+    db.prepare("INSERT OR IGNORE INTO store_choices (store_id, key, value) VALUES ('resin-miniatures', 'look', 'field-notes')").run();
+    db.prepare("INSERT OR IGNORE INTO store_choices (store_id, key, value) VALUES ('resin-miniatures', 'gate_progress', '6 of 10')").run();
     db.prepare("INSERT INTO meta (key, value) VALUES ('seeded', datetime('now'))").run();
     db.exec("COMMIT");
   } catch (e) {

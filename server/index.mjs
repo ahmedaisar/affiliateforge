@@ -126,6 +126,23 @@ const server = createServer(async (req, res) => {
       return json(res, 200, { title: meta.title, score: meta.score, scoreLabel: meta.score_label, argument: meta.argument, counter: meta.counter, moneyLine: meta.money_line, orderLine: meta.order_line, evidence });
     }
 
+    const choice = path.match(/^\/api\/stores\/([A-Za-z0-9._-]+)\/choices$/);
+    if (choice) {
+      if (method === "GET") {
+        const rows = db.prepare("SELECT key, value FROM store_choices WHERE store_id = ?").all(choice[1]);
+        return json(res, 200, Object.fromEntries(rows.map((r) => [r.key, r.value])));
+      }
+      if (method === "PUT") {
+        const body = await readBody(req);
+        for (const [key, value] of Object.entries(body)) {
+          if (typeof value !== "string" || key.length > 64 || value.length > 256) continue;
+          db.prepare("INSERT INTO store_choices (store_id, key, value) VALUES (?,?,?) ON CONFLICT(store_id, key) DO UPDATE SET value = excluded.value")
+            .run(choice[1], key, value);
+        }
+        return json(res, 200, { saved: true });
+      }
+    }
+
     const health = path.match(/^\/api\/activity$/);
     if (method === "GET" && health) {
       const rows = db.prepare("SELECT time, what, state FROM build_log ORDER BY rowid DESC LIMIT 3").all().reverse();
