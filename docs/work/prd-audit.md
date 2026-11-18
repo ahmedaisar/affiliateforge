@@ -26,6 +26,18 @@ inert nav spans in `/stores` (linked through to real routes), a topbar that refu
 at 390 px (kit-level `@media` at 720 px), and the screenshot set — all 10 app images this pass
 came from the phone-unfriendly build; all recaptured against the fix.
 
+**Defect log 18 Nov 2026 (evening):** a `bikerental.mv` store appeared in the
+portfolio via the public tunnel before the comment was withdrawn and deleted at
+08:27 UTC — exactly the failure mode an unauthenticated quick tunnel produces.
+Fixed by deletion and noted here; no action was required beyond removing the
+row, but the next quick tunnel sequence must land Phase 3 before inviting
+strangers.
+
+**Defect log 18 Nov 2026 (evening, round 2):** settings pages (`/settings/ai`,
+`/settings/profile`) shipped but silently dropped every write — the back-end's
+`store_choices` foreign key to `stores(id)` rejects the `"workspace"` pseudo-store.
+`ERR_SQLITE_ERROR 787` logged, UI showed nothing. Split to `workspace_choices`.
+
 **Input-abuse pass (18 Nov 2026):**
 **Input-abuse pass (18 Nov 2026):** malformed JSON, oversized bodies, SQL-ish choice keys,
 XSS-shaped strings and path-traversal ids — all handled (400 or silently ignored); the seed
