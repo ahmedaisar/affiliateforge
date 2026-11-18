@@ -275,10 +275,14 @@ Each is a sentence a migration or a job can be checked against.
 
 ## 2.7 Status
 
-Stage 2 (design) is complete: the shell is Trade press (17 Nov 2026), the kit holds every
-value and the artboards are rendered. **Phase 2 is in progress** — screens on sample data
-as a Vite SPA in `src/`, routes `/` (landing), `/pricing`, `/stores` (member home), `/legal/*`,
-built and served from `dist/` with `npm run build && npm run preview`. Nothing is in
-production. Waiting on the owner: a read of the four-plus provisional picks (shape switches,
-`billing: none`, the stack entry of 17-18 Nov, the phase order, Field Notes for the
-storefront) — decisions in `decisions.md`. Reopening: 17/18 Nov 2026.
+Stage 2 (design) is complete. **Phase 2 is functionally complete** —
+Vite SPA in `src/`, 14 routes including `/settings/ai` and `/settings/profile`,
+37 new artifacts this session. Landing `/`, `/pricing`, `/stores` (member home,
+reads `/api/stores`), the five-step operator journey, the reader storefront at
+`/stores/:id/preview`, legal drafts and settings wired to the persistent backend
+(`server/index.mjs` + `node:sqlite`). Phone works at 390 px after the owner's
+report. Nothing is deployed; nothing is behind credentials (loopback only).
+**Waiting on the owner:** legal sign-off on `/legal/*` (both files stay flagged
+as drafts until then), a named Cloudflare tunnel (the quick tunnel is ephemeral
+and public), Clerk + Supabase keys for Phase 3, and a read of/corrections to the
+provisional picks in `decisions.md`. Reopening: 18 Nov 2026.
