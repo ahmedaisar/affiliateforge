@@ -20,7 +20,7 @@ reads it instead of a fixture.
 | Agents (Scout/Broker/Mason) | **Missing** | Phase 5–6 |
 | Real affiliate feeds | **Missing** | Keys, networks, approval flows |
 | Tests | 10 unit, skipped per owner | Browser gate absent |
-| Legal text | Drafts, unapproved (P9) | Cannot launch without owner approval |
+| External demo URL (tunnel) | Drafts, unapproved (P9) | Cannot launch without owner approval |
 
 **Backend now exists and is the source of truth for stores, catalogue, build log and click
 counts.** The frontend reads `/api` (proxied in development); fixtures remain for the niche
