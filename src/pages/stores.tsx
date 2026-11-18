@@ -5,6 +5,8 @@ import { needsAttention, SAMPLE, type StoreState, type Store, type ActivityLine 
 import { fetchActivity, fetchStores, fetchInsights } from "@/lib/api";
 import { NewStoreDialog } from "@/components/new-store-dialog";
 
+const DEMO_READ_ONLY = import.meta.env.VITE_DEMO_READ_ONLY === "1";
+
 const money = (n: number) => `$${n.toFixed(2)}`;
 
 function State({ state, label }: { state: StoreState; label: string }) {
@@ -69,6 +71,15 @@ export default function Stores() {
             <button className="btn btn--primary" onClick={() => setCreating(true)}>New store</button>
           </div>
 
+
+{DEMO_READ_ONLY && (
+  <div className="banner" style={{ marginTop: "var(--sp-4)" }}>
+    <div className="stack-sm grow">
+      <p><strong>Public demo — read-only.</strong></p>
+      <p>Everyone can browse; nobody can create stores, approve catalogues or open the gate. A real workspace requires sign-in, which hasn't shipped yet.</p>
+    </div>
+  </div>
+)}
           {attention.length > 0 && (
             <div className="banner" style={{ marginTop: "var(--sp-5)" }}>
               <div className="stack-sm grow">
