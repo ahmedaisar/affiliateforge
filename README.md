@@ -82,8 +82,10 @@ Treat any URL as public.
 ## Verify everything at once
 
 ```bash
-scripts/verify.sh
+scripts/verify.sh    # typecheck + build + tests + bundle check + live smoke
+scripts/smoke.mjs    # end-to-end: ingest → brief → catalogue → build → landing renders
 ```
 
-Typecheck, production build, unit suite, bundle smoke test, live health of the API and the
-dev server — all five, exits non-zero on the first failure.
+`verify.sh` is the gate; `smoke.mjs` proves the user-level journey works on the owner
+stack. Neither pretends to be a security review or a legal sign-off — both of those
+belong to the owner's desk, not this repo's automation.
