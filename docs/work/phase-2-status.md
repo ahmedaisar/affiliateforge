@@ -19,7 +19,7 @@ eyes on the screens.
 3. The owner's click-through of every state at phone and desktop width.
 4. The accessibility of the reader storefront (`storefront.css`) on a forced-colors pass.
 
-**Owner's part now:** open https://anytime-diagnosis-papua-fotos.trycloudflare.com on phone
+**Owner's part now:** open https://guides-holds-held-jul.trycloudflare.com on phone
 and desktop. Start at `/`, then `/stores`, then `brief → look → preview`. Report what
 reads wrong; everything found rides fixes into the same stage (Phase 2).
 
