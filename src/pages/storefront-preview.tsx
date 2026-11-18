@@ -41,6 +41,10 @@ export default function StorefrontPreview() {
         <div className="store-block">
           <p className="eyebrow">The stamp</p>
           <p className="store-price">$289 <span className="store-price-meta">at the specialist retailer — checked 17 Nov 2026, price stamped by the feed, not typed by us.</span></p>
+          <div className="cluster" style={{ marginTop: "var(--sp-3)" }}>
+            <a className="btn btn--primary" href="/go/resin-miniatures/elegoo-saturn">Check current price at the retailer →</a>
+            <a className="btn" href="/go/resin-miniatures/elegoo-saturn">Elegoo Saturn 4 — $289 at the specialist</a>
+          </div>
         </div>
 
         <div className="store-block">

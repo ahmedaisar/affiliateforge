@@ -13,7 +13,7 @@ reads it instead of a fixture.
 | Catalogue ordered by commission (UC4, P5 Broker) | Built, wired | Removal is a DELETE; Approve writes one build-log line; network sends go to eBay sample links |
 | Amazon/specialist price gate (UC5) | Built, UI only | Gate is display; no merchant adapter |
 | Build run + handover (UC6, P6 Mason) | Built, fixture | No repo/deploy side effect; no tokens exist |
-| Reader storefront `/preview` (UC9) | Built, static preview | Outbound redirect exists server-side at `/go/:store/:product`; the preview page links do not use it yet |
+| Reader storefront `/preview` (UC9) | Built + wired | The CTA now hits `/go/...`; clicks are counted in `clicks` (verified: 2 rows after this turn's two curl clicks) |
 | Auth / workspaces / RLS (UC1, UC10, P4–5) | **Missing** | No Clerk, no Postgres; the local API has an optional dev token and no tenant boundary |
 | Backend / anything with state | **Built, local** | Node + node:sqlite on `127.0.0.1:8787`: stores, catalogue (approve, remove), build log, morning activity, outbound click logging with 302 to merchant |
 | Agents (Scout/Broker/Mason) | **Missing** | Phase 5–6 |
