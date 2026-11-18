@@ -68,6 +68,10 @@ export function openDb() {
       value TEXT NOT NULL,
       PRIMARY KEY (store_id, key)
     );
+    CREATE TABLE IF NOT EXISTS workspace_choices (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS meta (
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL

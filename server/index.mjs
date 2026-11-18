@@ -131,8 +131,11 @@ const server = createServer(async (req, res) => {
 
     const choice = path.match(/^\/api\/stores\/([A-Za-z0-9._-]+)\/choices$/);
     if (choice) {
+      const target = choice[1] === "workspace" ? null : choice[1]; // workspace: account-level choices, no store FK
       if (method === "GET") {
-        const rows = db.prepare("SELECT key, value FROM store_choices WHERE store_id = ?").all(choice[1]);
+        const rows = target === null
+          ? db.prepare("SELECT key, value FROM workspace_choices").all()
+          : db.prepare("SELECT key, value FROM store_choices WHERE store_id = ?").all(target);
         return json(res, 200, Object.fromEntries(rows.map((r) => [r.key, r.value])));
       }
       if (method === "PUT") {
@@ -142,8 +145,11 @@ const server = createServer(async (req, res) => {
           if (typeof value !== "string") continue;
           if (!/^[a-z_]{1,32}$/.test(key)) continue;
           if (value.length > 64) continue;
-          db.prepare("INSERT INTO store_choices (store_id, key, value) VALUES (?,?,?) ON CONFLICT(store_id, key) DO UPDATE SET value = excluded.value")
-            .run(choice[1], key, value);
+          if (target === null) {
+            db.prepare("INSERT INTO workspace_choices (key, value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(key, value);
+          } else {
+            db.prepare("INSERT INTO store_choices (store_id, key, value) VALUES (?,?,?) ON CONFLICT(store_id, key) DO UPDATE SET value = excluded.value").run(target, key, value);
+          }
           saved.push(key);
         }
         return json(res, 200, { saved });
