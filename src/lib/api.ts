@@ -6,11 +6,16 @@
 import type { Store, ActivityLine, StoreState } from "./data";
 import type { CatalogueRow, BuildStep, NicheBrief } from "./screenData";
 
+export type ApiFailure = Error & { missing?: string[]; status?: number };
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api${path}`, init);
   if (!response.ok) {
-    const body = (await response.json().catch(() => ({}))) as { error?: string };
-    throw new Error(body.error ?? `request failed: ${response.status}`);
+    const body = (await response.json().catch(() => ({}))) as { error?: string; missing?: string[] };
+    const err = new Error(body.error ?? `request failed: ${response.status}`) as ApiFailure;
+    err.missing = body.missing;
+    err.status = response.status;
+    throw err;
   }
   return (await response.json()) as T;
 }
@@ -44,8 +49,16 @@ export async function fetchBuild(storeId: string): Promise<BuildStep[]> {
   return request<BuildStep[]>(`/stores/${encodeURIComponent(storeId)}/build`);
 }
 
-export async function startBuild(storeId: string): Promise<void> {
-  await request(`/stores/${encodeURIComponent(storeId)}/build`, { method: "POST" });
+export type BuildResult = {
+  outDir: string;
+  files: string[];
+  products: number;
+  evidence: number;
+  missing?: string[];
+};
+
+export async function startBuild(storeId: string): Promise<BuildResult> {
+  return request<BuildResult>(`/stores/${encodeURIComponent(storeId)}/build`, { method: "POST" });
 }
 
 export type BriefEvidence = { claim: string; source: string; readOn: string; kind: "observed" | "inference" | "assumption" };

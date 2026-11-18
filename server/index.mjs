@@ -5,8 +5,10 @@
  * local-development seam, never a production scheme.
  */
 import { createServer } from "node:http";
-import { openDb } from "./db.mjs";
+import { openDb, dbPath } from "./db.mjs";
+import { buildStore } from "./build-store.mjs";
 import { randomUUID } from "node:crypto";
+import pathMod from "node:path";
 
 const PORT = Number(process.env.CAIRN_API_PORT ?? 8787);
 const DEV_TOKEN = process.env.CAIRN_DEV_TOKEN; // unset → open (loopback only)
@@ -122,9 +124,36 @@ const server = createServer(async (req, res) => {
       return json(res, 200, rows);
     }
     if (method === "POST" && build) {
-      db.prepare("INSERT INTO build_log (store_id, time, what, state) VALUES (?,?, 'Build started by the operator', 'warn')")
-        .run(build[1], new Date().toTimeString().slice(0, 5));
-      return json(res, 202, { started: true });
+      const storeId = build[1];
+      const store = db.prepare(`SELECT ${STORE_COLS} FROM stores WHERE id = ?`).get(storeId);
+      if (!store) return json(res, 404, { error: "not found" });
+      const counts = db.prepare(
+        `SELECT
+          (SELECT count(*) FROM catalogue WHERE store_id = ? AND removed = 0) AS catalogue,
+          (SELECT count(*) FROM brief_evidence WHERE store_id = ?)           AS evidence,
+          (SELECT count(*) FROM store_choices WHERE store_id = ? AND key = 'look') AS look`
+      ).get(storeId, storeId, storeId);
+      const missing = [];
+      if (counts.catalogue === 0) missing.push("Catalogue: approve at least one offer in the Catalogue step");
+      if (counts.evidence === 0)  missing.push("Brief evidence: run the Research step — no source can vouch for the niche");
+      if (counts.look === 0)      missing.push("Look: pick a storefront direction in the Look step");
+      if (missing.length) return json(res, 409, { error: "cannot build yet", missing });
+      const outDir = pathMod.join(process.cwd(), "dist-stores");
+      let summary;
+      try {
+        summary = buildStore(dbPath, storeId, outDir);
+      } catch (e) {
+        db.prepare("INSERT INTO build_log (store_id, time, what, state) VALUES (?,?,?, 'bad')")
+          .run(storeId, new Date().toTimeString().slice(0, 5), `Build failed: ${(e && e.message) || e}`);
+        return json(res, 500, { error: "build failed", detail: String((e && e.message) || e) });
+      }
+      const outAbs = summary.outDir;
+      db.prepare("INSERT INTO build_log (store_id, time, what, state) VALUES (?,?,?, 'ok')")
+        .run(storeId, new Date().toTimeString().slice(0, 5),
+             `Built: ${summary.products} offers rendered; ${summary.evidence} sources cited; output at ${outAbs}`);
+      db.prepare("UPDATE stores SET state = 'ok', state_label = 'Built — ready to hand over', detail = ?, refreshed_label = 'now' WHERE id = ?")
+        .run(outAbs, storeId);
+      return json(res, 200, { ...summary, outDir: outAbs });
     }
 
     const brief = path.match(/^\/api\/stores\/([A-Za-z0-9._-]+)\/brief$/);
