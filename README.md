@@ -42,9 +42,10 @@ for review). Phase 3 needs external accounts; the exact steps are in
 
 Phase 3 — Clerk (organizations) and Postgres — has not been done. No multi-tenant
 authorization exists; the tunnel that was live on 2026-11-18 exposed one demo workspace
-to anyone with the link. Legal text is a draft. The rendered pass and the scored
-`ui-design` audit have not been performed (no browser on the build host). No release
-has shipped.
+to anyone with the link. Legal text is a draft. The rendered pass has now happened —
+six screenshots in `screenshots/`, taken with headless Chromium at 1440 and 390, and the
+Playwright route walk reports no console errors — but the scored `ui-design` audit has not
+been performed. No release has shipped.
 
 ## Documents in this repo
 
