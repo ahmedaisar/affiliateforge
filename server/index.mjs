@@ -143,6 +143,12 @@ const server = createServer(async (req, res) => {
       }
     }
 
+    if (method === "GET" && path === "/api/insights") {
+      const top = db.prepare("SELECT product_id, count(*) AS clicks FROM clicks GROUP BY product_id ORDER BY clicks DESC LIMIT 5").all();
+      const last = db.prepare("SELECT product_id, merchant, store_id, at FROM clicks ORDER BY id DESC LIMIT 3").all();
+      return json(res, 200, { totalClicks: db.prepare("SELECT count(*) c FROM clicks").get().c, top, last });
+    }
+
     const health = path.match(/^\/api\/activity$/);
     if (method === "GET" && health) {
       const rows = db.prepare("SELECT time, what, state FROM build_log ORDER BY rowid DESC LIMIT 3").all().reverse();

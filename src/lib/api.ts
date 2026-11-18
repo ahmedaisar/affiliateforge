@@ -61,3 +61,7 @@ export async function fetchChoices(storeId: string): Promise<Record<string, stri
 export async function saveChoices(storeId: string, choices: Record<string, string>): Promise<void> {
   await request(`/stores/${encodeURIComponent(storeId)}/choices`, { method: "PUT", body: JSON.stringify(choices), headers: { "content-type": "application/json" } });
 }
+
+export async function fetchInsights(): Promise<{ totalClicks: number; top: { product_id: string; clicks: number }[]; last: { product_id: string; merchant: string; store_id: string; at: string }[] }> {
+  return request("/insights");
+}

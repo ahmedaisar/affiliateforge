@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Brand } from "@/components/brand";
 import { needsAttention, SAMPLE, type StoreState, type Store, type ActivityLine } from "@/lib/data";
-import { fetchActivity, fetchStores } from "@/lib/api";
+import { fetchActivity, fetchStores, fetchInsights } from "@/lib/api";
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 
@@ -14,11 +14,12 @@ function State({ state, label }: { state: StoreState; label: string }) {
 export default function Stores() {
   const [stores, setStores] = useState<Store[]>([]);
   const [activity, setActivity] = useState<ActivityLine[]>([]);
+  const [insights, setInsights] = useState<{ totalClicks: number; top: { product_id: string; clicks: number }[]; last: { product_id: string; merchant: string; at: string }[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([fetchStores(), fetchActivity()])
-      .then(([s, a]) => { setStores(s); setActivity(a); })
+    Promise.all([fetchStores(), fetchActivity(), fetchInsights().catch(() => null)])
+      .then(([s, a, i]) => { setStores(s); setActivity(a); setInsights(i); })
       .catch((err) => setError(err instanceof Error ? err.message : String(err)));
   }, []);
 
@@ -78,6 +79,12 @@ export default function Stores() {
             </div>
           )}
 
+          {insights && (
+            <div className="cluster" style={{ marginTop: "var(--sp-4)" }}>
+              <span className="tag tag--accent">{insights.totalClicks} affiliate clicks tracked</span>
+              {insights.top[0] && <span className="meta">Most clicked: {insights.top[0].product_id} ({insights.top[0].clicks})</span>}
+            </div>
+          )}
           <div className="table-wrap" style={{ marginTop: "var(--sp-5)" }}>
             <table className="table">
               <thead>
