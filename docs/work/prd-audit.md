@@ -16,6 +16,17 @@ reads it instead of a fixture.
 | Reader storefront `/preview` (UC9) | Built + wired + visible | CTA hits `/go/...`; UI shows tracked clicks on `/stores` (verified: 2 rows logged, portfolio strip renders, `/api/insights` 200) |
 | Auth / workspaces / RLS (UC1, UC10, P4–5) | **Missing** | No Clerk, no Postgres; the local API has an optional dev token and no tenant boundary |
 
+**Owner-reported defects (18 Nov 2026, evening pass):** two were found only by doing
+the phone pass the owner asked for — a foreign-key violation on account-level choices was
+silently swallowing every `/api/stores/workspace/choices` write (the settings screens had
+been writing to a `store_id = 'workspace'` row that did not exist; `ERR_SQLITE_ERROR 787`,
+surfaces none in the UI), which is why the key always looked empty and the click feedback
+appeared to work but did not persist. Fixed by splitting the table. Also fixed: dead-looking
+inert nav spans in `/stores` (linked through to real routes), a topbar that refused to wrap
+at 390 px (kit-level `@media` at 720 px), and the screenshot set — all 10 app images this pass
+came from the phone-unfriendly build; all recaptured against the fix.
+
+**Input-abuse pass (18 Nov 2026):**
 **Input-abuse pass (18 Nov 2026):** malformed JSON, oversized bodies, SQL-ish choice keys,
 XSS-shaped strings and path-traversal ids — all handled (400 or silently ignored); the seed
 resets to seven demo stores. No 500s remain on any probed route. Method: a fuzz script that
