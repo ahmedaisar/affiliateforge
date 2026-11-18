@@ -1,0 +1,16 @@
+/* The kit is the source of every value: tokens.css holds them, kit.css builds
+   the primitives. Both live in design/ and are imported here, never copied,
+   so a screen cannot drift from the kit by editing a local copy. */
+@import "../../design/tokens.css";
+@import "../../design/kit.css";
+
+/* App-level composition only: page scaffolding that is not a kit primitive.
+   No colour, no size — those come from tokens. */
+.page { max-width: var(--max); margin: 0 auto; padding: 0 var(--sp-6) var(--sp-8); }
+.page-head--front { padding: var(--sp-8) 0 var(--sp-6); border-bottom: var(--bw-strong) solid var(--ink); }
+.front-section { padding: var(--sp-7) 0; border-bottom: var(--bw) solid var(--rule); }
+.front-section:last-of-type { border-bottom: 0; }
+.prose p + p { margin-top: var(--sp-3); }
+.prose { max-width: var(--measure); }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-4); }
+.footer { border-top: var(--bw) solid var(--rule); padding: var(--sp-6) 0; }

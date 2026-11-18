@@ -3,4 +3,7 @@
 !.env.example
 node_modules/
 .next/
+dist/
+.deltabox/
+tsconfig.tsbuildinfo
 .DS_Store
