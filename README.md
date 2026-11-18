@@ -64,8 +64,10 @@ been performed. No release has shipped.
 
 ## Direction of travel
 
-**Phase 2 is functionally complete.** The next unblocked step is Phase 3 (identity +
-database), which needs a Clerk application and a Supabase project — see the plan.
+**Phase 2 is functionally complete; owner sign-off on the evidence is pending.**
+The next unblocked step is Phase 3 (identity + database), which needs a Clerk
+application and a Supabase project — external accounts, ~10 minutes. Full
+steps in `docs/work/phase-3-setup.md`.
 
 ## Restart cleanly
 
@@ -74,10 +76,11 @@ scripts/demo.sh            # backend + dev server locally (no restart of a live 
 scripts/demo.sh --tunnel   # forces a new quick public link (random *.trycloudflare.com)
 ```
 
-The demo on the public link is **read-only** as of 2026-11-18: `/health`, `/api/*`, `/go/*` and
-the generated-store preview work; every other verb is 503. The URL at 08:30 UTC today was
-https://congratulations-hire-sophisticated-prominent.trycloudflare.com — ephemeral, gone when the laptop sleeps.
-Treat any URL as public.
+**Everything visible at the public link is read-only** (2026-11-18): `/health`,
+`/api/*` and `/go/*` respond; the storefront renders; every other verb is 503. The
+current link is printed by `scripts/demo.sh --tunnel` (random *.trycloudflare.com
+subdomain) — ephemeral, good until the laptop sleeps, dangerous to assume durable.
+Treat any such link as public from the moment it leaves your clipboard.
 
 ## Verify everything at once
 
