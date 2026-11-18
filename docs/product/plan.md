@@ -65,6 +65,8 @@ rendered. **Next: Phase 2**, screens on sample data with the front door beside t
 
 ### Phase 2 — Screens on sample data, and the front door (stage 3)
 
+> **2026-11-18**: per the owner's instruction, development runs on the local SQLite file with no auth; Phase 3 (Clerk + Postgres) is backlog until an explicit owner go. See decisions 2026-11-18.
+
 - **The scaffold** — Vite SPA in `src/`, React Router, the design kit imported from
   `design/` by path; `npm run dev` serves on 3000, `npm run preview` serves the built
   `dist/` on 3100. Done when: the app builds from a clean clone and every route below

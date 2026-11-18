@@ -1,3 +1,5 @@
+**This page is reference material for later — the owner's 18 Nov 2026 instruction keeps development on the local SQLite file with no auth.**
+
 # Phase 3 — what the owner must create outside this repo
 
 Everything in Phase 3 (`docs/product/plan.md`) needs accounts and keys that only you can

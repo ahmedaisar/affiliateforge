@@ -14,7 +14,7 @@ reads it instead of a fixture.
 | Catalogue ordered by commission (UC4, P5 Broker) | Built, wired end-to-end | Row-level DELETE survives refresh; Approve writes one build-log line that appears the following morning and cannot be undone from the UI |
 | Amazon/specialist price gate (UC5) | Built, UI only | Gate is display; no merchant adapter |
 | Reader storefront `/preview` (UC9) | Built + wired + visible | CTA hits `/go/...`; UI shows tracked clicks on `/stores` (verified: 2 rows logged, portfolio strip renders, `/api/insights` 200) |
-| Auth / workspaces / RLS (UC1, UC10, P4–5) | **Missing** | No Clerk, no Postgres; the local API has an optional dev token and no tenant boundary |
+| Auth / workspaces / RLS (UC1, UC10, P4–5) | **Parked — owner instruction of 18 Nov 2026** | No Clerk, no Postgres; the local API has an optional dev token and no tenant boundary. Owner explicitly chose SQLite + no auth for development. See decisions 2026-11-18 |
 
 **Owner-reported defects (18 Nov 2026, evening pass):** two were found only by doing
 the phone pass the owner asked for — a foreign-key violation on account-level choices was

@@ -13,6 +13,30 @@ Evidence behind these: `proposal.html` in this folder (sources S1–S21, § 1 an
 
 ---
 
+## 2026-11-18 — development stays on SQLite, with no auth, by owner instruction
+
+- **Options considered:** proceed with the stack's default (Clerk + Postgres through
+  Supabase, RLS, organizations, the full Phase 3 in the plan); keep the current local
+  SQLite file (`server/db.mjs` + `node:sqlite`) and the optional dev header; stay on
+  SQLite but add a minimal cookie session for realism.
+- **Picked:** **Keep SQLite, ship no sign-in** — by **the owner**: "for development we
+  need to use sqlite file db, no auth" (18 Nov 2026, in session).
+- **Why:** the objective is a demo-shaped product a stranger can look at and touch, not
+  a paying multi-tenant SaaS. Auth changes the demo cost without changing anything a
+  viewer of the front door sees; the seed data is the value.
+- **Consequences, stated honestly:** the public tunnel keeps the demo writable-for-noone
+  (read-only, and now is) and the local owner stack stays fully functional without signup.
+  Phase 3 becomes a backlog item that requires a separate, explicit go — not a stage the
+  current plan executes by default. `AGENTS.md`, `docs/product/plan.md`, `docs/work/phase-3-setup.md`,
+  `docs/work/prd-audit.md` carry the new status. Any doc naming Clerk as "next" or "pending"
+  is either explicitly marked as a proposal, or lists it as backlog-only with the
+  reopening trigger preserved.
+- **Reopen when:** the owner revokes this with a new dated entry — the simplest possible
+  reopening is "we need user accounts now" — at which point Phase 3 resumes with the same
+  harness and without undoing this decision first; the stores table can gain a
+  `workspace_id` and an index in one migration; `server/index.mjs` can carry the Clerk
+  middleware behind an env flag; the `agent-desk` demo seed can be preserved verbatim.
+
 ## 2026-11-18 — the control plane's stack: Vite, not Next.js
 
 - **Options considered:** keep Next.js (App Router) as proposed; **Vite + React Router as a

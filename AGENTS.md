@@ -204,9 +204,9 @@ the code, the domain and the affiliate accounts.
 
 ## 2.2 Users
 
-- **The operator — the payer and the only signed-in user.** A portfolio operator running
-  3–30 sites (the first customer), or a first-time builder. Signs in with the identity
-  provider; belongs to one workspace, an organization of one or of a team.
+- **The operator.** One operator per local demo workspace. Sign-in does not exist yet;
+  authorization is `X-Cairn-Dev-Token`, loopback-only. Per the owner's 18 Nov 2026
+  instruction ("for development we need to use sqlite file db, no auth").
 - **The reader — anyone, no account.** Arrives on a generated storefront from search, on a
   phone, and either clicks an affiliate link or leaves. Never identified beyond an anonymous
   token on the redirect.
@@ -215,14 +215,15 @@ the code, the domain and the affiliate accounts.
 
 ## 2.3 Product shape and reopened defaults
 
-- **Workspace model:** organization — every workspace is an organization, a solo operator an
-  organization of one, roles inside it.
+- **Workspace model:** single implicit workspace (owner's local SQLite). No organization
+  model, no roles, no sign-in. Per the owner's 18 Nov 2026 instruction. Decision:
+  `docs/product/decisions.md` — 2026-11-18, "development stays on SQLite, with no auth".
 - **Billing:** none — no plan table, no entitlement slugs, no pricing logic in app code. The
   build fee and the caretaker fee are charged outside the app by a payment link. Reopened
   from the default; reasoning in `docs/product/decisions.md` (2026-11-17).
-- **Anonymous public:** yes — the landing, pricing, legal pages, the affiliate redirect and
-  every generated storefront are read by strangers.
-- **Embedded agents:** yes — Scout, Broker and Mason.
+- **Anonymous public:** yes — the landing, pricing, legal pages and the affiliate redirect
+  are read by strangers; the editor dashboard is loopback-only in this build.
+- **Embedded agents:** yes — Scout, Broker and Mason (all still sample-data only).
 - **Member home:** `/stores`.
 
 Reopened defaults: **billing** (default "the identity provider's" → none, because a
@@ -275,12 +276,4 @@ Each is a sentence a migration or a job can be checked against.
 
 ## 2.7 Status
 
-Stage 2 (design) complete. **Phase 2 is functionally complete (18 Nov evening); owner pass pending.**
-Routes: `/`, `/pricing`, `/stores`, the five-step operator journey, `/stores/:id/preview`,
-`/settings/ai`, `/settings/profile`, `/legal/*`, 404. Phone verified at 390; PR adds kit-level
-`@media` for 720 and 380 breakpoints. Public demo at `--tunnel` mode is read-only with a
-disabled New Store control and a banner; the owner stack stays full. Legal text now describes
-exactly what ships. Nothing is behind credentials; the loopback is not production.
-**Owner's moves, in order:** (1) approve/patch `/legal/terms` and `/legal/privacy`;
-(2) phone-verify the journey on the live external demo; (3) Clerk + Supabase keys;
-(4) named Cloudflare tunnel or another host. Reopening: 18 Nov 2026 (evening).
+Phase 2 functionally complete (18 Nov). Dev runs on local SQLite, loopback-only, no auth — owner's 18 Nov 2026 instruction. Public tunnel serves a read-only build with write verbs returning 503. **Owner's moves:** (1) legally sign `/legal/terms` + `/legal/privacy`, or request changes; (2) phone-verify the public link; (3) if/when multi-user is wanted, one new decision entry revives Phase 3.
