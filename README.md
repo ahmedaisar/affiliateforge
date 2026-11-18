@@ -71,3 +71,12 @@ scripts/demo.sh --tunnel   # forces a new quick public link (random *.trycloudfl
 ```
 
 The tunnel is ephemeral and public; treat any URL it prints as public-on-the-internet.
+
+## Verify everything at once
+
+```bash
+scripts/verify.sh
+```
+
+Typecheck, production build, unit suite, bundle smoke test, live health of the API and the
+dev server — all five, exits non-zero on the first failure.
