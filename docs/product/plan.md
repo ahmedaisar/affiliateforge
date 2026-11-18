@@ -68,15 +68,14 @@ rendered. **Next: Phase 2**, screens on sample data with the front door beside t
 - **The scaffold** — Vite SPA in `src/`, React Router, the design kit imported from
   `design/` by path; `npm run dev` serves on 3000, `npm run preview` serves the built
   `dist/` on 3100. Done when: the app builds from a clean clone and every route below
-  answers 200 against `vite preview`. Status: **done (17 Nov 2026)** — verified by
-  build + fetch of all routes; screenshots and the rendered pass are **not** done (no
-  browser on the host).
-- **The screens** — `/stores` (portfolio, done), landing `/` and `/pricing` (done), legal
-  `/legal/terms` and `/legal/privacy` (drafts, done), plus the
-  remaining jobs screens: `/stores/:id/niche` (brief + evidence), `/stores/:id/look`
-  (three specimens), `/stores/:id/catalogue`, `/stores/:id/gate` (price gate),
-  `/stores/:id/build` (run), and a storefront preview at `/stores/:id/preview/…`.
-  Sample data fills every state, behind the seams the real system
+  answers 200 against `vite preview`. Status: **done (18 Nov 2026)** — verified by
+  build + fetch of all routes incl. the reader screen; screenshots and the rendered pass
+  are **not** done, and world-facing check (phone + desktop via the tunnel) is the owner's.
+- **The screens** — `/stores` (portfolio), landing `/` and `/pricing`, legal
+  `/legal/terms` and `/legal/privacy` (drafts), the operator journey
+  (`/stores/:id/niche`, `/stores/:id/look`, `/stores/:id/catalogue`, `/stores/:id/gate`,
+  `/stores/:id/build`) and the reader screen `/stores/:id/preview` — all on sample data,
+  behind the seams the real system
   will use. Done when: the newcomer walkthrough, the rendered pass at 1440/768/390, the
   screenshot critique and the scored audit pass with P0 and P1 fixed, and the owner has
   clicked through every state at phone and desktop width. Status: not started.
