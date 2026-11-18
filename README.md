@@ -21,7 +21,10 @@ Open `http://localhost:3000` (on the LAN, `http://10.138.0.2:3000`).
 
 `npm run test` for the small unit suite, `npm run build` for the static bundle,
 `npm run preview` to serve `dist/` on 3100. `.env.example` documents the local
-controls (`CAIRN_API_PORT`, `CAIRN_DEV_TOKEN`).
+controls (`CAIRN_API_PORT`, `CAIRN_DEV_TOKEN`) and `scripts/demo.sh` resurrects the
+demo (with `--tunnel` for a public link, which is ephemeral and exposed on purpose
+for review). Phase 3 needs external accounts; the exact steps are in
+[`docs/work/phase-3-setup.md`](docs/work/phase-3-setup.md).
 
 ## What is real today
 
