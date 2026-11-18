@@ -30,7 +30,7 @@ came from the phone-unfriendly build; all recaptured against the fix.
 portfolio via the public tunnel before the comment was withdrawn and deleted at
 08:27 UTC — exactly the failure mode an unauthenticated quick tunnel produces.
 Fixed by deletion and noted here; no action was required beyond removing the
-row, but the next quick tunnel sequence must land Phase 3 before inviting
+row; Phase 3 is parked by owner's 2026-11-18 instruction — reopen only by a dated decision entry before inviting
 strangers.
 
 **Defect log 18 Nov 2026 (evening, round 2):** settings pages (`/settings/ai`,
