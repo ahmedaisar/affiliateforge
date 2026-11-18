@@ -49,12 +49,13 @@ repository, a URL, a log line or a client bundle.
 
 ## 1.3 Stack, and the choices already made on it
 
-Vite + React Router (TypeScript SPA) · the kit in `design/` · Supabase Postgres · Clerk ·
-Vitest + Playwright. Generated stores are a **separate** Next.js repository built and
-deployed into the operator's own GitHub and Vercel accounts. There is no server runtime in
-the control plane: agent jobs run as **Supabase Edge Functions**, and authorization in the
-browser is the anon key plus RLS. Hosting is static (e.g. Netlify) with the SPA rewrite, so
-every path serves `index.html`.
+Vite + React Router (TypeScript SPA) · the kit in `design/` · local SQLite file (owner instruction,
+18 Nov 2026) · Vitest. Generated stores are a **separate** static artifact built into the operator's
+own repo, never deployed by us. There is no server runtime in the control plane: agent jobs run as
+server-side jobs (Scout/Broker/Mason, currently sample-data only for Scout and Broker; Mason now
+builds locally). Authorization is loopback-only; no public auth exists by owner instruction.
+Hosting, when needed, is any static host with the SPA rewrite — every path must serve
+`index.html`.
 
 Propose these rather than re-deriving them; reopen one only by saying in § 2.3 that its
 trigger fired, and record it in `docs/product/decisions.md` (default choices: the
