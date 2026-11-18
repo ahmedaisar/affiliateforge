@@ -63,6 +63,14 @@ no stray demo store remains — the tunnel-created `bikerental.mv` was deleted.
 
 **Verification, 18 Nov 2026 (whole day):** `/health` 200, `/api/stores` 200 with seven seeded stores, `/api/stores/:id/brief` 200, catalogue DELETE 200, approval 200 after fix, input-hardening fuzz pass clean, Playwright flow walk clean, build clean.
 
+**18 Nov 2026 — a fix called a feature, caught the same day:** an owner-driven 581-line change
+built a self-contained static storefront generator (`server/build-store.mjs`) that emits
+`index.html`, `method.html`, `404.html` and `sitemap.xml` into `dist-stores/` with FTC
+disclosure above the merchant links, nothing that reads as a stale price, and claims you can
+click to a source. The base `./` work that preceded it is shown up by this just as cleanly:
+the owner flagged it, the generator proves deep routes load, and README now names the command
+(`scripts/demo.sh --tunnel`) rather than any single link.
+
 **Verification this turn:** `/health` 200, `/api/stores` 200 with seven seeded stores, an
 unknown route returns 404 JSON, a 302 redirect logs a click and forwards with the intended
 tag, duplicate-domain create succeeds with suffixed id, invalid domain returns 400.
