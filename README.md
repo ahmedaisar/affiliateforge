@@ -58,3 +58,12 @@ has shipped.
 
 **Phase 2 is functionally complete.** The next unblocked step is Phase 3 (identity +
 database), which needs a Clerk application and a Supabase project — see the plan.
+
+## Restart cleanly
+
+```bash
+scripts/demo.sh            # backend + dev server on this machine (LAN-visible)
+scripts/demo.sh --tunnel   # also opens a quick public link (random *.trycloudflare.com)
+```
+
+The tunnel is ephemeral and public; treat any URL it prints as public-on-the-internet.
