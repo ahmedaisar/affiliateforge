@@ -31,5 +31,15 @@ export default defineConfig({
     },
   },
   build: { outDir: "dist", sourcemap: true },
-  preview: { port: 3100, proxy: {} },
+  preview: {
+    port: 3100,
+    // The preview server serves the built bundle; without the proxy the app
+    // loads but cannot reach the backend, so the advertised "preview the
+    // release" flow would be a blank demo. Same proxy as dev.
+    proxy: {
+      "/api": { target: process.env.VITE_API_TARGET ?? "http://127.0.0.1:8787", changeOrigin: true },
+      "/go": { target: process.env.VITE_API_TARGET ?? "http://127.0.0.1:8787", changeOrigin: true },
+      "/health": { target: process.env.VITE_API_TARGET ?? "http://127.0.0.1:8787", changeOrigin: true },
+    },
+  },
 });
