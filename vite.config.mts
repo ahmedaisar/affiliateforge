@@ -30,6 +30,7 @@ export default defineConfig({
       "/health": { target: process.env.VITE_API_TARGET ?? "http://127.0.0.1:8787", changeOrigin: true },
     },
   },
+  base: "./",
   build: { outDir: "dist", sourcemap: true },
   preview: {
     port: 3100,
