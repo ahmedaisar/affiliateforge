@@ -6,7 +6,7 @@ No browser user or display server was used; this is the closest this host can ge
 | File | Route | Width | Note |
 |---|---|---|---|
 | `front-door-1440.png` | `/` | 1440 | 28 KB |
-| `stores-1440.png` | `/stores` | 1440 | capture at `networkidle + 600ms`; note there is also an *earlier* `app-stores-1440.png` taken before the React fetch resolved, showing an empty table — a genuinely useful negative: the app renders its empty state coherently |
+| `stores-1440.png` | `/stores` | 1440 | re-shot 07:36 after the ESM + empty-state fixes; note there is also an *earlier* `app-stores-1440.png` taken before the React fetch resolved, showing an empty table — a genuinely useful negative: the app renders its empty state coherently |
 | `niche-1440.png` | `/stores/resin-miniatures/niche` | 1440 | brief + evidence renders from `/api/.../brief` |
 | `storefront-1440.png` | `/stores/resin-miniatures/preview` | 1440 | reader screen |
 | `stores-390.png` | `/stores` | 390 | phone width |
