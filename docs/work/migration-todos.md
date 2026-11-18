@@ -1,3 +1,9 @@
+# DEPRECATED 2026-11-18 — migration done
+
+This checklist belongs to the Vite migration and is all done: build green, preview
+serving, routes verified, docs updated (`AGENTS.md` §1.3) and committed. The current
+verification gate is `scripts/check_build.mjs` / `npm run check`. See
+`docs/work/prd-audit.md` for today's line-by-line status.
 # Todo — finish the Vite migration (17 Nov 2026)
 
 The reference is the plan written in this session: every step below names its target and the

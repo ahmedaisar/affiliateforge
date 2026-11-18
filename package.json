@@ -8,7 +8,8 @@
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
     "api": "node server/index.mjs",
-    "dev:full": "(node server/index.mjs &) && vite"
+    "dev:full": "(node server/index.mjs &) && vite",
+    "check": "npm run build && node scripts/check_build.mjs"
   },
   "dependencies": {
     "react": "^19.3.1",
