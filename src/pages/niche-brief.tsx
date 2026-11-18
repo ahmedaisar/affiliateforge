@@ -5,12 +5,30 @@ import { fetchBrief, type BriefResponse } from "@/lib/api";
 
 export default function NicheBriefPage() {
   const [brief, setBrief] = useState<BriefResponse | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { id = "resin-miniatures" } = useParams<{ id: string }>();
 
   useEffect(() => {
-    fetchBrief(id).then(setBrief);
+    setLoadError(null);
+    setBrief(null);
+    fetchBrief(id)
+      .then(setBrief)
+      .catch(() => setLoadError(id));
   }, [id]);
+
+  if (loadError) return (
+    <OperatorShell>
+      <h1 className="h2" style={{ marginTop: "var(--sp-6)" }}>No brief for this store yet</h1>
+      <p className="lede">
+        A store you just created has no research behind it. The Scout agent does that work — and
+        until it does, there is nothing honest to show you.
+      </p>
+      <p className="body-sm" style={{ marginTop: "var(--sp-4)" }}>
+        <a href="/stores">Back to your stores →</a>
+      </p>
+    </OperatorShell>
+  );
 
   if (!brief) return <OperatorShell><p className="meta">Loading…</p></OperatorShell>;
 

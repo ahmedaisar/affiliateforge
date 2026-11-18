@@ -10,14 +10,17 @@ export default function CataloguePage() {
   const [rows, setRows] = useState<CatalogueRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   void error;
+  const [loaded, setLoaded] = useState(false);
   const [approved, setApproved] = useState(false);
   const navigate = useNavigate();
   const { id = "resin-miniatures" } = useParams<{ id: string }>();
 
   useEffect(() => {
+    setLoaded(false);
     fetchCatalogue(id)
       .then((data) => setRows([...data].sort((a, b) => a.order - b.order)))
-      .catch((err) => setError(err instanceof Error ? err.message : String(err)));
+      .catch((err) => setError(err instanceof Error ? err.message : String(err)))
+      .finally(() => setLoaded(true));
   }, [id]);
 
   const total = rows.reduce((n, r) => n + r.commission, 0);
@@ -36,7 +39,7 @@ export default function CataloguePage() {
         <table className="table">
           <thead><tr><th>Order</th><th>Product</th><th>Merchant</th><th className="num">Commission</th><th>Note</th><th></th></tr></thead>
           <tbody>
-            {rows.map((row) => (
+            {rows.map((row) => ( /* empty when the store has no research yet */
               <tr key={row.id}>
                 <td className="meta num">{row.order}</td>
                 <td style={{ fontWeight: "var(--w-strong)" }}>{row.name}</td>
@@ -53,6 +56,12 @@ export default function CataloguePage() {
                 </td>
               </tr>
             ))}
+            {loaded && rows.length === 0 && (
+              <tr><td colSpan={6} className="body-sm">
+                No products yet — the Broker agent finds them once the brief exists.
+                <a href={`/stores/${id}/niche`} style={{ marginLeft: "var(--sp-2)" }}>Go to the brief →</a>
+              </td></tr>
+            )}
           </tbody>
         </table>
       </div>
