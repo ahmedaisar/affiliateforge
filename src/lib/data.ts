@@ -50,15 +50,11 @@ const ACTIVITY: ActivityLine[] = [
   { time: "07:15", what: "wood-filament.shop build stopped: the catalogue has 0 offers", state: "bad", stateLabel: "Stopped" },
 ];
 
-export async function listStores(): Promise<Store[]> {
+export function staticStores(): Store[] {
   return STORES;
 }
 
-export async function getStore(id: string): Promise<Store | undefined> {
-  return STORES.find((s) => s.id === id);
-}
-
-export async function listActivity(): Promise<ActivityLine[]> {
+export function staticActivity(): ActivityLine[] {
   return ACTIVITY;
 }
 

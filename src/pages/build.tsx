@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { OperatorShell } from "@/components/operator-shell";
-import { getBuildSteps, type BuildStep } from "@/lib/screenData";
+import type { BuildStep } from "@/lib/screenData";
+import { fetchBuild, startBuild } from "@/lib/api";
 import type { StoreState } from "@/lib/data";
 
 function lineState(state: BuildStep["state"]): { state: StoreState; label: string } {
@@ -13,7 +14,7 @@ export default function BuildPage() {
   const [steps, setSteps] = useState<BuildStep[]>([]);
 
   useEffect(() => {
-    getBuildSteps().then(setSteps);
+    fetchBuild("resin-miniatures").then(setSteps).catch(() => {});
   }, []);
 
   return (
@@ -51,6 +52,7 @@ export default function BuildPage() {
           stops refreshing.
         </p>
         <div className="cluster" style={{ marginTop: "var(--sp-2)" }}>
+          <button className="btn btn--primary" onClick={() => startBuild("resin-miniatures").catch(() => {})}>Append a build line</button>
           <span className="mono">github.com/your-account/resin-miniatures.best</span>
           <span className="mono">vercel.com/your-account/…</span>
         </div>

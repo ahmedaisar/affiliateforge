@@ -21,6 +21,15 @@ export default defineConfig({
     // server is a local design preview (no data, no credentials). To tighten,
     // replace `true` with the exact preview hostname, e.g. [".trycloudflare.com"].
     allowedHosts: true,
+    // Dev-only forward: the browser calls /api (and /go) on the dev server;
+    // Vite proxies to the local control plane. Override the target
+    // with VITE_API_TARGET if you run the backend elsewhere.
+    proxy: {
+      "/api": { target: process.env.VITE_API_TARGET ?? "http://127.0.0.1:8787", changeOrigin: true },
+      "/go": { target: process.env.VITE_API_TARGET ?? "http://127.0.0.1:8787", changeOrigin: true },
+      "/health": { target: process.env.VITE_API_TARGET ?? "http://127.0.0.1:8787", changeOrigin: true },
+    },
   },
   build: { outDir: "dist", sourcemap: true },
+  preview: { port: 3100, proxy: {} },
 });

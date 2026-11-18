@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Brand } from "@/components/brand";
-import { listActivity, listStores, needsAttention, SAMPLE, type StoreState } from "@/lib/data";
+import { needsAttention, SAMPLE, type StoreState, type Store, type ActivityLine } from "@/lib/data";
+import { fetchActivity, fetchStores } from "@/lib/api";
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 
@@ -9,11 +11,29 @@ function State({ state, label }: { state: StoreState; label: string }) {
   return <span className={`state ${modifier}`}>{label}</span>;
 }
 
-export default async function Stores() {
-  const stores = await listStores();
-  const activity = await listActivity();
-  const attention = needsAttention(stores);
+export default function Stores() {
+  const [stores, setStores] = useState<Store[]>([]);
+  const [activity, setActivity] = useState<ActivityLine[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    Promise.all([fetchStores(), fetchActivity()])
+      .then(([s, a]) => { setStores(s); setActivity(a); })
+      .catch((err) => setError(err instanceof Error ? err.message : String(err)));
+  }, []);
+
   const totalOffers = stores.reduce((n, s) => n + s.offers, 0);
+  const attention = needsAttention(stores);
+
+  if (error) {
+    return (
+      <div className="page">
+        <h1 className="h2" style={{ marginTop: "var(--sp-6)" }}>The backend is not answering</h1>
+        <p className="lede">{error}</p>
+        <p className="body-sm">Expected: <span className="mono">node server/index.mjs</span> on port 8787. In development it is proxied by Vite; the screens read <span className="mono">/api</span>, never a fixture.</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -51,8 +71,8 @@ export default async function Stores() {
           {attention.length > 0 && (
             <div className="banner" style={{ marginTop: "var(--sp-5)" }}>
               <div className="stack-sm grow">
-                <p><strong>{stores[0].domain} has 4 dead links</strong></p>
-                <p>{stores[0].detail}</p>
+                <p><strong>{attention[0].domain} — {attention[0].stateLabel}</strong></p>
+                <p>{attention[0].detail}</p>
               </div>
               <button className="btn" disabled title="Phase 6 adds link repair">Review</button>
             </div>

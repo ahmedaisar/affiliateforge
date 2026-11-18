@@ -93,6 +93,15 @@ rendered. **Next: Phase 2**, screens on sample data with the front door beside t
   `docs/variables.md`, the env schema failing at build. Done when: the app boots on the
   development keys and sign-up creates an organization. Status: not started.
 
+### Phase 3.5 — The local backend (interim)
+
+- **SQLite + Node on `127.0.0.1:8787`** — built this turn: `server/index.mjs` (stdlib HTTP,
+  zero deps), `server/db.mjs` (`node:sqlite`), seven seeded stores, catalogue CRUD, build
+  log append, `/health`, `/go/:store/:product` click logging. Frontend reads `/api` through
+  the Vite dev proxy; unit suite rewritten for the seam. Done when: the audit's verification
+  list holds. Status: **done (18 Nov 2026), local only** — no auth, no Postgres, no RLS;
+  that remains Phase 3. Environment: `.env.example`, `npm run api`, `npm run dev:full`.
+
 ### Phase 4 — The first real slice (stage 5)
 
 - **Workspaces and stores** — sign-in landing on `/stores`, `workspaces` and

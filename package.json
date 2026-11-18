@@ -6,7 +6,9 @@
     "build": "tsc -b --noEmit && vite build",
     "preview": "vite preview --port 3100",
     "typecheck": "tsc -b --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "api": "node server/index.mjs",
+    "dev:full": "(node server/index.mjs &) && vite"
   },
   "dependencies": {
     "react": "^19.3.1",

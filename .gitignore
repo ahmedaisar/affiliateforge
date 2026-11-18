@@ -7,3 +7,4 @@ dist/
 .deltabox/
 tsconfig.tsbuildinfo
 .DS_Store
+data/
