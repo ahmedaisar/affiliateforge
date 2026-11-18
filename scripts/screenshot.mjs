@@ -13,7 +13,7 @@ export default async function main(base = "http://127.0.0.1:3000") {
     const page = await browser.newPage({ viewport: { width, height: 1100 } });
     await page.goto(base + path, { waitUntil: "networkidle" });
     await page.waitForTimeout(600);
-    await page.screenshot({ path: `screenshots/${file}`, fullPage: true });
+    await page.screenshot({ path: `screenshots/app/${file}`, fullPage: true });
     console.log("shot", path);
     await page.close();
   }

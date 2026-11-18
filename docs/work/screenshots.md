@@ -5,12 +5,14 @@ No browser user or display server was used; this is the closest this host can ge
 
 | File | Route | Width | Note |
 |---|---|---|---|
-| `front-door-1440.png` | `/` | 1440 | 28 KB |
-| `stores-1440.png` | `/stores` | 1440 | re-shot 07:36 after the ESM + empty-state fixes; note there is also an *earlier* `app-stores-1440.png` taken before the React fetch resolved, showing an empty table — a genuinely useful negative: the app renders its empty state coherently |
-| `niche-1440.png` | `/stores/resin-miniatures/niche` | 1440 | brief + evidence renders from `/api/.../brief` |
-| `storefront-1440.png` | `/stores/resin-miniatures/preview` | 1440 | reader screen |
-| `stores-390.png` | `/stores` | 390 | phone width |
-| `front-door-390.png` | `/` | 390 | phone width |
+| `app/front-door-1440.png` | `/` | 1440 | 28 KB |
+| `app/stores-1440.png` | `/stores` | 1440 | re-shot 07:36 after the ESM + empty-state fixes; note there is also an *earlier* `app/app-stores-1440.png` taken before the React fetch resolved, showing an empty table — a genuinely useful negative: the app renders its empty state coherently |
+| `app/niche-1440.png` | `/stores/resin-miniatures/niche` | 1440 | brief + evidence renders from `/api/.../brief` |
+
+Proposal-phase artboards and director picks live in `screenshots/proposal/` — they precede the app and are not re-shot.
+| `app/storefront-1440.png` | `/stores/resin-miniatures/preview` | 1440 | reader screen |
+| `app/stores-390.png` | `/stores` | 390 | phone width |
+| `app/front-door-390.png` | `/` | 390 | phone width |
 
 Checks performed on them: PNG signature and declared dimensions read back from the
 files (1440×1100 seeds; fullPage heights vary); all HTTP responses 200; no console
