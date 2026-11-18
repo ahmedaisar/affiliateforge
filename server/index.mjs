@@ -95,8 +95,7 @@ const server = createServer(async (req, res) => {
         return json(res, 200, rows.map((r) => ({ id: r.id, name: r.name, merchant: r.merchant, commission: r.commission, order: r.position })));
       }
       if (method === "POST" && url.searchParams.get("action") === "approve") {
-        db.prepare("INSERT INTO build_log (store_id, time, what, state) VALUES (?,?,?, 'ok')")
-          .run(storeId, new Date().toTimeString().slice(0, 5), "Catalogue approved by the operator", "ok");
+        db.prepare("INSERT INTO build_log (store_id, time, what, state) VALUES (?,?,?, 'ok')").run(storeId, new Date().toTimeString().slice(0, 5), "Catalogue approved by the operator");
         return json(res, 200, { approved: true });
       }
     }
