@@ -10,6 +10,8 @@ import { randomUUID } from "node:crypto";
 
 const PORT = Number(process.env.CAIRN_API_PORT ?? 8787);
 const DEV_TOKEN = process.env.CAIRN_DEV_TOKEN; // unset → open (loopback only)
+// Set when serving the demo to strangers: nothing changes, nothing is created.
+const READ_ONLY = process.env.CAIRN_READ_ONLY === "1";
 const db = openDb();
 
 const json = (res, status, body) => {
@@ -50,6 +52,10 @@ const server = createServer(async (req, res) => {
   try {
     if (method === "GET" && path === "/health") {
       return json(res, 200, { status: "ok", stores: db.prepare("SELECT count(*) c FROM stores").get().c, time: new Date().toISOString() });
+    }
+
+    if (READ_ONLY && method !== "GET") {
+      return json(res, 503, { error: "read-only demo", detail: "This public link is a read-only demo; no changes are accepted." });
     }
 
     // Clicks are open: they come from stranger phones, not from members.
