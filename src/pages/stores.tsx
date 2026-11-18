@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Brand } from "@/components/brand";
 import { needsAttention, SAMPLE, type StoreState, type Store, type ActivityLine } from "@/lib/data";
 import { fetchActivity, fetchStores, fetchInsights } from "@/lib/api";
+import { NewStoreDialog } from "@/components/new-store-dialog";
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 
@@ -16,6 +17,7 @@ export default function Stores() {
   const [activity, setActivity] = useState<ActivityLine[]>([]);
   const [insights, setInsights] = useState<{ totalClicks: number; top: { product_id: string; clicks: number }[]; last: { product_id: string; merchant: string; at: string }[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     Promise.all([fetchStores(), fetchActivity(), fetchInsights().catch(() => null)])
@@ -64,19 +66,7 @@ export default function Stores() {
                 {stores.length} stores · {attention.length} need you today · {totalOffers} offers
               </p>
             </div>
-            <button className="btn btn--primary" onClick={async () => {
-              const domain = window.prompt("Store domain (e.g. resin-bench.com)");
-              const niche = window.prompt("Niche, in your words");
-              if (!domain || !niche) return;
-              try {
-                const res = await fetch("/api/stores", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ domain, niche }) });
-                if (!res.ok) { setError((await res.json()).error ?? "could not create"); return; }
-                const created = await res.json();
-                setStores((list) => [...list, created]);
-              } catch (err) { setError(String(err)); }
-            }}>
-              New store
-            </button>
+            <button className="btn btn--primary" onClick={() => setCreating(true)}>New store</button>
           </div>
 
           {attention.length > 0 && (
@@ -95,7 +85,14 @@ export default function Stores() {
               {insights.top[0] && <span className="meta">Most clicked: {insights.top[0].product_id} ({insights.top[0].clicks})</span>}
             </div>
           )}
-          <div className="table-wrap" style={{ marginTop: "var(--sp-5)" }}>
+          {creating && (
+          <NewStoreDialog
+            onCreated={(store) => { setStores((list) => [...list, store]); setCreating(false); }}
+            onError={(message) => setError(message)}
+            onClose={() => setCreating(false)}
+          />
+        )}
+        <div className="table-wrap" style={{ marginTop: "var(--sp-5)" }}>
             <table className="table">
               <thead>
                 <tr>
